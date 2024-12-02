@@ -5,6 +5,7 @@ class ProductBase(BaseModel):
     description: str
     price: float
     stock: int
+    image_url: str
 
 class ProductCreate(ProductBase):
     pass
@@ -14,3 +15,4 @@ class Product(ProductBase):
 
     class Config:
         orm_mode = True
+    
