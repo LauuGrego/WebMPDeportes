@@ -1,7 +1,9 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from typing import List, Optional
-from schemas.product import Product, ProductCreate, ProductBase
+from ..schemas.product import Product, ProductCreate, ProductBase
 from .categories import categories_db
+from .users_JWT_auth import admin_only
+from ..schemas.user import User
 
 router = APIRouter(prefix="/productos")
 
@@ -18,8 +20,8 @@ def get_product_by_id(product_id: int):
 next_id = 1 
 
 # Agregar productos
-@router.post("/agregar_producto", response_model=Product)
-async def create_product(product_data: ProductCreate):
+@router.post("/agregar", response_model=Product)
+async def create_product(product_data: ProductCreate, admin: User = Depends(admin_only)):
     global next_product_id
 
     # Buscar el ID de la categoría
@@ -40,8 +42,8 @@ async def create_product(product_data: ProductCreate):
 
 
 # Actualizar productos
-@router.put("/actualizar_producto/{product_id}", response_model=Product)
-async def modify_product(product_id: int, updated_product: ProductCreate):
+@router.put("/actualizar/{product_id}", response_model=Product)
+async def modify_product(product_id: int, updated_product: ProductCreate, admin: User = Depends(admin_only)):
     db_product = get_product_by_id(product_id)
     if not db_product:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
@@ -56,14 +58,15 @@ async def modify_product(product_id: int, updated_product: ProductCreate):
     return db_product
 
 # Deshabilitar productos
-@router.put("/deshabilitar_producto/{product_id}", response_model=Product)
-async def disable_product(product_id: int):
+@router.put("/deshabilitar/{product_id}", response_model=Product)
+async def disable_product(product_id: int,admin: User = Depends(admin_only)):
     db_product = get_product_by_id(product_id)
     if not db_product:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
 
     db_product.stock = 0
     return db_product
+
 
 # Buscar productos por filtro
 PRICE_RANGES = {
@@ -77,7 +80,7 @@ PRICE_RANGES = {
 @router.get("/filtrar_busqueda", response_model=List[Product])
 async def filter_products(
     name: Optional[str] = None,
-    price_range: Optional[str] = None,  # Nuevo parámetro para rango de precios
+    price_range: Optional[str] = None,  
     type: Optional[str] = None,
 ):
     results = products_db  
@@ -91,3 +94,15 @@ async def filter_products(
         results = [product for product in results if min_price <= product.price <= max_price]
 
     return [ProductBase(**product.dict()) for product in results]
+
+@router.delete("/eliminar/{idProduct}")
+async def delete_product_by_id(idProduct: int,admin: User = Depends(admin_only)):
+    
+    product = get_product_by_id(idProduct)
+    
+    if not product:
+        raise HTTPException(status_code=404, detail="Producto no encontrado")
+    
+    products_db.remove(product)
+    return {"message": "Producto eliminado con éxito"}
+

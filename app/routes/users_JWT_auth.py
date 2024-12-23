@@ -1,5 +1,5 @@
 from fastapi import FastAPI, APIRouter, Depends, HTTPException, status
-from schemas import user
+from ..schemas import user
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt, JWTError
 from passlib.context import CryptContext
@@ -19,7 +19,8 @@ users_db = {"lauu_grego": {"username": "lauu_grego",
                                      "email":"lautarogrego@gmail.com",
                                       "disable": False,
                                        "password": "$2a$12$2Z2uusv9JV6Go6j2vc6jFOzcEExp4KKXRHoYaKJE9Qk2Kc7gP6HDu",
-                                        "id": 1 }
+                                        "id": 1,
+                                        "role": "admin"  },  
             } #base de datos
 
 def search_user_db(username:str):
@@ -70,5 +71,13 @@ async def login(form:OAuth2PasswordRequestForm = Depends()):
     return {"acces_token": jwt.encode(access_token, SECRET, algorithm=ALGORITHM) ,"token_type": "JWT"}
 
 @router.get("/users/me")
-async def me(user: user.UserBase = Depends(current_user)): #depende de que el usuario este autenticado
+async def me(user: user.UserBase = Depends(current_user)): 
+    return user
+
+async def admin_only(user: user.User = Depends(current_user)):
+    if user.role != "admin":
+        raise HTTPException(
+            status_code=403,
+            detail="Acceso denegado: Se requieren permisos de administrador"
+        )
     return user

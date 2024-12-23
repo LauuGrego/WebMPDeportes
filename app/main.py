@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import products, users, users_auth,categories, users_JWT_auth
+from app.routes import products, users, categories, users_JWT_auth
 
 
 app = FastAPI()
@@ -14,7 +14,7 @@ async def  bienvenida ():
 
 app.include_router(categories.router)
 
-"""app.include_router(users.router)"""
+app.include_router(users.router)
 
 """app.include_router(users_auth.router)"""
 
