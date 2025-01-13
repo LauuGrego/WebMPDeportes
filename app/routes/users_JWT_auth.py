@@ -48,13 +48,18 @@ async def auth_user(token: str = Depends(oauth2)):
     return search_user(username)
 
 async def current_user(user : user.User = Depends(auth_user)):
-  
-    if user.disable:
+    
+    try:
+        if user.disable:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                detail="Usuario inactivo")
+        return user
+    except:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="Usuario inactivo")
-    return user
+                                detail="No Registrado")
+    
 
-@router.post("/login")
+@router.post("/usuarios/login")
 async def login(form:OAuth2PasswordRequestForm = Depends()):
     user_db = users_db.get(form.username)
     if not user_db:
@@ -70,14 +75,20 @@ async def login(form:OAuth2PasswordRequestForm = Depends()):
 
     return {"acces_token": jwt.encode(access_token, SECRET, algorithm=ALGORITHM) ,"token_type": "JWT"}
 
-@router.get("/users/me")
+@router.get("/usuarios/yo")
 async def me(user: user.UserBase = Depends(current_user)): 
     return user
 
 async def admin_only(user: user.User = Depends(current_user)):
-    if user.role != "admin":
-        raise HTTPException(
-            status_code=403,
-            detail="Acceso denegado: Se requieren permisos de administrador"
-        )
-    return user
+    try:
+        if user.role != "admin":
+            raise HTTPException(
+                status_code=403,
+                detail="Acceso denegado: Se requieren permisos de administrador"
+            )
+        return user
+    except Exception:
+      return "algo pasa" 
+      
+      """  raise HTTPException(status_code=401, 
+                            detail="Debes Autenticarte para realizar esto")"""

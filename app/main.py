@@ -19,3 +19,7 @@ app.include_router(users.router)
 """app.include_router(users_auth.router)"""
 
 app.include_router(users_JWT_auth.router)
+
+
+
+#uvicorn app.main:app --reload

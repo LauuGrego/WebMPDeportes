@@ -17,19 +17,21 @@ def get_product_by_id(product_id: int):
             return product
     return None
 
-next_id = 1 
+next_product_id = 1 
 
 # Agregar productos
 @router.post("/agregar", response_model=Product)
 async def create_product(product_data: ProductCreate, admin: User = Depends(admin_only)):
     global next_product_id
 
-    # Buscar el ID de la categoría
-    category = next((cat for cat in categories_db if cat.name.lower() == product_data.category_name.lower()), None)
+    product_data.name = product_data.name.strip().title()
+    product_data.category_name = product_data.category_name.strip().title()
+    product_data.type = product_data.type.strip().title()
+
+    category = next((cat for cat in categories_db if cat.name.strip().title() == product_data.category_name.strip().title()), None)
     if not category:
         raise HTTPException(status_code=404, detail=f"La categoría '{product_data.category_name}' no existe")
 
-    # Crear un diccionario del producto sin el campo 'category_name'
     product_dict = product_data.model_dump()
     product_dict.pop("category_name") 
     product_dict["category_id"] = category.id  
@@ -44,18 +46,29 @@ async def create_product(product_data: ProductCreate, admin: User = Depends(admi
 # Actualizar productos
 @router.put("/actualizar/{product_id}", response_model=Product)
 async def modify_product(product_id: int, updated_product: ProductCreate, admin: User = Depends(admin_only)):
+
+
     db_product = get_product_by_id(product_id)
     if not db_product:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
 
+    updated_product.name = updated_product.name.strip().title()
 
-    db_product.name = updated_product.name
-    db_product.price = updated_product.price
-    db_product.type = updated_product.type
-    db_product.description = updated_product.description
-    db_product.stock = updated_product.stock
-    db_product.image_url = updated_product.image_url
+    category_names = [category.name for category in categories_db]
+    if updated_product.category_name not in category_names:
+        raise HTTPException(status_code=404, detail="Categoría no encontrada")
+
+    updated_product.category_name = updated_product.category_name.strip().title()
+    updated_product.type = updated_product.type.strip().title()
+
+    update_data = updated_product.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        if field == "id":
+            continue 
+        setattr(db_product, field, value)
+
     return db_product
+
 
 # Deshabilitar productos
 @router.put("/deshabilitar/{product_id}", response_model=Product)
@@ -85,9 +98,9 @@ async def filter_products(
 ):
     results = products_db  
 
-    if name:
+    if name.trip().title():
         results = [product for product in results if name.lower() in product.name.lower()]
-    if type:
+    if type.trip().title():
         results = [product for product in results if type.lower() in product.type.lower()]
     if price_range and price_range in PRICE_RANGES:
         min_price, max_price = PRICE_RANGES[price_range]
