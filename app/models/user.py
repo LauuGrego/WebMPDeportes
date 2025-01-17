@@ -1,4 +1,4 @@
-from pydantic import BaseModel,EmailStr
+from pydantic import BaseModel,EmailStr, Field
 from typing import Optional
 
 class UserBase(BaseModel):
@@ -10,7 +10,7 @@ class UserBase(BaseModel):
          from_attributes = True
 
 class User(UserBase):
-    id: int
+    id: str = Field(default=None, alias="_id") 
     password: str
 
 class UserCreate(UserBase):

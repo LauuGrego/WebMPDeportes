@@ -1,12 +1,19 @@
-from fastapi import FastAPI, APIRouter, Depends, HTTPException, status
-from ..schemas import user
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
+from pymongo.collection import Collection
+from pymongo import MongoClient
+from bson import ObjectId
+from models.user import User, UserBase, UserCreate
+from db.client import db_client
+import pymongo
+from typing import Optional
+
 
 ALGORITHM = "HS256"
-ACCESS_TOKEN_DURATION = 15
+ACCESS_TOKEN_DURATION = 200
 SECRET = "gwtfdtdgjiemlopckj98763tgcuebcdsshgdywxbg65423324r"
 
 router = APIRouter()
@@ -15,80 +22,96 @@ oauth2 = OAuth2PasswordBearer(tokenUrl="login")
 
 crypt_context = CryptContext(schemes=["bcrypt"]) #algoritmo de criptografia
 
-users_db = {"lauu_grego": {"username": "lauu_grego",
-                                     "email":"lautarogrego@gmail.com",
-                                      "disable": False,
-                                       "password": "$2a$12$2Z2uusv9JV6Go6j2vc6jFOzcEExp4KKXRHoYaKJE9Qk2Kc7gP6HDu",
-                                        "id": 1,
-                                        "role": "admin"  },  
-            } #base de datos
+users_collection = db_client.users
 
-def search_user_db(username:str):
-    if username in users_db:
-        return user.User(**users_db[username])
+def search_user_db(field: str, key:str) -> User:
+    
+    try:
+        user= users_collection.find_one({field: key})
+        return user.User(**user)
+    except:
+        return {"error": "No se ha encontrado el usuario"}
 
-def search_user(username:str):
-    if username in users_db:
-        return user.UserBase(**users_db[username])
 
-async def auth_user(token: str = Depends(oauth2)):
-   
-    exception = HTTPException(status_code=401, 
-                            detail="Credenciales de autenticacion invalidas", 
-                            headers={"WWW-Authenticate": "Bearer"})
+
+def search_user(field: str, key) -> Optional[UserBase]:
+    try:
+        
+        user_data = users_collection.find_one({field: key})
+        
+        if user_data:
+            
+            user_data["_id"] = str(user_data["_id"]) 
+            
+            
+            return UserBase(**user_data)
+        
+        return None  
+    except pymongo.errors.PyMongoError as e:
+        
+        print(f"Error al buscar el usuario: {e}")
+        return None
+
+    
+
+async def auth_user(token: str = Depends(oauth2)) -> User:
+    exception = HTTPException(
+        status_code=401, 
+        detail="Credenciales de autenticación inválidas", 
+        headers={"WWW-Authenticate": "Bearer"}
+    )
 
     try:
-        username = jwt.decode(token,SECRET, algorithms=[ALGORITHM]).get("sub")
+        username = jwt.decode(token, SECRET, algorithms=[ALGORITHM]).get("sub")
         if username is None:
-           raise exception
- 
+            raise exception
     except JWTError:
         raise exception
-    
-    return search_user(username)
 
-async def current_user(user : user.User = Depends(auth_user)):
-    
-    try:
-        if user.disable:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                                detail="Usuario inactivo")
-        return user
-    except:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                                detail="No Registrado")
-    
+    user_data = search_user("username",username)
+    if not user_data:
+        raise exception
+    return user_data
 
-@router.post("/usuarios/login")
-async def login(form:OAuth2PasswordRequestForm = Depends()):
-    user_db = users_db.get(form.username)
-    if not user_db:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail = "Usuario Incorrecto")
-    
-    user = search_user_db(form.username)
-
-    if not crypt_context.verify(form.password,user.password):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail = "Contraseña Incorrecta")
-
-    access_token = {"sub":user.username,
-                    "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_DURATION)}
-
-    return {"acces_token": jwt.encode(access_token, SECRET, algorithm=ALGORITHM) ,"token_type": "JWT"}
-
-@router.get("/usuarios/yo")
-async def me(user: user.UserBase = Depends(current_user)): 
+async def current_user(user: User = Depends(auth_user)) -> User:
+    if user.disable:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Usuario inactivo"
+        )
     return user
 
-async def admin_only(user: user.User = Depends(current_user)):
-    try:
-        if user.role != "admin":
-            raise HTTPException(
-                status_code=403,
-                detail="Acceso denegado: Se requieren permisos de administrador"
-            )
-        return user
-    except Exception:
-      return "algo pasa" 
-      
-      """  raise HTTPException(status_code=401, 
-                            detail="Debes Autenticarte para realizar esto")"""
+@router.post("/usuarios/login")
+async def login(form: OAuth2PasswordRequestForm = Depends()):
+    user_data = users_collection.find_one({"username": form.username})
+    if not user_data:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Usuario Incorrecto")
+    
+    # Convertir ObjectId a cadena
+    user_data["_id"] = str(user_data["_id"])
+
+ 
+    user_obj = User(**user_data)
+
+    if not crypt_context.verify(form.password, user_obj.password):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Contraseña Incorrecta")
+
+    access_token = {
+        "sub": user_obj.username,
+        "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_DURATION),
+    }
+
+    return {"access_token": jwt.encode(access_token, SECRET, algorithm=ALGORITHM), "token_type": "JWT"}
+
+
+@router.get("/usuarios/yo")
+async def me(user: UserBase = Depends(current_user)):
+    return user
+
+async def admin_only(user: User = Depends(current_user)):
+    if user.role != "admin":
+        raise HTTPException(
+            status_code=403,
+            detail="Acceso denegado: Se requieren permisos de administrador"
+        )
+    return user
