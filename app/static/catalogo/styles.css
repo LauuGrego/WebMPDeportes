@@ -1,0 +1,355 @@
+:root {
+    --color-violeta: #7f58af;
+    --color-naranja: #f39c12;
+    --color-fondo: #ffffff;
+    --color-texto: #333333;
+    --color-fondo-seccion: #f4f4f4;
+    --color-borde: #dddddd;
+    --transition: 0.3s ease-in-out;
+}
+
+/* General */
+body {
+    margin: 0;
+    font-family: 'Garamond', sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    line-height: 1.6;
+    box-sizing: border-box;
+    overflow-x: hidden; 
+}
+
+header {
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-texto);
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-left: auto;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(to bottom, var(--color-violeta), var(--color-naranja));
+    color: var(--color-fondo);
+    text-align: center;
+    padding: 20px 10px;
+    position: relative;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Adaptable para pantallas pequeñas */
+    padding: 10px 5%;
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap; /* Ajusta los enlaces si hay poco espacio */
+}
+
+.nav-links li a {
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.nav-links li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--color-fondo);
+}
+
+.logo img {
+    height: 60px;
+    transition: var(--transition);
+}
+
+.logo img:hover {
+    transform: scale(1.1);
+}
+
+.search-container {
+    margin-top: 20px;
+    text-align: center;
+    padding: 10px 5%; /* Ajuste adaptable */
+}
+
+.search-input {
+    width: 100%;
+    max-width: 500px; /* Limitar ancho máximo */
+    padding: 10px 15px;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+    margin-bottom: 20px;
+
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--color-naranja);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.category-btn {
+    padding: 8px 15px;
+    background-color: var(--color-fondo-seccion);
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.category-btn:hover {
+    background-color: var(--color-violeta);
+    color: var(--color-fondo);
+    transform: translateY(-5px);
+}
+
+.category-btn.active {
+    background-color: var(--color-violeta);
+    color: var(--color-fondo);
+    border-color: var(--color-violeta);
+}
+
+.search-input {
+    width: 90%;
+    max-width: 500px;
+    padding: 10px 15px;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--color-naranja);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Catálogo de productos */
+.catalog {
+    padding: 40px 10px;
+    background-color: var(--color-fondo-seccion);
+    text-align: center;
+}
+
+.catalog h2 {
+    color: var(--color-violeta);
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+
+.product-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+.card {
+    background: var(--color-fondo);
+    border: 1px solid var(--color-borde);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px var(--color-naranja);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px var(--color-violeta);
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card h3 {
+    font-size: 1.2rem;
+    color: var(--color-violeta);
+    margin: 10px 0;
+}
+
+.card p {
+    font-size: 1rem;
+    color: var(--color-texto);
+    margin-bottom: 5px;
+}
+.card .price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--color-naranja);
+    margin: 5px 0;
+}
+
+.card .btn-primary {
+    padding: 10px 20px;
+    background-color: var(--color-violeta);
+    color: var(--color-fondo);
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    align-self: center;
+}
+
+
+.card .btn-primary:hover {
+    background-color: var(--color-naranja);
+}
+
+/* Contenido del modal */
+
+.modal {
+    display: none; /* Ocultar por defecto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: var(--color-fondo);
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid var(--color-borde);
+    border-radius: 10px;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content label {
+    display: block; 
+    text-align: left; 
+    margin-bottom: 5px; 
+    font-weight: bold; 
+}
+
+.modal-content h2 {
+    color: var(--color-violeta);
+}
+
+.modal-content button[type="submit"] {
+    background-color: var(--color-fondo);
+    color: var(--color-violeta);
+    border: none; 
+    border-radius: 5px; 
+    padding: 10px 15px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    margin-top: 5px;
+}
+
+.modal-content button[type="submit"]:hover {
+    background-color: var(--color-violeta);
+    color: var(--color-fondo); 
+}
+
+/* Botón cerrar */
+.close {
+    color: var(--color-texto);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: var(--color-violeta);
+    text-decoration: none;
+}
+
+
+/* Inputs y botones */
+form input {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #7f58af;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+form button:hover {
+    background-color: #f39c12;
+}
+
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .product-cards {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .card img {
+        height: 180px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card img {
+        height: 150px;
+    }
+}

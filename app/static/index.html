@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - Marca Pasos</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="./images/logo.png" type="image">
+</head>
+<body>
+    <header class="hero">
+        <nav class="navbar">
+            <div class="logo">
+                <img src="./images/logo.png" alt="Marca Pasos">
+            </div>
+            <ul class="nav-links">
+                <li><a href="#about">Nosotros</a></li>
+                <li><a href="#contact">Contacto</a></li>
+                <li><a href="#login-modal" id="open-login">Vista Editor</a></li>
+
+                <!-- <li><a href="#shop" class="btn-primary">Tienda</a></li> -->
+            </ul>
+        </nav>
+        <div class="hero-content">
+            <h1>Bienvenidos a Marca Pasos Deportes</h1>
+        </div>
+        <div class="search-container">
+            <input type="text" placeholder="Buscar productos..." class="search-input">
+            <div class="categories">
+                <button class="category-btn active">Más populares</button>
+                <button class="category-btn">Categoria 1</button>
+                <button class="category-btn">Categoria 2</button>
+                <button class="category-btn">Categoria 3</button>
+                <button class="category-btn">Categoria 4</button>
+                <button class="category-btn">Categoria 5</button>
+            </div>
+        </div>
+        <div class="hero-content">
+            <a href="./catalogo/catalogo.html">
+            <p>Descubre nuestros productos destacados y encuentra el que mejor se adapta a ti.</p>
+            <button class="btn-primary">Ver Catálogo</button>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section id="about" class="about">
+            <div class="about-content">
+                <h2>Sobre Nosotros</h2>
+                <p>
+                    Somos <span>Marca Pasos</span>, una casa de deportes comprometida con ofrecer productos de calidad para acompañar a cada persona en sus actividades deportivas y cotidianas. Nos especializamos en indumentaria deportiva, calzado deportivo y urbano, y calzado de verano, como ojotas y crocs, para que puedas disfrutar de comodidad y estilo tanto en el gimnasio como en tu día a día.
+                    
+                    Además, contamos con una amplia variedad de accesorios deportivos pensados para todas las disciplinas y necesidades. Ya sea que practiques fútbol, running, entrenamiento en el gimnasio o deportes de aventura, en <span>Marca Pasos Deportes</span> encontrarás todo lo que necesitas para dar el siguiente paso en tu rendimiento y confort.
+                    
+                    Nos apasiona brindar productos que combinen lo mejor de la tecnología, el diseño y la accesibilidad para que cada paso que des sea con la mejor calidad. ¡Te invitamos a formar parte de nuestra comunidad y a encontrar todo lo que buscas para tu estilo de vida activo!</p>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <h2>Contáctanos</h2>
+            <div class="social-links">
+                <a href="https://www.instagram.com/marcapasosdeportes/" target="_blank" class="social-btn">
+                    <img src="./images/insta.jpeg" alt="Instagram">
+                    Instagram
+                </a>
+                <a href="https://wa.me/543445417684" target="_blank" class="social-btn">
+                    <img src=".//images/wsp.webp" alt="WhatsApp">
+                    WhatsApp
+                </a>
+            </div>
+        </section>
+        
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Marca Pasos. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Ventana emergente -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-login" class="close">&times;</span>
+            <h2>Iniciar Sesión</h2>
+            <form>
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" placeholder="Ingresa tu usuario">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" placeholder="Ingresa tu contraseña">
+                <button type="submit">Ingresar</button>
+            </form>
+        </div>
+    </div>
+</body>
+ <script src="./js/boton-emergente-vista-editor.js"></script> 
+</html>
