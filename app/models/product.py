@@ -1,10 +1,11 @@
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, List
 
 class ProductBase(BaseModel):
     name: str
     price: float
     type: str
+    size: List[str]
     description: Optional[str] = None
     stock: int
     image_url: Optional[str] = None

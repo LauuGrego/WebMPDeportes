@@ -1,0 +1,216 @@
+:root {
+    --color-violeta: #7f58af;
+    --color-naranja: #f39c12;
+    --color-fondo: #ffffff;
+    --color-texto: #333333;
+    --color-fondo-seccion: #f4f4f4;
+    --color-borde: #dddddd;
+    --transition: 0.3s ease-in-out;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px; /* 1rem = 16px */
+}
+
+/* General */
+body {
+    margin: 0;
+    font-family: 'Garamond', sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    line-height: 1.6;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+header {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--color-violeta);
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-texto);
+    margin-right: 12vh;
+    font-size: 3vh;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(to bottom, var(--color-violeta), var(--color-naranja));
+    color: var(--color-fondo);
+    text-align: center;
+    padding: 10vh 5vw;
+    position: relative;
+    animation: fadeIn 1.5s ease;
+}
+
+.hero p {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    flex-wrap: wrap;
+}
+
+.navbar .logo img {
+    height: 3.75rem;
+    transition: var(--transition);
+}
+
+.navbar .logo img:hover {
+    transform: scale(1.1);
+}
+
+.nav-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.nav-links li a {
+    font-weight: bold;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-links li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--color-fondo);
+}
+
+.nav-links li a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 0.125rem;
+    background-color: var(--color-fondo);
+    transition: width 0.4s ease;
+}
+
+.nav-links li a:hover::after {
+    width: 100%;
+}
+
+/* Agregar category */
+.add-category-section {
+    max-width: 60%;
+    margin: 5vh auto;
+    padding: 2rem;
+    background-color: var(--color-fondo);
+    border-radius: 0.75rem;
+    box-shadow: 0 0.25rem 0.9375rem var(--color-violeta);
+    animation: slideIn 1s ease forwards;
+}
+
+.add-category-section h2 {
+    font-size: 2rem;
+    color: var(--color-violeta);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.add-category-section form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.add-category-section label {
+    font-size: 1rem;
+    color: var(--color-texto);
+}
+
+.add-category-section input, 
+.add-category-section select, 
+.add-category-section textarea {
+    padding: 0.75rem;
+    border: 0.0625rem solid var(--color-borde);
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    color: var(--color-texto);
+    background-color: var(--color-fondo-seccion);
+    transition: var(--transition);
+}
+
+.add-category-section input:focus, 
+.add-category-section textarea:focus, 
+.add-category-section select:focus {
+    outline: none;
+    border-color: var(--color-violeta);
+    box-shadow: 0 0 0.5rem rgba(127, 88, 175, 0.5);
+}
+
+.add-category-section button {
+    background-color: var(--color-violeta);
+    color: var(--color-fondo);
+    padding: 0.875rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    animation: popIn 1.5s ease forwards;
+}
+
+.add-category-section button:hover {
+    background-color: var(--color-naranja);
+    transform: scale(1.05);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(1.25rem);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+

@@ -44,7 +44,7 @@ def search_user(field: str, key) -> Optional[UserBase]:
             user_data["_id"] = str(user_data["_id"]) 
             
             
-            return UserBase(**user_data)
+            return User(**user_data)
         
         return None  
     except pymongo.errors.PyMongoError as e:

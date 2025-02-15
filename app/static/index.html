@@ -3,43 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Productos</title>
+    <title>Catálogo - Marca Pasos</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="./images/logo.png" type="image">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 <body>
-    <header>
-        <nav>
-            <h1>Mi Catálogo</h1>
+    <header class="hero">
+        <nav class="navbar animate__animated animate__fadeInDown">
+            <div class="logo animate__animated animate__rotateIn">
+                <img src="./images/logo.png" alt="Marca Pasos">
+            </div>
+            <ul class="nav-links animate__animated animate__fadeInDown">
+                <li><a href="#about">Nosotros</a></li>
+                <li><a href="#contact">Contacto</a></li>
+                <li><a href="#login-modal" id="open-login">Vista Editor</a></li>
+            </ul>
         </nav>
+        <div class="hero-content animate__animated animate__fadeInUp">
+            <h1>Bienvenidos a Marca Pasos Deportes</h1>
+            <p>Descubre nuestros productos destacados y encuentra el que mejor se adapta a ti.</p>
+            <a href="./catalogo/catalogo.html">
+                <button class="btn-primary animate__animated animate__pulse animate__infinite">Ver Catálogo</button>
+            </a>
+        </div>
+        <div class="search-container animate__animated animate__fadeInUp">
+            <input type="text" placeholder="Buscar productos..." class="search-input">
+            <div class="categories">
+                <button class="category-btn active animate__animated animate__fadeInLeft">Más populares</button>
+                <button class="category-btn animate__animated animate__fadeInLeft">Categoria 1</button>
+                <button class="category-btn animate__animated animate__fadeInLeft">Categoria 2</button>
+                <button class="category-btn animate__animated animate__fadeInLeft">Categoria 3</button>
+                <button class="category-btn animate__animated animate__fadeInLeft">Categoria 4</button>
+                <button class="category-btn animate__animated animate__fadeInLeft">Categoria 5</button>
+            </div>
+        </div>
     </header>
 
     <main>
-        <section class="search">
-            <input type="text" id="search-bar" placeholder="Buscar productos...">
-            <button id="search-button">Buscar</button>
+        <section id="about" class="about">
+            <div class="about-content animate__animated animate__fadeInUp">
+                <h2>Sobre Nosotros</h2>
+                <p>
+                    Somos <span>Marca Pasos</span>, una casa de deportes comprometida con ofrecer productos de calidad para acompañar a cada persona en sus actividades deportivas y cotidianas. Nos especializamos en indumentaria deportiva, calzado deportivo y urbano, y calzado de verano, como ojotas y crocs, para que puedas disfrutar de comodidad y estilo tanto en el gimnasio como en tu día a día.
+                    
+                    Además, contamos con una amplia variedad de accesorios deportivos pensados para todas las disciplinas y necesidades. Ya sea que practiques fútbol, running, entrenamiento en el gimnasio o deportes de aventura, en <span>Marca Pasos Deportes</span> encontrarás todo lo que necesitas para dar el siguiente paso en tu rendimiento y confort.
+                    
+                    Nos apasiona brindar productos que combinen lo mejor de la tecnología, el diseño y la accesibilidad para que cada paso que des sea con la mejor calidad. ¡Te invitamos a formar parte de nuestra comunidad y a encontrar todo lo que buscas para tu estilo de vida activo!
+                </p>
+            </div>
         </section>
 
-        <section class="products">
-            <div class="product-card">
-                <img src="https://via.placeholder.com/150" alt="Producto">
-                <h2>Producto 1</h2>
-                <p>Descripción breve del producto.</p>
-                <p class="price">$100.00</p>
+        <section id="contact" class="contact">
+            <h2 class="animate__animated animate__fadeInUp">Contáctanos</h2>
+            <div class="social-links animate__animated animate__fadeInUp">
+                <a href="https://www.instagram.com/marcapasosdeportes/" target="_blank" class="social-btn animate__animated animate__bounceIn">
+                    <img src="./images/insta.jpeg" alt="Instagram">
+                    Instagram
+                </a>
+                <a href="https://wa.me/543445417684" target="_blank" class="social-btn animate__animated animate__bounceIn">
+                    <img src="./images/wsp.webp" alt="WhatsApp">
+                    WhatsApp
+                </a>
             </div>
-
-            <div class="product-card">
-                <img src="https://via.placeholder.com/150" alt="Producto">
-                <h2>Producto 2</h2>
-                <p>Descripción breve del producto.</p>
-                <p class="price">$150.00</p>
-            </div>
-
-            <!-- Más productos aquí -->
         </section>
     </main>
 
-    <footer>
-        <p>© 2025 Mi Catálogo. Todos los derechos reservados.</p>
+    <footer class="animate__animated animate__fadeInUp">
+        <p>&copy; 2025 Marca Pasos. Todos los derechos reservados.</p>
     </footer>
+
+    <!-- Ventana emergente -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content animate__animated animate__zoomIn">
+            <span id="close-login" class="close">&times;</span>
+            <h2>Iniciar Sesión</h2>
+            <form>
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" placeholder="Ingresa tu usuario">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" placeholder="Ingresa tu contraseña">
+                <button type="submit" class="animate__animated animate__pulse animate__infinite">Ingresar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="./js/boton-emergente-vista-editor.js"></script>
 </body>
 </html>

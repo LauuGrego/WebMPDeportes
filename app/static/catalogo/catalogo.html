@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - Marca Pasos</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body>
+    <header class="hero">
+        <nav class="navbar animate__animated animate__fadeInDown">
+            <div class="logo animate__animated animate__rotateIn">
+                <img src="./../images/logo.png" alt="Marca Pasos">
+            </div>
+            <ul class="nav-links animate__animated animate__fadeInDown">
+                <li><a href="./../index.html">Inicio</a></li>
+                <li><a href="#" id="open-login">Vista Editor</a></li>
+            </ul>
+        </nav>
+        <div class="search-container animate__animated animate__fadeInUp">
+            <input type="text" placeholder="Buscar productos..." class="search-input">
+            <div class="categories">
+                <button class="category-btn active">Más populares</button>
+                <button class="category-btn">Categoria 1</button>
+                <button class="category-btn">Categoria 2</button>
+                <button class="category-btn">Categoria 3</button>
+                <button class="category-btn">Categoria 4</button>
+                <button class="category-btn">Categoria 5</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="catalog" class="catalog">
+            <h2 class="animate__animated animate__fadeInUp">Catálogo de Productos</h2>
+            <div class="product-cards">
+                <!-- Producto 1 -->
+                <div class="card animate__animated animate__fadeInLeft">
+                    <img src=".//../../images/nike1.jpeg" alt="Producto 1">
+                    <h3>Producto 1</h3>
+                    <p>Descripción breve del producto 1.</p>
+                    <span class="price">$1,200</span>
+                    <div class="card-buttons">
+                        <button class="btn-primary animate__animated animate__pulse animate__infinite">Comprar</button>
+                        <button class="btn-secondary" onclick="openProductModal('producto1')">Ver más</button>
+                    </div>
+                </div>
+                 <!-- Producto 2 -->
+                 <div class="card animate__animated animate__fadeInLeft">
+                    <img src=".//../../images/nike1.jpeg" alt="Producto 2">
+                    <h3>Producto 2</h3>
+                    <p>Descripción breve del producto 2.</p>
+                    <span class="price">$1,200</span>
+                    <div class="card-buttons">
+                        <button class="btn-primary animate__animated animate__pulse animate__infinite">Comprar</button>
+                        <button class="btn-secondary" onclick="openProductModal('producto1')">Ver más</button>
+                    </div>
+                </div>
+                 <!-- Producto 3 -->
+                 <div class="card animate__animated animate__fadeInLeft">
+                    <img src=".//../../images/nike1.jpeg" alt="Producto 3">
+                    <h3>Producto 3</h3>
+                    <p>Descripción breve del producto 3.</p>
+                    <span class="price">$1,200</span>
+                    <div class="card-buttons">
+                        <button class="btn-primary animate__animated animate__pulse animate__infinite">Comprar</button>
+                        <button class="btn-secondary" onclick="openProductModal('producto1')">Ver más</button>
+                    </div>
+                </div>
+                <!-- Repite para más productos -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Detalles del Producto -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content animate__animated animate__zoomIn">
+            <span class="close" onclick="closeProductModal()">&times;</span>
+            <div id="product-detail-content">
+                <!-- Contenido dinámico se cargará aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Ventana emergente de Login -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content animate__animated animate__zoomIn">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>Iniciar Sesión</h2>
+            <form>
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" placeholder="Ingresa tu usuario">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" placeholder="Ingresa tu contraseña">
+                <button type="submit">Ingresar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Datos de los productos (simulados)
+        const products = {
+            producto1: {
+                name: "Producto 1",
+                price: "$1,200",
+                description: "Descripción detallada del Producto 1. Ideal para corredores que buscan comodidad y estilo.",
+                images: [
+                    "./../images/nike1.jpeg",
+                    "./../images/nike1-thumb1.jpeg",
+                    "./../images/nike1-thumb2.jpeg"
+                ]
+            },
+            producto2: {
+                name: "Producto 2",
+                price: "$900",
+                description: "Descripción detallada del Producto 2. Perfecto para entrenamientos intensos.",
+                images: [
+                    "./../images/nike1.jpeg",
+                    "./../images/nike1-thumb1.jpeg",
+                    "./../images/nike1-thumb2.jpeg"
+                ]
+            }
+        };
+
+        // Abrir modal de producto
+        function openProductModal(productId) {
+            const product = products[productId];
+            const modalContent = document.getElementById("product-detail-content");
+            modalContent.innerHTML = `
+                <h2>${product.name}</h2>
+                <div class="product-images">
+                    <img src="${product.images[0]}" alt="${product.name}">
+                    <div class="thumbnails">
+                        ${product.images.map(img => `<img src="${img}" alt="Miniatura">`).join("")}
+                    </div>
+                </div>
+                <p class="price">${product.price}</p>
+                <p class="description">${product.description}</p>
+                <button class="btn-primary">Comprar</button>
+            `;
+            document.getElementById("product-modal").style.display = "flex";
+        }
+
+        // Cerrar modal de producto
+        function closeProductModal() {
+            document.getElementById("product-modal").style.display = "none";
+        }
+
+        // Abrir modal de login
+        document.getElementById("open-login").addEventListener("click", function (e) {
+            e.preventDefault();
+            document.getElementById("login-modal").style.display = "flex";
+        });
+
+        // Cerrar modal de login
+        function closeLoginModal() {
+            document.getElementById("login-modal").style.display = "none";
+        }
+
+        // Cerrar modales al hacer clic fuera de ellos
+        window.onclick = function (event) {
+            if (event.target.classList.contains("modal")) {
+                event.target.style.display = "none";
+            }
+        };
+    </script>
+</body>
+</html>
