@@ -19,14 +19,25 @@
             </ul>
         </nav>
         <div class="search-container animate__animated animate__fadeInUp">
+            <!-- Barra de búsqueda principal -->
             <input type="text" placeholder="Buscar productos..." class="search-input">
-            <div class="categories">
-                <button class="category-btn active">Más populares</button>
-                <button class="category-btn">Categoria 1</button>
-                <button class="category-btn">Categoria 2</button>
-                <button class="category-btn">Categoria 3</button>
-                <button class="category-btn">Categoria 4</button>
-                <button class="category-btn">Categoria 5</button>
+            <button id="open-filters" class="btn-primary">Filtrar</button>
+        
+            <!-- Barra lateral de filtros -->
+            <div id="filters-sidebar" class="filters-sidebar">
+                <button id="close-filters" class="btn-close">&times;</button>
+                <h3>Filtros</h3>
+                <form id="search-filters">
+                    <input type="number" id="min-price" placeholder="Precio mínimo" class="search-input">
+                    <input type="number" id="max-price" placeholder="Precio máximo" class="search-input">
+                    <input type="text" id="search-type" placeholder="Tipo de producto..." class="search-input">
+                    <select id="search-category" class="search-input">
+                        <option value="">Todas las categorías</option>
+                        <!-- Las categorías se cargarán dinámicamente aquí -->
+                    </select>
+                    <input type="text" id="search-size" placeholder="Talla (separada por comas)" class="search-input">
+                    <button type="submit" class="btn-primary">Aplicar Filtros</button>
+                </form>
             </div>
         </div>
     </header>
@@ -35,40 +46,6 @@
         <section id="catalog" class="catalog">
             <h2 class="animate__animated animate__fadeInUp">Catálogo de Productos</h2>
             <div class="product-cards">
-                <!-- Producto 1 -->
-                <div class="card animate__animated animate__fadeInLeft">
-                    <img src=".//../../images/nike1.jpeg" alt="Producto 1">
-                    <h3>Producto 1</h3>
-                    <p>Descripción breve del producto 1.</p>
-                    <span class="price">$1,200</span>
-                    <div class="card-buttons">
-                        <button class="btn-primary animate__animated animate__pulse animate__infinite">Comprar</button>
-                        <button class="btn-secondary" onclick="openProductModal('producto1')">Ver más</button>
-                    </div>
-                </div>
-                 <!-- Producto 2 -->
-                 <div class="card animate__animated animate__fadeInLeft">
-                    <img src=".//../../images/nike1.jpeg" alt="Producto 2">
-                    <h3>Producto 2</h3>
-                    <p>Descripción breve del producto 2.</p>
-                    <span class="price">$1,200</span>
-                    <div class="card-buttons">
-                        <button class="btn-primary animate__animated animate__pulse animate__infinite">Comprar</button>
-                        <button class="btn-secondary" onclick="openProductModal('producto1')">Ver más</button>
-                    </div>
-                </div>
-                 <!-- Producto 3 -->
-                 <div class="card animate__animated animate__fadeInLeft">
-                    <img src=".//../../images/nike1.jpeg" alt="Producto 3">
-                    <h3>Producto 3</h3>
-                    <p>Descripción breve del producto 3.</p>
-                    <span class="price">$1,200</span>
-                    <div class="card-buttons">
-                        <button class="btn-primary animate__animated animate__pulse animate__infinite">Comprar</button>
-                        <button class="btn-secondary" onclick="openProductModal('producto1')">Ver más</button>
-                    </div>
-                </div>
-                <!-- Repite para más productos -->
             </div>
         </section>
     </main>
@@ -98,31 +75,13 @@
         </div>
     </div>
 
-    <script>
-        // Datos de los productos (simulados)
-        const products = {
-            producto1: {
-                name: "Producto 1",
-                price: "$1,200",
-                description: "Descripción detallada del Producto 1. Ideal para corredores que buscan comodidad y estilo.",
-                images: [
-                    "./../images/nike1.jpeg",
-                    "./../images/nike1-thumb1.jpeg",
-                    "./../images/nike1-thumb2.jpeg"
-                ]
-            },
-            producto2: {
-                name: "Producto 2",
-                price: "$900",
-                description: "Descripción detallada del Producto 2. Perfecto para entrenamientos intensos.",
-                images: [
-                    "./../images/nike1.jpeg",
-                    "./../images/nike1-thumb1.jpeg",
-                    "./../images/nike1-thumb2.jpeg"
-                ]
-            }
-        };
+    <script src="./../js/botones-categorias.js"></script>
+    <script src="./../js/boton-emergente-vista-editor.js"></script>
+    <script src="./../js/obtener-productos.js"></script>
+    <script src="./../js/barra-busqueda.js"></script>
 
+    <script>
+    
         // Abrir modal de producto
         function openProductModal(productId) {
             const product = products[productId];
@@ -164,6 +123,57 @@
                 event.target.style.display = "none";
             }
         };
+
+        document.addEventListener("DOMContentLoaded", () => {
+    const openFiltersButton = document.getElementById("open-filters");
+    const closeFiltersButton = document.getElementById("close-filters");
+    const filtersSidebar = document.getElementById("filters-sidebar");
+    const overlay = document.createElement("div");
+    overlay.classList.add("overlay");
+
+    // Agregar el overlay al body
+    document.body.appendChild(overlay);
+
+    // Abrir la barra lateral
+    openFiltersButton.addEventListener("click", () => {
+        filtersSidebar.classList.add("open");
+        overlay.classList.add("active");
+    });
+
+    // Cerrar la barra lateral
+    closeFiltersButton.addEventListener("click", () => {
+        filtersSidebar.classList.remove("open");
+        overlay.classList.remove("active");
+    });
+
+    // Cerrar la barra lateral al hacer clic en el overlay
+    overlay.addEventListener("click", () => {
+        filtersSidebar.classList.remove("open");
+        overlay.classList.remove("active");
+    });
+
+    // Manejar el envío del formulario de filtros
+    const searchFiltersForm = document.getElementById("search-filters");
+    searchFiltersForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const filters = getFilters();
+        fetchProducts(filters);
+        filtersSidebar.classList.remove("open");
+        overlay.classList.remove("active");
+    });
+});
+
+// Función para obtener los valores de los filtros
+function getFilters() {
+    return {
+        name: document.querySelector(".search-input").value,
+        min_price: document.getElementById("min-price").value,
+        max_price: document.getElementById("max-price").value,
+        type: document.getElementById("search-type").value,
+        category: document.getElementById("search-category").value,
+        size: document.getElementById("search-size").value,
+    };
+}
     </script>
 </body>
 </html>

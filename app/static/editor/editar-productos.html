@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="editar-productos-styles.css">
+</head>
+<body>
+    <header class="hero">
+        <nav class="navbar animate__animated animate__fadeInDown">
+            <div class="logo animate__animated animate__rotateIn">
+                <img src="./../images/logo.png" alt="Marca Pasos">
+            </div>
+            <ul class="nav-links">
+                <li><a href="./inicio.html">Inicio</a></li>
+                <li><a href="./agregar-product.html">Agregar Producto</a></li>
+                <li><a href="./agregar-category.html">Agregar Categoría</a></li>
+                <li><a href="./editar-categorias.html">Editar Categoría</a></li>
+                <li><a href="./../index.html">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+        <div class="search-container animate__animated animate__fadeInUp">
+            <!-- Barra de búsqueda principal -->
+            <input type="text" placeholder="Buscar productos..." class="search-input">
+        </div>
+    </header>
+    <div class="container">
+        <h1>Lista de Productos</h1>
+        <ul class="product-list" id="product-list">
+            <!-- Los productos se cargarán dinámicamente aquí -->
+        </ul>
+    </div>
+
+    <script src="./../js/lista-editar-productos.js"></script>
+</body>
+</html>

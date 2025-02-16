@@ -10,6 +10,11 @@
     --animation-delay: 0.2s;
 }
 
+main {
+    position: relative;
+    z-index: -1;
+}
+
 /* General */
 body {
     margin: 0;
@@ -45,13 +50,22 @@ ul {
     position: relative;
 }
 
-/* Navbar */
+/* Barra de navegación */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     padding: 10px 5%;
+}
+
+.logo img {
+    height: 60px;
+    transition: var(--transition);
+}
+
+.logo img:hover {
+    transform: scale(1.1);
 }
 
 .nav-links {
@@ -72,14 +86,6 @@ ul {
     color: var(--color-fondo);
 }
 
-.logo img {
-    height: 60px;
-    transition: var(--transition);
-}
-
-.logo img:hover {
-    transform: scale(1.1);
-}
 
 /* Search Container */
 .search-container {
@@ -163,7 +169,7 @@ ul {
     border-radius: 12px;
     padding: 20px;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--color-violeta);
     transition: transform 0.3s, box-shadow 0.3s;
     display: flex;
     flex-direction: column;
@@ -459,6 +465,118 @@ ul {
     color: var(--color-violeta);
     text-decoration: none;
 }
+
+/* Estilos para la barra lateral de filtros */
+.filters-sidebar {
+    position: fixed;
+    top: 0;
+    right: -10000px; /* Oculta la barra lateral fuera de la pantalla */
+    width: 300px;
+    height: 100vh;
+    background-color: var(--color-fondo);
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: right var(--transition);
+    z-index: 1001; /* Mayor que el overlay y el contenido */
+    overflow-y: auto; /* Permitir scroll si el contenido es muy largo */
+}
+
+.filters-sidebar.open {
+    right: 0; /* Muestra la barra lateral */
+    z-index: 999;
+}
+
+/* Estilos para el botón de cerrar */
+.btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--color-texto);
+    transition: color var(--transition);
+}
+
+.btn-close:hover {
+    color: var(--color-violeta);
+}
+
+/* Estilos para el título de la barra lateral */
+.filters-sidebar h3 {
+    color: var(--color-violeta);
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Estilos para los inputs y selects dentro de la barra lateral */
+.filters-sidebar .search-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--color-texto);
+    background-color: var(--color-fondo);
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.filters-sidebar .search-input:focus {
+    outline: none;
+    border-color: var(--color-naranja);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para el select */
+.filters-sidebar select {
+    appearance: none; /* Eliminar estilo por defecto */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%237f58af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    padding-right: 30px;
+}
+
+/* Estilos para el botón de aplicar filtros */
+.filters-sidebar .btn-primary {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--color-violeta);
+    color: var(--color-fondo);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color var(--transition);
+    margin-top: 10px;
+}
+
+.filters-sidebar .btn-primary:hover {
+    background-color: var(--color-naranja);
+}
+
+/* Estilos para el botón de abrir filtros */
+#open-filters {
+    padding: 10px 20px;
+    background-color: var(--color-violeta);
+    color: var(--color-fondo);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color var(--transition);
+    margin-left: 10px;
+}
+
+#open-filters:hover {
+    background-color: var(--color-naranja);
+}
+
 
 /* Media Queries */
 @media (max-width: 768px) {

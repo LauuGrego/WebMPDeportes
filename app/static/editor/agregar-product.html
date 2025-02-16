@@ -13,8 +13,13 @@
                 <img src="./../images/logo.png" alt="Marca Pasos">
             </div>
             <ul class="nav-links">
-                <li><a href="./../index.html" class="btn-header">Inicio</a></li>
+                <li><a href="./inicio.html" class="btn-header">Inicio</a></li>
+                <li><a href="./agregar-category.html" class="btn-header">Agregar Categoría</a></li>
+                <li><a href="./editar-categorias.html" class="btn-header">Editar Categoría</a></li>
+                <li><a href="./editar-productos.html "class="btn-header">Editar Producto</a></li>
+                <li><a href="./../index.html" class="btn-header">Cerrar Sesión</a></li>
             </ul>
+            
         </nav>
     </header>
 
@@ -45,17 +50,13 @@
 
             <label for="category">Categoría:</label>
             <select id="category" name="category_name" required>
-                <option value="">Seleccione una categoría</option>
-                <option value="1">Categoría 1</option>
-                <option value="2">Categoría 2</option>
-                <option value="3">Categoría 3</option>
-                <option value="4">Categoría 4</option>
             </select>
 
             <button type="submit" class="btn-primary">Agregar Producto</button>
         </form>
     </section>
 
-    <script src="./../js/editor.js"></script> 
+    <script src="./../js/cargar-producto.js"></script> 
+    <script src="./../js/obtener-categorias.js"></script>
 </body>
 </html>

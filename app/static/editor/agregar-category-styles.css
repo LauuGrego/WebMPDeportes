@@ -88,11 +88,11 @@ ul {
 
 .nav-links li a {
     font-weight: bold;
-    padding: 0.5rem 0.75rem;
     border-radius: 0.375rem;
     transition: var(--transition);
     position: relative;
     overflow: hidden;
+    margin: 3vh;
 }
 
 .nav-links li a:hover {

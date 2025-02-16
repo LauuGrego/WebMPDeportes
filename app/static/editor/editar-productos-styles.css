@@ -1,0 +1,214 @@
+/* Estilos generales */
+:root {
+    --color-violeta: #7f58af;
+    --color-naranja: #f39c12;
+    --color-fondo: #ffffff;
+    --color-texto: #333333;
+    --color-fondo-seccion: #f4f4f4;
+    --color-borde: #dddddd;
+    --transition: 0.3s ease-in-out;
+}
+
+body {
+    font-family: 'Garamond', sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+header {
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-texto);
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-texto);
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(to bottom, var(--color-violeta), var(--color-naranja));
+    color: var(--color-fondo);
+    text-align: center;
+    padding: 20px 10px;
+    position: relative;
+}
+
+/* Barra de navegación */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 10px 5%;
+}
+
+.logo img {
+    height: 60px;
+    transition: var(--transition);
+}
+
+.logo img:hover {
+    transform: scale(1.1);
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.nav-links li a {
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.nav-links li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--color-fondo);
+}
+
+
+/* Search Container */
+.search-container {
+    margin-top: 20px;
+    text-align: center;
+    padding: 10px 5%;
+}
+
+.search-input {
+    width: 100%;
+    max-width: 500px;
+    padding: 10px 15px;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+    margin-bottom: 20px;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--color-naranja);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: transparent;
+    border-radius: 10px;
+}
+
+h1 {
+    text-align: center;
+    color: var(--color-violeta);
+    margin-bottom: 20px;
+}
+
+/* Lista de productos */
+.product-list {
+    list-style: none;
+    padding: 0;
+}
+
+.product-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: var(--color-fondo);
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: box-shadow var(--transition);
+}
+
+.product-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.product-description {
+    font-size: 1rem;
+    color: var(--color-texto);
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--color-naranja);
+    margin-bottom: 10px;
+}
+
+/* Botones de acciones (editar y eliminar) */
+.product-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit, .btn-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    transition: color var(--transition);
+}
+
+.btn-edit {
+    color: var(--color-violeta);
+}
+
+.btn-delete {
+    color: var(--color-naranja);
+}
+
+.btn-edit:hover {
+    color: darken(var(--color-violeta), 10%);
+}
+
+.btn-delete:hover {
+    color: darken(var(--color-naranja), 10%);
+}
+
+/* Estilos para la imagen del producto */
+.product-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+

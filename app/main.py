@@ -1,8 +1,17 @@
 from fastapi import FastAPI
 from routes import products, users, categories, users_JWT_auth, cart
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 #statics
 #app.mount()
