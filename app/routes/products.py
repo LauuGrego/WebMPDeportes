@@ -1,11 +1,12 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from typing import List, Optional
-from models.product import Product, ProductCreate, ProductBase
+from models.product import Product, ProductCreate, ProductUpdate
 from db.client import db_client
 from bson import ObjectId
 from .users_JWT_auth import admin_only
 from models.user import User
 import re
+from fastapi.responses import JSONResponse
 
 router = APIRouter(prefix="/productos", tags=["Products"])
 
@@ -20,6 +21,13 @@ def get_product_by_id(product_id: str):
         product["_id"] = str(product["_id"])  # Convertir ObjectId a string
     return product
 
+@router.get("/obtener_por_id/{product_id}")
+async def get_product(product_id: str):
+    product = get_product_by_id(product_id)
+    if not product:
+        raise HTTPException(status_code=404, detail="Producto no encontrado")
+    return JSONResponse(content=product)
+
 
 # Agregar productos
 @router.post("/agregar", response_model=Product)
@@ -33,7 +41,10 @@ async def create_product(product_data: ProductCreate, admin: User = Depends(admi
  
     if product_data.size:
         product_data.size = [s.strip().title() for s in product_data.size if s.strip()]
-
+    """  
+    if product_data.color:
+        product_data.color = [s.strip().title() for s in product_data.color if s.strip()]
+"""
 
     category = categories_collection.find_one({"name": product_data.category_name})
     if not category:
@@ -56,41 +67,34 @@ async def create_product(product_data: ProductCreate, admin: User = Depends(admi
 
 # Actualizar productos
 @router.put("/actualizar/{product_id}", response_model=Product)
-async def modify_product(product_id: str, updated_product: ProductCreate, admin: User = Depends(admin_only)):
+async def modify_product(product_id: str, updated_product: ProductUpdate, admin: User = Depends(admin_only)):
     db_product = get_product_by_id(product_id)
     if not db_product:
         raise HTTPException(status_code=404, detail="Producto no encontrado.")
-    
- 
-    updated_product.category_name = updated_product.category_name.strip().title()
-    category = categories_collection.find_one({"name": updated_product.category_name})
-    if not category:
-        raise HTTPException(status_code=404, detail=f"La categoría '{updated_product.category_name}' no existe.")
-    
+
+    if updated_product.category_name:
+        updated_product.category_name = updated_product.category_name.strip().title()
+        category = categories_collection.find_one({"name": updated_product.category_name})
+        if not category:
+            raise HTTPException(status_code=404, detail=f"La categoría '{updated_product.category_name}' no existe.")
 
     if updated_product.size:
         updated_product.size = [s.strip().title() for s in updated_product.size if s.strip()]
-    
 
+    # Obtener solo los campos que han sido enviados
     update_data = updated_product.model_dump(exclude_unset=True)
-    update_data["category_id"] = str(category["_id"])
-    
 
+    # Si se actualizó la categoría, agrega el category_id
+    if updated_product.category_name:
+        update_data["category_id"] = str(category["_id"])
+
+    # Actualizar solo los campos recibidos
     products_collection.update_one({"_id": ObjectId(product_id)}, {"$set": update_data})
 
-
     return get_product_by_id(product_id)
 
 
-# Deshabilitar productos
-@router.put("/deshabilitar/{product_id}", response_model=Product)
-async def disable_product(product_id: str, admin: User = Depends(admin_only)):
-    db_product = get_product_by_id(product_id)
-    if not db_product:
-        raise HTTPException(status_code=404, detail="Producto no encontrado.")
 
-    products_collection.update_one({"_id": ObjectId(product_id)}, {"$set": {"stock": 0}})
-    return get_product_by_id(product_id)
 
 # Buscar productos por filtro
 @router.get("/buscar", response_model=List[Product])
@@ -100,7 +104,8 @@ async def search_products(
     max_price: Optional[float] = None,
     type: Optional[str] = None,
     category: Optional[str] = None,
-    size: Optional[List[str]] = None  
+    size: Optional[List[str]] = None,
+   # color: Optional[str] = None
 ):
    
     query = {}
@@ -131,6 +136,9 @@ async def search_products(
     if size:
         query["size"] = {"$in": [s.strip().title() for s in size]}  
     
+    """
+    if color:
+            query["color"] = {"$regex": re.escape(color), "$options": "i"}"""
 
     products = products_collection.find(query)
 
@@ -144,11 +152,45 @@ async def search_products(
 
 
 
-# Eliminar producto
-@router.delete("/eliminar/{product_id}")
-async def delete_product_by_id(product_id: str, admin: User = Depends(admin_only)):
-    result = products_collection.delete_one({"_id": ObjectId(product_id)})
-    if result.deleted_count == 0:
+# Deshabilitar productos
+@router.put("/deshabilitar/{product_id}", response_model=Product)
+async def disable_product(product_id: str, admin: User = Depends(admin_only)):
+    db_product = get_product_by_id(product_id)
+    if not db_product:
         raise HTTPException(status_code=404, detail="Producto no encontrado.")
+    
+    # Deshabilitar el producto (poner el stock en 0)
+    updated_product = products_collection.find_one_and_update(
+        {"_id": ObjectId(product_id)},
+        {"$set": {"stock": 0}},
+        return_document=True  # Esto devuelve el documento actualizado
+    )
+    
+    if updated_product:
+        # Convertir ObjectId a string y asignarlo como 'id'
+        updated_product["_id"] = str(updated_product["_id"])  # Convertir _id a string
+        updated_product["id"] = updated_product.pop("_id")  # Cambiar _id a id
+        
+        # Eliminar cualquier campo no necesario
+        return {key: updated_product[key] for key in updated_product if key != "_id"}
+    else:
+        raise HTTPException(status_code=500, detail="Error al deshabilitar el producto.")
 
-    return {"message": "Producto eliminado con éxito."}
+
+
+#Listar Productos
+@router.get("/listar")
+async def list_products():
+    # Se buscan todos los productos, incluyendo el _id
+    products = list(products_collection.find({}))
+    
+    # Verificar si se encontraron productos
+    if not products:
+        raise HTTPException(status_code=404, detail="No se encontraron productos.")
+    
+    # Convertir el _id de ObjectId a string antes de devolverlo
+    for product in products:
+        product["id"] = str(product["_id"])  # Convertir el ObjectId a string
+    
+    # Eliminar el campo _id ya que ya lo hemos convertido a "id"
+    return [{"id": product["id"], **{key: value for key, value in product.items() if key != "_id"}} for product in products]

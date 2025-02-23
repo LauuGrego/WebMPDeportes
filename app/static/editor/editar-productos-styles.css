@@ -15,7 +15,6 @@ body {
     color: var(--color-texto);
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
 }
 
 header {
@@ -31,39 +30,6 @@ ul {
     list-style: none;
     margin: 0;
     padding: 0;
-}
-
-header {
-    width: 100%;
-}
-
-a {
-    text-decoration: none;
-    color: var(--color-texto);
-}
-
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-/* Hero Section */
-.hero {
-    background: linear-gradient(to bottom, var(--color-violeta), var(--color-naranja));
-    color: var(--color-fondo);
-    text-align: center;
-    padding: 20px 10px;
-    position: relative;
-}
-
-/* Barra de navegación */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 10px 5%;
 }
 
 .logo img {
@@ -75,10 +41,25 @@ ul {
     transform: scale(1.1);
 }
 
+/* Hero Section */
+.hero {
+    background: linear-gradient(to bottom, var(--color-violeta), var(--color-naranja));
+    color: var(--color-fondo);
+    text-align: center;
+    padding: 60px 10px;
+    position: relative;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5%;
+}
+
 .nav-links {
     display: flex;
     gap: 15px;
-    flex-wrap: wrap;
 }
 
 .nav-links li a {
@@ -93,8 +74,7 @@ ul {
     color: var(--color-fondo);
 }
 
-
-/* Search Container */
+/* Barra de búsqueda */
 .search-container {
     margin-top: 20px;
     text-align: center;
@@ -110,13 +90,11 @@ ul {
     font-size: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: var(--transition);
-    margin-bottom: 20px;
 }
 
 .search-input:focus {
     outline: none;
     border-color: var(--color-naranja);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Contenedor principal */
@@ -124,91 +102,204 @@ ul {
     max-width: 800px;
     margin: 50px auto;
     padding: 20px;
-    background-color: transparent;
-    border-radius: 10px;
-}
-
-h1 {
-    text-align: center;
-    color: var(--color-violeta);
-    margin-bottom: 20px;
 }
 
 /* Lista de productos */
 .product-list {
-    list-style: none;
     padding: 0;
+    margin: 0;
 }
 
+/* Estilos para cada producto */
 .product-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 15px;
-    background-color: var(--color-fondo);
-    border: 1px solid var(--color-borde);
-    border-radius: 8px;
-    margin-bottom: 10px;
-    transition: box-shadow var(--transition);
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin: 8px 0;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-naranja);
 }
 
 .product-item:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: scale(1.03);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .product-name {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: bold;
-}
-
-.product-description {
-    font-size: 1rem;
-    color: var(--color-texto);
-    margin-bottom: 10px;
-}
-
-.product-price {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: var(--color-naranja);
-    margin-bottom: 10px;
-}
-
-/* Botones de acciones (editar y eliminar) */
-.product-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.btn-edit, .btn-delete {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-    transition: color var(--transition);
-}
-
-.btn-edit {
     color: var(--color-violeta);
 }
 
-.btn-delete {
-    color: var(--color-naranja);
+.product-description, .product-price, .product-stock {
+    font-size: 1rem;
+    color: var(--color-texto);
+}
+
+/* Imagen del producto */
+.product-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Botones */
+.product-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.product-actions button {
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color var(--transition);
+    font-weight: bold;
+}
+
+.btn-edit {
+    background-color: var(--color-violeta);
+    color: white;
 }
 
 .btn-edit:hover {
-    color: darken(var(--color-violeta), 10%);
+    background-color: #6a47a3;
+}
+
+.btn-delete {
+    background-color: var(--color-naranja);
+    color: white;
 }
 
 .btn-delete:hover {
-    color: darken(var(--color-naranja), 10%);
+    background-color: #d97b05;
 }
 
-/* Estilos para la imagen del producto */
-.product-image {
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 10px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
 }
+
+.edit-form {
+    background: #fff;
+    padding: 20px;
+    max-height: 80vh; /* Ajustar el tamaño vertical */
+    overflow-y: auto; /* Habilitar scroll */
+    border-radius: 8px;
+    width: 600px;
+    max-width: 80%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.edit-form h2 {
+    margin-top: 0;
+    text-align: center;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+/* Etiquetas y campos */
+.edit-form label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.edit-form input {
+    width: 97%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* Botones */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.form-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
+
+#save-edit {
+    background-color: #28a745;
+    color: white;
+}
+
+#save-edit:hover {
+    background-color: #218838;
+}
+
+#cancel-edit {
+    background-color: #dc3545;
+    color: white;
+}
+
+#cancel-edit:hover {
+    background-color: #c82333;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Responsivo para pantallas pequeñas */
+@media (max-width: 600px) {
+    .edit-form {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .form-actions button {
+        width: 100%;
+    }
+}
+
 

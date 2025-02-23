@@ -114,42 +114,57 @@ h1 {
 
 /* Lista de categorías */
 .category-list {
-    list-style: none;
+    list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
-.category-item {
+/* Estilos para cada item de la lista */
+.category-list li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 15px;
-    background-color: var(--color-fondo);
-    border: 1px solid var(--color-borde);
-    border-radius: 8px;
-    margin-bottom: 10px;
-    transition: box-shadow var(--transition);
+    background-color: #f9f9f9;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid var(--color-naranja);
 }
 
-.category-item:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Hover para los items */
+.category-list li:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.category-name {
+/* Estilos para el nombre de la categoría */
+.category-list li span {
     font-size: 1.1rem;
-    font-weight: bold;
+    color: #333;
 }
 
-/* Botón de eliminar */
-.btn-delete {
+/* Estilos para el icono de eliminar */
+.delete-icon {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 5px;
-    transition: color var(--transition);
+    padding: 8px 12px;
+    font-size: 1rem;
+    transition: background-color var(--transition), color var(--transition);
+    border-radius: 5px;
+    text-align: right;
     color: var(--color-naranja);
-    font-size: 1.2rem; /* Tamaño del ícono de basura */
 }
 
-.btn-delete:hover {
-    color: darken(var(--color-naranja), 10%);
+/* Hover para el icono de eliminar */
+.delete-icon:hover {
+    background-color: var(--color-naranja);
+    color: var(--color-fondo);
+}
+
+/* Animación para el contenedor del cesto */
+.delete-icon:active {
+    transform: scale(0.9);
 }

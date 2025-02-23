@@ -11,13 +11,20 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        // Obtiene el token de localStorage
+        const token = localStorage.getItem("access_token");
+
+        if (!token) {
+            alert("No estás autenticado. Por favor inicia sesión.");
+            return;
+        }
+
         try {
             const response = await fetch("http://127.0.0.1:8000/categorias/agregar", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    // Agrega el token de autenticación si es necesario
-                    // "Authorization": "Bearer TU_TOKEN"
+                    "Authorization": `Bearer ${token}`,  // Agrega el token de autenticación en la cabecera
                 },
                 body: JSON.stringify({ name: categoryName }),
             });

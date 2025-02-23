@@ -1,5 +1,5 @@
 // URL del backend
-const API_URL = "http://127.0.0.1:8000/productos/buscar";
+const API_URL = "http://127.0.0.1:8000/productos/listar";
 
 // Función para obtener productos del backend
 async function fetchProducts(searchQuery = "") {
@@ -27,19 +27,20 @@ function displayProducts(products) {
     catalogContainer.innerHTML = ""; // Limpiar catálogo antes de agregar nuevos productos
 
     products.forEach((product) => {
-        const productCard = `
-            <div class="card animate__animated animate__fadeInLeft">
-                <img src="${product.image}" alt="${product.name}">
-                <h3>${product.name}</h3>
-                <p>${product.description}</p>
-                <span class="price">$${product.price}</span>
-                <div class="card-buttons">
-                    <button class="btn-primary animate__animated animate__pulse animate__infinite">Comprar</button>
-                    <button class="btn-secondary" onclick="openProductModal('${product.id}')">Ver más</button>
-                </div>
+        const productCard = document.createElement("div");
+        productCard.classList.add("product-card", "animate__animated", "animate__fadeInUp");
+
+        productCard.innerHTML = `
+            <div class="product-image">
+                <img src="${product.image_url}" alt="${product.name}">
             </div>
+            <div class="product-details">
+                <h3>${product.name}</h3>
+                <p class="product-description">${product.description || "Descripción no disponible"}</p>
+                <p class="product-price">$${product.price.toFixed(2)}</p>
+                <p class="product-description">Cantidad Disponible : ${product.stock}</p>
         `;
-        catalogContainer.innerHTML += productCard;
+        catalogContainer.appendChild(productCard);
     });
 }
 
@@ -47,3 +48,4 @@ function displayProducts(products) {
 document.addEventListener("DOMContentLoaded", () => {
     fetchProducts();
 });
+

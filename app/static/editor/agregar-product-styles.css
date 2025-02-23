@@ -154,6 +154,7 @@ ul {
     color: var(--color-texto);
     background-color: var(--color-fondo-seccion);
     transition: var(--transition);
+    resize: none;
 }
 
 .add-product-section input:focus, 

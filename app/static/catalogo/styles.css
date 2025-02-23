@@ -6,13 +6,10 @@
     --color-fondo-seccion: #f4f4f4;
     --color-borde: #dddddd;
     --transition: 0.3s ease-in-out;
-    --animation-duration: 1s;
-    --animation-delay: 0.2s;
 }
 
-main {
-    position: relative;
-    z-index: -1;
+html {
+    scroll-behavior: smooth;
 }
 
 /* General */
@@ -26,36 +23,18 @@ body {
     overflow-x: hidden;
 }
 
-header {
-    width: 100%;
-}
-
-a {
-    text-decoration: none;
-    color: var(--color-texto);
-}
-
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-/* Hero Section */
+/* Encabezado */
 .hero {
     background: linear-gradient(to bottom, var(--color-violeta), var(--color-naranja));
     color: var(--color-fondo);
     text-align: center;
-    padding: 20px 10px;
-    position: relative;
+    padding: 40px 10px;
 }
 
-/* Barra de navegación */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
     padding: 10px 5%;
 }
 
@@ -71,7 +50,10 @@ ul {
 .nav-links {
     display: flex;
     gap: 15px;
-    flex-wrap: wrap;
+}
+
+ul{
+    list-style: none;
 }
 
 .nav-links li a {
@@ -79,6 +61,8 @@ ul {
     padding: 8px 12px;
     border-radius: 6px;
     transition: var(--transition);
+    color: var(--color-texto);
+    text-decoration: none;
 }
 
 .nav-links li a:hover {
@@ -86,171 +70,178 @@ ul {
     color: var(--color-fondo);
 }
 
-
-/* Search Container */
+/* Buscador */
 .search-container {
-    margin-top: 20px;
-    text-align: center;
-    padding: 10px 5%;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
 .search-input {
-    width: 100%;
-    max-width: 500px;
-    padding: 10px 15px;
+    padding: 10px;
     border: 1px solid var(--color-borde);
     border-radius: 8px;
     font-size: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: var(--transition);
-    margin-bottom: 20px;
+    width: 300px;
 }
 
-.search-input:focus {
-    outline: none;
-    border-color: var(--color-naranja);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
+.btn-primary {
+    background-color: rgba(255, 255, 255, 0.397); /* Color de fondo */
+    color: var(--color-texto); /* Color del texto */
+    font-size: 16px; /* Tamaño de la fuente */
+    padding: 10px 20px; /* Relleno del botón */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    display: inline-flex; /* Alineación horizontal */
+    align-items: center; /* Centrado del icono y el texto */
+    cursor: pointer; /* Cambiar cursor a mano */
+    transition: all 0.3s ease; /* Efecto de transición */
+  }
 
-.categories {
+  .btn-primary:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Cambio de color de fondo al pasar el ratón */
+    transform: translateY(-2px);
+ color: var(--color-fondo);
+  }
+
+  .btn-primary i {
+    margin-right: 8px; /* Espaciado entre el icono y el texto */
+  }
+
+/* Contenedor principal */
+.layout-container {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 15px;
-}
-
-.category-btn {
-    padding: 8px 15px;
-    background-color: var(--color-fondo-seccion);
-    color: var(--color-texto);
-    border: 1px solid var(--color-borde);
-    border-radius: 6px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.category-btn:hover {
-    background-color: var(--color-violeta);
-    color: var(--color-fondo);
-    transform: translateY(-5px);
-}
-
-.category-btn.active {
-    background-color: var(--color-violeta);
-    color: var(--color-fondo);
-    border-color: var(--color-violeta);
-}
-
-/* Catálogo de productos */
-.catalog {
-    padding: 40px 10px;
-    background-color: var(--color-fondo-seccion);
-    text-align: center;
-}
-
-.catalog h2 {
-    color: var(--color-violeta);
-    margin-bottom: 30px;
-    font-size: 2rem;
-}
-
-.product-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
-    justify-items: center;
+    padding: 20px;
+    justify-content: center;
+    width: 100%;
 }
 
-.card {
-    background: var(--color-fondo);
-    border: 1px solid var(--color-borde);
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 8px var(--color-violeta);
-    transition: transform 0.3s, box-shadow 0.3s;
+/* Catálogo */
+.catalog {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.card img {
-    width: 100%;
-    height: auto;
-    max-height: 250px;
-    object-fit: cover;
+    align-items: center; /* Centra el contenido en el eje horizontal */
+    justify-content: center; /* Centra el contenido en el eje vertical */
+    flex: 1;
+    background-color: var(--color-fondo-seccion);
+    padding: 20px;
     border-radius: 8px;
-    margin-bottom: 15px;
+    overflow-x: auto;
+    white-space: nowrap;
+
 }
 
-.card h3 {
-    font-size: 1.2rem;
-    color: var(--color-violeta);
-    margin: 10px 0;
+/* Contenedor de tarjetas de productos */
+.product-cards {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 20px;
+    padding: 10px;
+    overflow-x: auto;
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
 }
 
-.card p {
+/* Ocultar barras de desplazamiento */
+.product-cards::-webkit-scrollbar {
+    display: none; /* Oculta la barra de desplazamiento en Chrome y Safari */
+}
+
+/* Tarjetas de productos */
+.product-card {
+    display: inline-block;
+    background: var(--color-fondo);
+    padding: 15px;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    text-align: center;
+    transition: var(--transition);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    cursor: pointer;
+    margin-bottom: 20px; /* Espacio debajo de cada tarjeta */
+}
+
+.product-card:hover {
+    
+    box-shadow: 0 0 20px  var(--color-violeta);
+    transform: translateY(-5px);
+    
+}
+
+/* Imagen de producto */
+.product-image img {
+    max-width: 100%;
+    height: auto; 
+    border-radius: 6px;
+    transition: var(--transition);
+    height: 180px;
+    object-fit: contain;
+}
+
+.product-image img:hover {
+    transform: scale(1.05);
+}
+
+.search_image {
+    max-width: 100%;
+    height: auto; 
+    border-radius: 6px;
+    transition: var(--transition);
+    height: 180px;
+    object-fit: contain;
+}
+
+/* Detalles del producto */
+.product-details {
+    padding: 10px;
+}
+
+.product-description {
     font-size: 1rem;
     color: var(--color-texto);
-    margin-bottom: 5px;
+    margin: 5px 0;
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.card .price {
-    font-size: 1.1rem;
+.product-price {
+    font-size: 1.2rem;
     font-weight: bold;
     color: var(--color-naranja);
-    margin: 5px 0;
 }
 
+/* Botones de las tarjetas */
 .card-buttons {
     display: flex;
+    justify-content: center;
     gap: 10px;
-    justify-content: center;
-    margin-top: 15px;
 }
 
-.card .btn-primary {
-    padding: 10px 20px;
-    background-color: var(--color-violeta);
-    color: var(--color-fondo);
-    border: none;
+/* Estilos del botón secundario */
+.btn-secondary {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: var(--color-violeta);
+    border: 2px solid var(--color-violeta);
     border-radius: 6px;
-    font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: var(--transition);
 }
 
-.card .btn-primary:hover {
-    background-color: var(--color-naranja);
-}
-
-.card .btn-secondary {
-    padding: 10px 20px;
-    background-color: var(--color-naranja);
-    color: var(--color-fondo);
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    text-decoration: none;
-}
-
-.card .btn-secondary:hover {
+.btn-secondary:hover {
     background-color: var(--color-violeta);
+    color: var(--color-fondo);
 }
 
-/* Modal de Detalles del Producto */
-#product-modal {
+/* Estilos del modal */
+.modal {
     display: none;
     position: fixed;
     top: 0;
@@ -263,193 +254,46 @@ ul {
     z-index: 1000;
 }
 
-#product-modal .modal-content {
+.modal-content {
     background-color: var(--color-fondo);
+    margin: 10% auto;
     padding: 20px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 500px; /* Reducimos el ancho máximo */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    position: relative;
-    animation: fadeIn 0.5s ease-in-out;
-    overflow-y: auto; /* Permitir scroll si el contenido es muy largo */
-    max-height: 90vh; /* Limitar la altura máxima al 90% de la pantalla */
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-#product-modal .close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    color: var(--color-texto);
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-#product-modal .close:hover {
-    color: var(--color-violeta);
-}
-
-#product-modal .product-images {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-}
-
-#product-modal .product-images img {
-    width: 100%;
-    max-height: 250px; /* Reducimos la altura máxima de la imagen */
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
-}
-
-#product-modal .product-images img:hover {
-    transform: scale(1.02);
-}
-
-#product-modal .thumbnails {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    margin-top: 10px;
-}
-
-#product-modal .thumbnails img {
-    width: 60px; /* Reducimos el tamaño de las miniaturas */
-    height: 60px;
-    object-fit: cover;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: transform 0.3s, border 0.3s;
-    border: 2px solid transparent;
-}
-
-#product-modal .thumbnails img:hover {
-    transform: scale(1.1);
-    border-color: var(--color-violeta);
-}
-
-#product-modal .thumbnails img.active {
-    border-color: var(--color-naranja);
-}
-
-#product-modal .product-info {
-    margin-top: 15px;
-    text-align: center;
-}
-
-#product-modal .product-info h2 {
-    color: var(--color-violeta);
-    font-size: 1.5rem; /* Reducimos el tamaño del título */
-    margin-bottom: 8px;
-}
-
-#product-modal .product-info .price {
-    font-size: 1.25rem; /* Reducimos el tamaño del precio */
-    font-weight: bold;
-    color: var(--color-naranja);
-    margin-bottom: 10px;
-}
-
-#product-modal .product-info .description {
-    font-size: 1rem; /* Reducimos el tamaño de la descripción */
-    color: var(--color-texto);
-    line-height: 1.5;
-    margin-bottom: 15px;
-}
-
-#product-modal .product-info .btn-primary {
-    padding: 10px 20px;
-    background-color: var(--color-violeta);
-    color: var(--color-fondo);
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#product-modal .product-info .btn-primary:hover {
-    background-color: var(--color-naranja);
-}
-
-/* Modal de Login */
-#login-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-#login-modal .modal-content {
-    background-color: var(--color-fondo);
-    padding: 20px;
-    border-radius: 12px;
-    width: 90%;
+    border: 1px solid var(--color-borde);
+    border-radius: 10px;
+    width: 80%;
     max-width: 400px;
+    text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-#login-modal h2 {
-    color: var(--color-violeta);
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-#login-modal label {
+.modal-content label {
     display: block;
     text-align: left;
     margin-bottom: 5px;
     font-weight: bold;
 }
 
-#login-modal input {
-    width:95%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid var(--color-borde);
-    border-radius: 6px;
-    font-size: 1rem;
+.modal-content h2 {
+    color: var(--color-violeta);
 }
 
-#login-modal button[type="submit"] {
+.modal-content button[type="submit"] {
+    background-color: var(--color-fondo);
+    color: var(--color-violeta);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 5px;
+}
+
+.modal-content button[type="submit"]:hover {
     background-color: var(--color-violeta);
     color: var(--color-fondo);
-    border: none;
-    border-radius: 6px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    display: block; /* Asegura que el botón ocupe todo el ancho disponible */
-    margin: 0 auto; /* Centra el botón horizontalmente */
 }
 
-#login-modal button[type="submit"]:hover {
-    background-color: var(--color-naranja);
-}
 
 /* Botón cerrar */
 .close {
@@ -466,131 +310,92 @@ ul {
     text-decoration: none;
 }
 
-/* Estilos para la barra lateral de filtros */
-.filters-sidebar {
-    position: fixed;
-    top: 0;
-    right: -10000px; /* Oculta la barra lateral fuera de la pantalla */
-    width: 300px;
-    height: 100vh;
-    background-color: var(--color-fondo);
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    transition: right var(--transition);
-    z-index: 1001; /* Mayor que el overlay y el contenido */
-    overflow-y: auto; /* Permitir scroll si el contenido es muy largo */
-}
-
-.filters-sidebar.open {
-    right: 0; /* Muestra la barra lateral */
-    z-index: 999;
-}
-
-/* Estilos para el botón de cerrar */
-.btn-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: var(--color-texto);
-    transition: color var(--transition);
-}
-
-.btn-close:hover {
-    color: var(--color-violeta);
-}
-
-/* Estilos para el título de la barra lateral */
-.filters-sidebar h3 {
-    color: var(--color-violeta);
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-/* Estilos para los inputs y selects dentro de la barra lateral */
-.filters-sidebar .search-input {
-    width: 100%;
+/* Inputs y botones */
+form input {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
     padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid var(--color-borde);
-    border-radius: 8px;
-    font-size: 1rem;
-    color: var(--color-texto);
-    background-color: var(--color-fondo);
-    transition: border-color var(--transition), box-shadow var(--transition);
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-.filters-sidebar .search-input:focus {
-    outline: none;
-    border-color: var(--color-naranja);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Estilos para el select */
-.filters-sidebar select {
-    appearance: none; /* Eliminar estilo por defecto */
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%237f58af%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
-    padding-right: 30px;
-}
-
-/* Estilos para el botón de aplicar filtros */
-.filters-sidebar .btn-primary {
-    width: 100%;
-    padding: 10px;
-    background-color: var(--color-violeta);
-    color: var(--color-fondo);
+form button {
+    background-color: #7f58af;
+    color: white;
+    padding: 10px 15px;
     border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color var(--transition);
-    margin-top: 10px;
+    transition: 0.3s;
 }
 
-.filters-sidebar .btn-primary:hover {
-    background-color: var(--color-naranja);
+form button:hover {
+    background-color: #f39c12;
 }
 
-/* Estilos para el botón de abrir filtros */
-#open-filters {
-    padding: 10px 20px;
-    background-color: var(--color-violeta);
-    color: var(--color-fondo);
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color var(--transition);
-    margin-left: 10px;
+/* Animación de zoom-in */
+@keyframes zoomIn {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
-#open-filters:hover {
-    background-color: var(--color-naranja);
+/* Contenedor de categorías */
+.categories-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    gap: 10px;
 }
 
+/* Botones de categorías */
+.category-button {
+    background-color: rgba(255, 255, 255, 0.397); /* Color de fondo */
+    color: var(--color-texto); /* Color del texto */
+    font-size: 16px; /* Tamaño de la fuente */
+    padding: 10px 20px; /* Relleno del botón */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    display: inline-flex; /* Alineación horizontal */
+    align-items: center; /* Centrado del icono y el texto */
+    cursor: pointer; /* Cambiar cursor a mano */
+    transition: all 0.3s ease; 
+    margin: 10px;
+}
 
-/* Media Queries */
+.category-button:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Cambio de color de fondo al pasar el ratón */
+    transform: translateY(-2px);
+ color: var(--color-fondo);
+}
+
+.category-button:active {
+    background-color: rgba(255, 255, 255, 0.2); /* Cambio de color de fondo al pasar el ratón */
+    transform: translateY(-2px);
+ color: var(--color-fondo);
+}
+
+/* Estilos para cuando una categoría está seleccionada */
+.category-button.active {
+    background-color: rgba(255, 255, 255, 0.2); /* Cambio de color de fondo al pasar el ratón */
+    transform: translateY(-2px);
+ color: var(--color-fondo);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-    .product-cards {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    .categories-container {
+        flex-direction: column;
+        align-items: center;
     }
-
-    .card img {
-        height: 180px;
-    }
-}
-
-@media (max-width: 480px) {
-    .card img {
-        height: 150px;
+    
+    .category-button {
+        width: 80%;
+        text-align: center;
     }
 }
