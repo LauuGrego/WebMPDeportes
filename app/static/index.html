@@ -4,178 +4,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo - Marca Pasos</title>
+    <title>Marca Pasos Deportes</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="./images/logo.png" type="image">
+    <link rel="icon" href="./images/logo-encabezado.png" type="image">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 <body>
     <header class="hero">
-        <nav class="navbar animate__animated animate__fadeInDown">
-            <div class="logo animate__animated animate__rotateIn">
-                <img src="./images/logo.png" alt="Marca Pasos">
-            </div>
-            <ul class="nav-links animate__animated animate__fadeInDown">
-                <li><a href="#about">Nosotros</a></li>
-                <li><a href="#contact">Contacto</a></li>
-                <li><a href="#login-modal" id="open-login">Vista Editor</a></li>
-            </ul>
-        </nav>
-        <div class="hero-content animate__animated animate__fadeInUp">
-            <h1>Bienvenidos a Marca Pasos Deportes</h1>
-            <p>Descubre nuestros productos destacados y encuentra el que mejor se adapta a ti.</p>
-            <a href="./catalogo/catalogo.html">
-                <button class="btn-primary animate__animated animate__pulse animate__infinite">Ver Catálogo</button>
-            </a>
-        </div>
-    </header>
-
-    <main>
-        <section id="about" class="about">
-            <div class="about-content animate__animated animate__fadeInUp">
-                <h2>Sobre Nosotros</h2>
-                <p>
-                    Somos <span>Marca Pasos</span>, una casa de deportes comprometida con ofrecer productos de calidad para acompañar a cada persona en sus actividades deportivas y cotidianas. Nos especializamos en indumentaria deportiva, calzado deportivo y urbano, y calzado de verano, como ojotas y crocs, para que puedas disfrutar de comodidad y estilo tanto en el gimnasio como en tu día a día.
-                    
-                    Además, contamos con una amplia variedad de accesorios deportivos pensados para todas las disciplinas y necesidades. Ya sea que practiques fútbol, running, entrenamiento en el gimnasio o deportes de aventura, en <span>Marca Pasos Deportes</span> encontrarás todo lo que necesitas para dar el siguiente paso en tu rendimiento y confort.
-                    
-                    Nos apasiona brindar productos que combinen lo mejor de la tecnología, el diseño y la accesibilidad para que cada paso que des sea con la mejor calidad. ¡Te invitamos a formar parte de nuestra comunidad y a encontrar todo lo que buscas para tu estilo de vida activo!
-                </p>
-            </div>
-        </section>
-
-        <section id="contact" class="contact">
-            <h2 class="animate__animated animate__fadeInUp">Contáctanos</h2>
-            <div class="social-links animate__animated animate__fadeInUp">
-                <a href="https://www.instagram.com/marcapasosdeportes/" target="_blank" class="social-btn animate__animated animate__bounceIn">
-                    <img src="./images/insta.jpeg" alt="Instagram">
-                    Instagram
-                </a>
-                <a href="https://wa.me/543445417684" target="_blank" class="social-btn animate__animated animate__bounceIn">
-                    <img src="./images/wsp.webp" alt="WhatsApp">
-                    WhatsApp
-                </a>
-            </div>
-        </section>
-    </main>
-
-    <footer class="animate__animated animate__fadeInUp">
-        <p>&copy; 2025 Marca Pasos. Todos los derechos reservados.</p>
-    </footer>
-
-    <!-- Ventana emergente -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content animate__animated animate__zoomIn">
-            <span id="close-login" class="close">&times;</span>
-            <h2>Iniciar Sesión</h2>
-            <form>
-                <label for="username">Usuario:</label>
-                <input type="text" id="username" placeholder="Ingresa tu usuario">
-                <label for="password">Contraseña:</label>
-                <input type="password" id="password" placeholder="Ingresa tu contraseña">
-                <button type="submit" class="animate__animated animate__pulse animate__infinite">Ingresar</button>
-            </form>
-        </div>
-    </div>
-
-    <script src="./js/boton-emergente-vista-editor.js"></script>
-
-</body>
-</html>
-=======
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo - Marca Pasos</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="./images/logo.png" type="image">
-</head>
-<body>
-    <header class="hero">
         <nav class="navbar">
-            <div class="logo">
-                <img src="./images/logo.png" alt="Marca Pasos">
-            </div>
-            <ul class="nav-links">
-                <li><a href="#about">Nosotros</a></li>
-                <li><a href="#contact">Contacto</a></li>
-                <li><a href="#login-modal" id="open-login">Vista Editor</a></li>
-
-                <!-- <li><a href="#shop" class="btn-primary">Tienda</a></li> -->
-            </ul>
-        </nav>
-        <div class="hero-content">
-            <h1>Bienvenidos a Marca Pasos Deportes</h1>
-        </div>
-        <div class="search-container">
-            <input type="text" placeholder="Buscar productos..." class="search-input">
-            <div class="categories">
-                <button class="category-btn active">Más populares</button>
-                <button class="category-btn">Categoria 1</button>
-                <button class="category-btn">Categoria 2</button>
-                <button class="category-btn">Categoria 3</button>
-                <button class="category-btn">Categoria 4</button>
-                <button class="category-btn">Categoria 5</button>
-            </div>
-        </div>
-        <div class="hero-content">
-            <a href="./catalogo/catalogo.html">
-            <p>Descubre nuestros productos destacados y encuentra el que mejor se adapta a ti.</p>
-            <button class="btn-primary">Ver Catálogo</button>
+          <ul class="navbar__links">
+            <li class="animate__animated animate__backInDown"><a href="#about">Nosotros</a></li>
+            <li class="animate__animated animate__backInDown"><a href="#contact">Contacto</a></li>
+          </ul>
+          <div class="navbar__buttons">
+            <a href="#login-modal">
+              <button id="open-login"class="animate__animated animate__backInRight btn-primary">Vista Editor</button>
             </a>
+          </div>
+        </nav>
+        <div class="hero__content">
+          <img class="hero__img animate__animated animate__backInLeft" src="./images/logo.png" alt="Marca Pasos logo">
+          <p class="animate__animated animate__flipInX">Descubre nuestros productos destacados</p>
+          <p class="animate__animated animate__flipInX">y encuentra el que mejor se adapta a ti.</p>
+          <div class="animate__animated animate__pulse animate__delay-3s animate__infinite hero__buttons">
+            <a href="./catalogo/catalogo.html">
+              <button class="animate__animated animate__flipInY btn-outline">Ver Catálogo</button>
+            </a>
+          </div>
         </div>
-    </header>
+      </header>
 
     <main>
         <section id="about" class="about">
-            <div class="about-content">
-                <h2>Sobre Nosotros</h2>
-                <p>
-                    Somos <span>Marca Pasos</span>, una casa de deportes comprometida con ofrecer productos de calidad para acompañar a cada persona en sus actividades deportivas y cotidianas. Nos especializamos en indumentaria deportiva, calzado deportivo y urbano, y calzado de verano, como ojotas y crocs, para que puedas disfrutar de comodidad y estilo tanto en el gimnasio como en tu día a día.
-                    
-                    Además, contamos con una amplia variedad de accesorios deportivos pensados para todas las disciplinas y necesidades. Ya sea que practiques fútbol, running, entrenamiento en el gimnasio o deportes de aventura, en <span>Marca Pasos Deportes</span> encontrarás todo lo que necesitas para dar el siguiente paso en tu rendimiento y confort.
-                    
-                    Nos apasiona brindar productos que combinen lo mejor de la tecnología, el diseño y la accesibilidad para que cada paso que des sea con la mejor calidad. ¡Te invitamos a formar parte de nuestra comunidad y a encontrar todo lo que buscas para tu estilo de vida activo!</p>
+            <div class="about__content">
+                <div class=" about__text-container">
+                    <h2 class="animate__animated animate__fadeInLeftBig about__title">Sobre Nosotros</h2>
+                    <p class="animate__animated animate__fadeInLeftBig about__text">
+                        Somos <span class="about__highlight">Marca Pasos</span>, una casa de deportes comprometida con ofrecer 
+                        productos de calidad para acompañar a cada persona en sus actividades deportivas y cotidianas. 
+                        Nos especializamos en indumentaria deportiva, calzado deportivo y urbano, y calzado de verano, 
+                        como ojotas y crocs, para que puedas disfrutar de comodidad y estilo tanto en el gimnasio como en tu día a día. 
+                    </p>
+                    <p class="animate__animated animate__fadeInLeftBig about__text">
+                        Además, contamos con una amplia variedad de accesorios deportivos pensados para todas las disciplinas 
+                        y necesidades. Ya sea que practiques fútbol, running, entrenamiento en el gimnasio o deportes de aventura, 
+                        en <span class="about__highlight">Marca Pasos Deportes</span> encontrarás todo lo que necesitas para dar 
+                        el siguiente paso en tu rendimiento y confort.
+                    </p>
+                    <p class="animate__animated animate__fadeInLeftBig about__text">
+                        Nos apasiona brindar productos que combinen lo mejor de la tecnología, el diseño y la accesibilidad 
+                        para que cada paso que des sea con la mejor calidad. 
+                        ¡Te invitamos a formar parte de nuestra comunidad y a encontrar todo lo que buscas para tu estilo de vida activo!
+                    </p>
+                </div>
+                <div class="animate__animated animate__fadeInRightBig about__image"></div>
             </div>
         </section>
-
+        
         <section id="contact" class="contact">
-            <h2>Contáctanos</h2>
-            <div class="social-links">
-                <a href="https://www.instagram.com/marcapasosdeportes/" target="_blank" class="social-btn">
-                    <img src="./images/insta.jpeg" alt="Instagram">
+            <h2 class="contact__title animate__animated animate__fadeInUpBig">Contáctanos</h2>
+            <div class="contact__social-links animate__animated animate__fadeInUpBig">
+                <a href="https://www.instagram.com/marcapasosdeportes/" target="_blank" class="social-btn " aria-label="Instagram">
+                    <img src="./images/Instagram.png" alt="Instagram" class="social-btn__img">
                     Instagram
                 </a>
-                <a href="https://wa.me/543445417684" target="_blank" class="social-btn">
-                    <img src=".//images/wsp.webp" alt="WhatsApp">
+                <a href="https://wa.me/543445417684" target="_blank" class="social-btn " aria-label="WhatsApp">
+                    <img src="./images/Whatsapp.png" alt="WhatsApp" class="social-btn__img">
                     WhatsApp
+                </a>
+                <a href="https://www.facebook.com/search/top?q=marca%20pasos%20deportes" target="_blank" class="social-btn " aria-label="Facebook">
+                    <img src="./images/facebook.png" alt="Facebook" class="social-btn__img">
+                    Facebook
+                </a>
+                <a href="https://maps.app.goo.gl/2tcHoon32rLNKL2V6" target="_blank" class="social-btn " aria-label="Ubicación">
+                    <img src="./images/location.png" alt="Ubicación" class="social-btn__img">
+                    Ubicación
                 </a>
             </div>
         </section>
         
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Marca Pasos. Todos los derechos reservados.</p>
-    </footer>
-
-    <!-- Ventana emergente -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content">
-            <span id="close-login" class="close">&times;</span>
-            <h2>Iniciar Sesión</h2>
-            <form>
-                <label for="username">Usuario:</label>
-                <input type="text" id="username" placeholder="Ingresa tu usuario">
-                <label for="password">Contraseña:</label>
-                <input type="password" id="password" placeholder="Ingresa tu contraseña">
-                <button type="submit">Ingresar</button>
+        <footer class="footer animate__animated animate__fadeInUp">
+            <p class="footer__text">&copy; 2025 Marca Pasos. Todos los derechos reservados.</p>
+        </footer>
+   
+        <!-- Ventana emergente -->
+    <div id="login-modal" class="modal" aria-labelledby="login-modal-title" role="dialog" aria-hidden="true">
+        <div class="modal__content animate__animated animate__zoomIn">
+            <span id="close-login" class="modal__close-btn" aria-label="Cerrar ventana">&times;</span>
+            <h2 id="login-modal-title" class="modal__title">Iniciar Sesión</h2>
+            <form class="modal__form">
+                <label for="username" class="modal__label">Usuario:</label>
+                <input type="text" id="username" class="modal__input" placeholder="Ingresa tu usuario" required aria-label="Ingresa tu usuario">
+                <label for="password" class="modal__label">Contraseña:</label>
+                <input type="password" id="password" class="modal__input" placeholder="Ingresa tu contraseña" required aria-label="Ingresa tu contraseña">
+                <button type="submit" class="modal__submit-btn animate__animated animate__pulse animate__infinite" aria-label="Ingresar">Ingresar</button>
             </form>
         </div>
     </div>
+   
+    <script src="./js/boton-emergente-vista-editor.js"></script>
+    <script src="./js/viewport-animations.js"></script>
+
+
 </body>
- <script src="./js/boton-emergente-vista-editor.js"></script> 
 </html>
->>>>>>> fcbb013a6e421ae9310f98ac2227f1e8e347b22f

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from pydantic import BaseModel, Field
 from typing import Optional, List
 
@@ -10,7 +9,7 @@ class ProductBase(BaseModel):
     description: Optional[str] = None
     stock: int
     image_url: Optional[str] = None
-
+   # color: List[str]
     class Config:
         from_attributes = True
 
@@ -18,30 +17,20 @@ class ProductCreate(ProductBase):
     category_name: str = Field(..., description="Nombre de la categoría para buscar su ID automáticamente")
 
 class Product(ProductBase):
-    id: str  # Cambié `int` por `str` para reflejar que MongoDB utiliza ObjectId como string
+    id: str  
     category_id: str
 
-=======
-from pydantic import BaseModel, Field
-from typing import Optional, List
 
-class ProductBase(BaseModel):
-    name: str
-    price: float
-    type: str
-    size: List[str]
+class ProductUpdate(BaseModel):
+    name: Optional[str] = None
+    price: Optional[float] = None
+    type: Optional[str] = None
+    size: Optional[List[str]] = None
     description: Optional[str] = None
-    stock: int
+    stock: Optional[int] = None
     image_url: Optional[str] = None
-
+    category_name: Optional[str] = None  # Opción de categoría si se quiere actualizar
+    
     class Config:
         from_attributes = True
 
-class ProductCreate(ProductBase):
-    category_name: str = Field(..., description="Nombre de la categoría para buscar su ID automáticamente")
-
-class Product(ProductBase):
-    id: str  # Cambié `int` por `str` para reflejar que MongoDB utiliza ObjectId como string
-    category_id: str
-
->>>>>>> fcbb013a6e421ae9310f98ac2227f1e8e347b22f

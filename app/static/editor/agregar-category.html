@@ -1,36 +1,45 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Producto - Marca Pasos</title>
-    <link rel="stylesheet" href="agregar-category-styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agregar Categoría - Marca Pasos</title>
+  <link rel="stylesheet" href="agregar-category-styles.css">
 </head>
 <body>
-    <header class="hero">
-        <nav class="navbar">
-            <div class="logo">
-                <img src="./../images/logo.png" alt="Marca Pasos">
-            </div>
-            <ul class="nav-links">
-                <li><a href="./inicio.html" class="btn-header">Inicio</a></li>
-                <li><a href="./agregar-product.html" class="btn-header">Agregar Producto</a></li>
-                <li><a href="./editar-productos.html "class="btn-header">Editar Producto</a></li>
-                <li><a href="./editar-categorias.html" class="btn-header">Editar Categoría</a></li>
-                <li><a href="./../index.html" class="btn-header">Cerrar Sesión</a></li>
-            </ul>
-        </nav>
-    </header>
+  <!-- HEADER -->
+  <header class="hero" role="banner">
+    <nav class="hero__nav" aria-label="Navegación Principal">
+      
+      <ul class="hero__nav-links">
+        <li class="hero__nav-item"><a href="./inicio.html" class="hero__nav-link btn-header">Inicio</a></li>
+        <li class="hero__nav-item"><a href="./agregar-product.html#main" class="hero__nav-link btn-header">Agregar Producto</a></li>
+        <li class="hero__nav-item"><a href="./editar-productos.html#main" class="hero__nav-link btn-header">Editar Producto</a></li>
+        <li class="hero__nav-item"><a href="./editar-categorias.html#main" class="hero__nav-link btn-header">Editar Categoría</a></li>
+        <li class="hero__nav-item"><a href="./../index.html" class="hero__nav-link btn-header">Cerrar Sesión</a></li>
+      </ul>      
+    </nav>
+    <div class="hero__logo">
+        <img src="./../images/logo.png" alt="Logo Marca Pasos">
+      </div>
+  </header>
 
-    <section id="add-category-section" class="add-category-section">
-        <h2>Agregar Categoría</h2>
-        <form id="add-product-form">
-            <label for="name">Nombre de la categoría:</label>
-            <input type="text" id="name" name="name" placeholder="Deportes" required>
-
-            <button type="submit" class="btn-primary">Agregar Categoría</button>
-        </form>
+  <!-- MAIN: Sección Agregar Categoría -->
+  <main id="main" class="main" role="main">
+    <section id="add-category-section" class="add-category">
+      <h2 class="add-category__title">Agregar Categoría</h2>
+      <form id="add-category-form" class="add-category__form" novalidate>
+        <div class="add-category__group">
+          <label for="name" class="add-category__label">Nombre de la categoría:</label>
+          <input type="text" id="name" name="name" class="add-category__input" placeholder="Deportes" required>
+        </div>
+        <button type="submit" class="btn-primary add-category__submit">Agregar Categoría</button>
+      </form>
     </section>
-    <script src="./../js/cargar-cateogoria.js"></script>
+  </main>
+
+  <!-- Se carga el JS para gestionar el formulario -->
+  <script src="./../js/cargar-categoria.js"></script>
+  <script src="./../js/scroll-main.js"></script>
 </body>
 </html>

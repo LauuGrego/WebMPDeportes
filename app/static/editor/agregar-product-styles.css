@@ -1,216 +1,241 @@
+/* ==============================
+   VARIABLES GLOBALES & RESET
+============================== */
 :root {
-    --color-violeta: #7f58af;
     --color-naranja: #f39c12;
-    --color-fondo: #ffffff;
-    --color-texto: #333333;
-    --color-fondo-seccion: #f4f4f4;
-    --color-borde: #dddddd;
+    --color-secondary: #ffffff;
+    --color-dark: #000000;
+    --color-overlay: rgba(0, 0, 0, 0.5);
     --transition: 0.3s ease-in-out;
-}
-
-html {
-    scroll-behavior: smooth;
-    font-size: 16px; /* 1rem = 16px */
-}
-
-/* General */
-body {
-    margin: 0;
-    font-family: 'Garamond', sans-serif;
-    background-color: var(--color-fondo);
-    color: var(--color-texto);
-    line-height: 1.6;
-    box-sizing: border-box;
-    overflow-x: hidden;
-}
-
-header {
-    width: 100%;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: var(--color-violeta);
-    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
-    transition: var(--transition);
-}
-
-a {
-    text-decoration: none;
-    color: var(--color-texto);
-    margin-right: 3vh;
-    font-size: 3vh;
-}
-
-ul {
-    list-style: none;
+    --color-violeta: #7F58AF;
+    --color-borde: #ddd
+  }
+  
+  * {
     margin: 0;
     padding: 0;
-}
-
-/* Hero Section */
-.hero {
-    background: linear-gradient(to bottom, var(--color-violeta), var(--color-naranja));
-    color: var(--color-fondo);
-    text-align: center;
-    padding: 10vh 5vw;
+    box-sizing: border-box;
+    font-family: 'Garamond', sans-serif;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    
+    background-color: var(--color-borde);
+  }
+  
+  body {
+    overflow-x: hidden;
+  }
+  
+  .header {
     position: relative;
-    animation: fadeIn 1.5s ease;
-}
-
-.hero p {
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
-/* Navbar */
-.navbar {
+    min-height: 100vh;
+    background-image: url('./../images/header-running.jpeg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; /* Alineación a la izquierda */
+    text-align: left;
+    padding: 0 5%;
+    z-index: 0;
+  }
+  
+  /* Overlay: se coloca sobre la imagen de fondo pero debajo del contenido */
+  .header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--color-overlay);
+    z-index: -100;
+  }
+  
+  /* Navegación */
+  .header__nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 5%;
-    flex-wrap: wrap;
-}
-
-.navbar .logo img {
-    height: 3.75rem;
-    transition: var(--transition);
-}
-
-.navbar .logo img:hover {
-    transform: scale(1.1);
-}
-
-.nav-links {
+    padding: 20px 50px;
+    z-index: 2;
+  }
+  
+  .header__logo img {
+    height: 150px;
+    /* Se puede ajustar o eliminar margin-right si se prefiere */
+  }
+  
+  .header__nav-links {
+    list-style: none;
     display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.nav-links li a {
-    font-weight: bold;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.375rem;
+    gap: 20px;
+    flex-grow: 1;
+  }
+  
+  .header__nav-links li {
+    display: inline;
+  }
+  
+  .header__nav-links a {
+    text-decoration: none;
+    color: var(--color-secondary);
+    font-size: 1.2rem;
+    font-weight: 200;
     transition: var(--transition);
-    position: relative;
-    overflow: hidden;
-}
+    padding: 10px;
+  }
+  
+  .header__nav-links a:hover,
+  .header__nav-links a:focus {
+    color: var(--color-naranja);
+  }
+  
+  /* Botones del header (aplicados a enlaces con clase .btn-header) */
+  .btn-header {
+    background: transparent;
+    color: var(--color-secondary);
+    padding: 10px 10px;
+    border-radius: 5px;
+    transition: background var(--transition);
+  }
+  
+  .btn-header:hover,
+  .btn-header:focus {
+    color: var(--color-naranja);
+  }
+  
+  /* Opcional: para forzar separación en el último elemento, si es necesario */
+  .header__nav-links li:last-child {
+    margin-left: 500px;
+  }
 
-.nav-links li a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: var(--color-fondo);
-}
-
-.nav-links li a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0;
-    height: 0.125rem;
-    background-color: var(--color-fondo);
-    transition: width 0.4s ease;
-}
-
-.nav-links li a:hover::after {
-    width: 100%;
-}
-
-/* Agregar Producto */
-.add-product-section {
-    max-width: 60%;
-    margin: 5vh auto;
-    padding: 2rem;
-    background-color: var(--color-fondo);
-    border-radius: 0.75rem;
-    box-shadow: 0 0.25rem 0.9375rem var(--color-violeta);
-    animation: slideIn 1s ease forwards;
-}
-
-.add-product-section h2 {
-    font-size: 2rem;
-    color: var(--color-violeta);
-    margin-bottom: 2rem;
+  .header__nav-links a:hover,
+  .header__nav-links a:focus {
+    color: var(--color-naranja);
+    background: transparent;
+  }
+  
+  /* Botones del header (aplicados a enlaces con clase .btn-header) */
+  .btn-header {
+    background: transparent;
+    color: var(--color-dark);
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background var(--transition);
+  }
+  
+  .btn-header:hover,
+  .btn-header:focus {
+    background: #e67e22;
+  }
+  
+  
+  /* ==============================
+     SECCIÓN AGREGAR PRODUCTO
+  ============================== */
+  .add-product {
+    background-color: var(--color-secondary);
+    padding: 40px 5%;
+    margin: 20px auto;
+    max-width: 800px;
+    border-radius: 8px;
+    box-shadow: 3px 6px 17px var(--color-violeta);
+  }
+  
+  .add-product__title {
     text-align: center;
-}
-
-.add-product-section form {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-}
-
-.add-product-section label {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: var(--color-dark);
+  }
+  
+  .add-product__form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .add-product__group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .add-product__label {
+    font-size: 1.2rem;
+    color: var(--color-dark);
+  }
+  
+  .add-product__input,
+  .add-product__textarea,
+  .add-product__select {
+    padding: 10px;
     font-size: 1rem;
-    color: var(--color-texto);
-}
-
-.add-product-section input, 
-.add-product-section select, 
-.add-product-section textarea {
-    padding: 0.75rem;
-    border: 0.0625rem solid var(--color-borde);
-    border-radius: 0.375rem;
-    font-size: 1rem;
-    color: var(--color-texto);
-    background-color: var(--color-fondo-seccion);
-    transition: var(--transition);
-}
-
-.add-product-section input:focus, 
-.add-product-section textarea:focus, 
-.add-product-section select:focus {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--color-secondary);
+    color: var(--color-dark);
     outline: none;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .add-product__input:focus,
+  .add-product__textarea:focus,
+  .add-product__select:focus {
     border-color: var(--color-violeta);
-    box-shadow: 0 0 0.5rem rgba(127, 88, 175, 0.5);
-}
-
-.add-product-section button {
-    background-color: var(--color-violeta);
-    color: var(--color-fondo);
-    padding: 0.875rem;
-    border: none;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    animation: popIn 1.5s ease forwards;
-}
-
-.add-product-section button:hover {
+    box-shadow: 0 0 0 3px rgba(127, 88, 175, 0.2);
+  }
+  
+  .add-product__submit {
     background-color: var(--color-naranja);
-    transform: scale(1.05);
-}
+    color: var(--color-dark);
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+  }
+  
+  .add-product__submit:hover,
+  .add-product__submit:focus {
+    background-color: #e67e22;
+  }
+  
 
-/* Animaciones */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
+  
+  /* ==============================
+     MEDIA QUERIES RESPONSIVOS
+  ============================== */
+  @media screen and (max-width: 768px) {
+    .header__nav {
+      flex-direction: column;
+      gap: 15px;
+      padding: 15px 20px;
     }
-    to {
-        opacity: 1;
+    .header__search {
+      flex-direction: column;
+      align-items: stretch;
+      margin: 20px 20px 0;
     }
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateY(1.25rem);
-        opacity: 0;
+    .header__search-input {
+      width: 100%;
     }
-    to {
-        transform: translateY(0);
-        opacity: 1;
+    .header__nav-links {
+      flex-direction: column;
+      align-items: center;
     }
-}
-
-@keyframes popIn {
-    0% {
-        transform: scale(0.9);
-        opacity: 0;
+    .add-product {
+      padding: 20px;
+      margin: 20px;
     }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-
+  }
+  

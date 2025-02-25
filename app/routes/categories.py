@@ -25,8 +25,13 @@ async def create_category(category: CategoryCreate, admin: User = Depends(admin_
     return new_category
 
 @router.get("/listar")
-async def list_categories(admin: User = Depends(admin_only)):
+async def list_categories(admin: User = Depends(admin_only) ):
     
+    categories = list(categories_collection.find({}, {"_id": 0, "name": 1}))
+    return categories
+
+@router.get("/listar-public")
+async def list_categories():
     categories = list(categories_collection.find({}, {"_id": 0, "name": 1}))
     return categories
 
@@ -40,7 +45,7 @@ async def delete_category_by_name(category_name: str, admin: User = Depends(admi
     return {"detail": f"La categoría '{category_name}' fue eliminada con éxito."}
 
 @router.get("/buscar/{category_name}")
-async def search_categories_by_name(category_name: str,admin: User = Depends(admin_only)):
+async def search_categories_by_name(category_name: str):
     category_name = category_name.title().strip()
 
     matching_categories = list(

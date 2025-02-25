@@ -3,80 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo - Marca Pasos</title>
+    <title>Marca Pasos Deportes</title>
     <link rel="stylesheet" href="inicio-styles.css">
-    <link rel="icon" href="./images/logo.png" type="image">
+    <link rel="icon" href="./../images/logo-encabezado.png" type="image">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 <body>
     <header class="hero">
-        <nav class="navbar animate__animated animate__fadeInDown">
-            <div class="logo animate__animated animate__rotateIn">
-                <img src="./../images/logo.png" alt="Marca Pasos">
-            </div>
-            <ul class="nav-links animate__animated animate__fadeInDown">
-                <li><a href="./agregar-product.html">Agregar Producto</a></li>
-                <li><a href="./agregar-category.html">Agregar Categoría</a></li>
-               <li> <a href="./editar-productos.html">Editar Productos </a></li>
-               <li> <a href="./editar-categorias.html">Editar Categorías </a></li>
-                <li><a href="./../index.html">Cerrar Sesión</a></li>
+        <nav class="navbar">
+            <ul class="navbar__links">
+              <li class="animate__animated animate__fadeInDown">
+                <a href="./agregar-product.html#main">Agregar Producto</a>
+              </li>
+              <li class="animate__animated animate__fadeInDown">
+                <a href="./agregar-category.html#main">Agregar Categoría</a>
+              </li>
+              <li class="animate__animated animate__fadeInDown">
+                <a href="./editar-productos.html#main">Editar Productos</a>
+              </li>
+              <li class="animate__animated animate__fadeInDown">
+                <a href="./editar-categorias.html#main">Editar Categorías</a>
+              </li>
+              <li class="animate__animated animate__fadeInDown">
+                <a href="./../index.html#main">Cerrar Sesión</a>
+              </li>
             </ul>
-        </nav>
-        <div class="hero-content animate__animated animate__fadeInUp">
-            <h1>Bienvenidos a Marca Pasos Deportes</h1>
-            <p>Descubre nuestros productos destacados y encuentra el que mejor se adapta a ti.</p>
+          </nav>
+        <div class="hero__content">
+          <img class="hero__img animate__animated animate__backInLeft" src="./../images/logo.png" alt="Marca Pasos logo">
         </div>
-    </header>
-
-    <main>
-        <section id="about" class="about">
-            <div class="about-content animate__animated animate__fadeInUp">
-                <h2>Sobre Nosotros</h2>
-                <p>
-                    Somos <span>Marca Pasos</span>, una casa de deportes comprometida con ofrecer productos de calidad para acompañar a cada persona en sus actividades deportivas y cotidianas. Nos especializamos en indumentaria deportiva, calzado deportivo y urbano, y calzado de verano, como ojotas y crocs, para que puedas disfrutar de comodidad y estilo tanto en el gimnasio como en tu día a día.
-                    
-                    Además, contamos con una amplia variedad de accesorios deportivos pensados para todas las disciplinas y necesidades. Ya sea que practiques fútbol, running, entrenamiento en el gimnasio o deportes de aventura, en <span>Marca Pasos Deportes</span> encontrarás todo lo que necesitas para dar el siguiente paso en tu rendimiento y confort.
-                    
-                    Nos apasiona brindar productos que combinen lo mejor de la tecnología, el diseño y la accesibilidad para que cada paso que des sea con la mejor calidad. ¡Te invitamos a formar parte de nuestra comunidad y a encontrar todo lo que buscas para tu estilo de vida activo!
-                </p>
-            </div>
-        </section>
-
-        <section id="contact" class="contact">
-            <h2 class="animate__animated animate__fadeInUp">Contáctanos</h2>
-            <div class="social-links animate__animated animate__fadeInUp">
-                <a href="https://www.instagram.com/marcapasosdeportes/" target="_blank" class="social-btn animate__animated animate__bounceIn">
-                    <img src="./../images/insta.jpeg" alt="Instagram">
-                    Instagram
-                </a>
-                <a href="https://wa.me/543445417684" target="_blank" class="social-btn animate__animated animate__bounceIn">
-                    <img src="./../images/wsp.webp" alt="WhatsApp">
-                    WhatsApp
-                </a>
-            </div>
-        </section>
-    </main>
-
-    <footer class="animate__animated animate__fadeInUp">
-        <p>&copy; 2025 Marca Pasos. Todos los derechos reservados.</p>
-    </footer>
-
-    <!-- Ventana emergente -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content animate__animated animate__zoomIn">
-            <span id="close-login" class="close">&times;</span>
-            <h2>Iniciar Sesión</h2>
-            <form>
-                <label for="username">Usuario:</label>
-                <input type="text" id="username" placeholder="Ingresa tu usuario">
-                <label for="password">Contraseña:</label>
-                <input type="password" id="password" placeholder="Ingresa tu contraseña">
-                <button type="submit" class="animate__animated animate__pulse animate__infinite">Ingresar</button>
+      </header>
+        
+        <footer class="footer animate__animated animate__fadeInUp">
+            <p class="footer__text">&copy; 2025 Marca Pasos. Todos los derechos reservados.</p>
+        </footer>
+   
+        <!-- Ventana emergente -->
+    <div id="login-modal" class="modal" aria-labelledby="login-modal-title" role="dialog" aria-hidden="true">
+        <div class="modal__content animate__animated animate__zoomIn">
+            <span id="close-login" class="modal__close-btn" aria-label="Cerrar ventana">&times;</span>
+            <h2 id="login-modal-title" class="modal__title">Iniciar Sesión</h2>
+            <form class="modal__form">
+                <label for="username" class="modal__label">Usuario:</label>
+                <input type="text" id="username" class="modal__input" placeholder="Ingresa tu usuario" required aria-label="Ingresa tu usuario">
+                <label for="password" class="modal__label">Contraseña:</label>
+                <input type="password" id="password" class="modal__input" placeholder="Ingresa tu contraseña" required aria-label="Ingresa tu contraseña">
+                <button type="submit" class="modal__submit-btn animate__animated animate__pulse animate__infinite" aria-label="Ingresar">Ingresar</button>
             </form>
         </div>
     </div>
-
+   
     <script src="./js/boton-emergente-vista-editor.js"></script>
+    <script src="./js/scroll-main.js"></script>
 
 </body>
 </html>
+
+

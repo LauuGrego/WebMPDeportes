@@ -7,7 +7,7 @@ const loginForm = document.querySelector("#login-modal form");
 
 // Muestra la ventana emergente
 openLoginBtn.addEventListener("click", () => {
-    loginModal.style.display = "flex"; // Cambia el display a 'flex' para centrar
+    loginModal.style.display = "flex";
 });
 
 // Cierra la ventana emergente
@@ -24,11 +24,11 @@ window.addEventListener("click", (e) => {
 
 // Manejo del envío del formulario de login
 loginForm.addEventListener("submit", async (event) => {
-    event.preventDefault(); // Evita la recarga de la página
+    event.preventDefault();
 
-    const formData = new FormData(loginForm);
-    const username = formData.get("username");
-    const password = formData.get("password");
+    const formData = new URLSearchParams();
+    formData.append("username", loginForm.username.value);
+    formData.append("password", loginForm.password.value);
 
     try {
         const response = await fetch("http://127.0.0.1:8000/usuarios/login", {
@@ -36,23 +36,25 @@ loginForm.addEventListener("submit", async (event) => {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: new URLSearchParams({ username, password }),
+            body: formData,
         });
 
         if (!response.ok) {
-            throw new Error("Usuario o contraseña incorrectos");
+            const errorData = await response.json();
+            throw new Error(errorData.detail || "Error en el inicio de sesión");
         }
 
         const data = await response.json();
-        localStorage.setItem("access_token", data.access_token); // Guarda el token
+        localStorage.setItem("access_token", data.access_token);
 
-        // Cierra la ventana emergente
+        // Cierra el modal
         loginModal.style.display = "none";
 
-        // Redirige a otra página
-        window.location.href = "./editor/inicio.html"; // Cambia la ruta según tu necesidad
+        // Redirige al editor
+        window.location.href = "./editor/inicio.html";
+
     } catch (error) {
-        alert(error.message); // Muestra el error si falla el login
+        alert(error.message);
     }
 });
 =======
