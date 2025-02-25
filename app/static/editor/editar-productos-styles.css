@@ -1,214 +1,363 @@
-/* Estilos generales */
+/* ==============================
+   VARIABLES GLOBALES & RESET
+============================== */
 :root {
-    --color-violeta: #7f58af;
     --color-naranja: #f39c12;
-    --color-fondo: #ffffff;
-    --color-texto: #333333;
-    --color-fondo-seccion: #f4f4f4;
-    --color-borde: #dddddd;
+    --color-secondary: #ffffff;
+    --color-dark: #000000;
+    --color-overlay: rgba(0, 0, 0, 0.5);
     --transition: 0.3s ease-in-out;
-}
-
-body {
+    --color-violeta: #7F58AF;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: 'Garamond', sans-serif;
-    background-color: var(--color-fondo);
-    color: var(--color-texto);
-    margin: 0;
-    padding: 0;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    background-color: #dadada;
     overflow-x: hidden;
-}
-
-header {
-    width: 100%;
-}
-
-a {
-    text-decoration: none;
-    color: var(--color-texto);
-}
-
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    width: 100%;
-}
-
-a {
-    text-decoration: none;
-    color: var(--color-texto);
-}
-
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-/* Hero Section */
-.hero {
-    background: linear-gradient(to bottom, var(--color-violeta), var(--color-naranja));
-    color: var(--color-fondo);
-    text-align: center;
-    padding: 20px 10px;
+  }
+  
+  /* ==============================
+     HERO (HEADER)
+  ============================== */
+  .hero {
     position: relative;
-}
-
-/* Barra de navegación */
-.navbar {
+    min-height: 100vh;
+    background-image: url('./../images/header-running.jpeg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    padding: 0 5%;
+    z-index: 0;
+  }
+  
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--color-overlay);
+    z-index: -1;
+  }
+  
+  /* ==============================
+     HERO NAVIGATION
+  ============================== */
+  .hero__nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    padding: 10px 5%;
-}
-
-.logo img {
-    height: 60px;
-    transition: var(--transition);
-}
-
-.logo img:hover {
-    transform: scale(1.1);
-}
-
-.nav-links {
+    padding: 20px 50px;
+    z-index: 2;
+  }
+  
+  .hero__logo img {
+    height: 150px;
+  }
+  
+  .hero__nav-links {
+    list-style: none;
     display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+.hero__nav-links li:last-child{
+  margin-left: 500px;
 }
-
-.nav-links li a {
-    font-weight: bold;
-    padding: 8px 12px;
-    border-radius: 6px;
+  
+  .hero__nav-link {
+    text-decoration: none;
+    color: var(--color-secondary);
+    font-size: 1.2rem;
+    font-weight: 200;
     transition: var(--transition);
-}
-
-.nav-links li a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: var(--color-fondo);
-}
-
-
-/* Search Container */
-.search-container {
-    margin-top: 20px;
-    text-align: center;
-    padding: 10px 5%;
-}
-
-.search-input {
-    width: 100%;
-    max-width: 500px;
-    padding: 10px 15px;
-    border: 1px solid var(--color-borde);
-    border-radius: 8px;
+    margin-left: 15px;
+  }
+  
+  .hero__nav-link:hover,
+  .hero__nav-link:focus {
+    color: var(--color-naranja);
+  }
+  
+  /* ==============================
+     HERO SEARCH
+  ============================== */
+  .hero__search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 50px 0;
+    z-index: 2;
+    margin-left: 0;
+    margin-top: 15px;
+  }
+  
+  
+  .hero__search-input {
+    padding: 12px 20px;
     font-size: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: var(--transition);
-    margin-bottom: 20px;
-}
-
-.search-input:focus {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--color-secondary);
+    color: var(--color-dark);
     outline: none;
-    border-color: var(--color-naranja);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Contenedor principal */
-.container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: transparent;
-    border-radius: 10px;
-}
-
-h1 {
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+    width: 300px;
+  }
+  
+  .hero__search-input:focus {
+    border-color: var(--color-violeta);
+    box-shadow: 0 0 0 3px rgba(127, 88, 175, 0.2);
+  }
+  
+  .hero__search-button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background: var(--color-naranja);
+    color: var(--color-dark);
+    cursor: pointer;
+    transition: background var(--transition);
+  }
+  
+  .hero__search-button:hover,
+  .hero__search-button:focus {
+    background: #e67e22;
+  }
+  
+  /* ==============================
+     CONTAINER & PRODUCT LIST
+  ============================== */
+  .container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 40px 5%;
+    background-color: var(--color-secondary);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  
+  .container__title {
     text-align: center;
-    color: var(--color-violeta);
     margin-bottom: 20px;
-}
-
-/* Lista de productos */
-.product-list {
+    font-size: 2rem;
+    color: var(--color-dark);
+  }
+  
+  .product-list {
     list-style: none;
     padding: 0;
-}
-
-.product-item {
+    margin: 0;
+  }
+  
+  .product-list li {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 15px;
-    background-color: var(--color-fondo);
-    border: 1px solid var(--color-borde);
-    border-radius: 8px;
-    margin-bottom: 10px;
-    transition: box-shadow var(--transition);
-}
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-violeta);
+    transition: background var(--transition);
+    margin-top: 15px;
+  }
 
-.product-item:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.product-name {
-    font-size: 1.1rem;
-    font-weight: bold;
-}
-
-.product-description {
+  
+  .product-info {
+    flex: 1 1 60%;
+  }
+  
+  .product-info h3 {
+    font-size: 1.3rem;
+    color: var(--color-dark);
+    margin-bottom: 5px;
+  }
+  
+  .product-info p {
     font-size: 1rem;
-    color: var(--color-texto);
-    margin-bottom: 10px;
-}
-
-.product-price {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: var(--color-naranja);
-    margin-bottom: 10px;
-}
-
-/* Botones de acciones (editar y eliminar) */
-.product-actions {
+    color: var(--color-dark);
+    margin: 2px 0;
+  }
+  
+  .product-image {
+    flex: 1 1 25%;
+    text-align: center;
+  }
+  
+  .product-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  
+  .product-actions {
+    flex: 1 1 100%;
     display: flex;
     gap: 10px;
-}
-
-.btn-edit, .btn-delete {
-    background: none;
+    margin-top: 10px;
+  }
+  
+  .btn-edit,
+  .btn-delete {
+    padding: 8px 12px;
     border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
     cursor: pointer;
-    padding: 5px;
-    transition: color var(--transition);
-}
-
-.btn-edit {
-    color: var(--color-violeta);
-}
-
-.btn-delete {
-    color: var(--color-naranja);
-}
-
-.btn-edit:hover {
-    color: darken(var(--color-violeta), 10%);
-}
-
-.btn-delete:hover {
-    color: darken(var(--color-naranja), 10%);
-}
-
-/* Estilos para la imagen del producto */
-.product-image {
+    transition: background var(--transition);
+  }
+  
+  .btn-edit {
+    background-color: var(--color-naranja);
+    color: var(--color-dark);
+  }
+  
+  .btn-edit:hover,
+  .btn-edit:focus {
+    background-color: #e67e22;
+  }
+  
+  .btn-delete {
+    background-color: transparent;
+    color: var(--color-dark);
+    border: 2px solid var(--color-dark);
+  }
+  
+  .btn-delete:hover,
+  .btn-delete:focus {
+    background-color: var(--color-dark);
+    color: var(--color-secondary);
+  }
+  
+/* ==============================
+   MODAL DE EDICIÓN
+============================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: auto;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px; /* Para que en pantallas pequeñas no quede pegado al borde */
+  }
+  
+  .edit-form {
+    background: var(--color-secondary);
+    padding: 20px 30px;
     border-radius: 8px;
-    margin-bottom: 10px;
-}
-
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;  /* Limita la altura máxima para que entre en pantalla */
+    overflow-y: auto;  /* Permite scroll si el contenido es muy alto */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  
+  .edit-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: var(--color-dark);
+  }
+  
+  .edit-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .edit-form label {
+    font-size: 1.2rem;
+    color: var(--color-dark);
+  }
+  
+  .edit-form input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .edit-form input:focus {
+    border-color: var(--color-violeta);
+    box-shadow: 0 0 0 3px rgba(127, 88, 175, 0.2);
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .form-actions button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  #save-edit {
+    background-color: var(--color-naranja);
+    color: var(--color-dark);
+  }
+  
+  #save-edit:hover,
+  #save-edit:focus {
+    background-color: #e67e22;
+  }
+  
+  #cancel-edit {
+    background-color: transparent;
+    color: var(--color-dark);
+    border: 2px solid var(--color-dark);
+  }
+  
+  #cancel-edit:hover,
+  #cancel-edit:focus {
+    background-color: var(--color-dark);
+    color: var(--color-secondary);}
+  
+  /* ==============================
+     MEDIA QUERIES PARA EL MODAL
+  ============================== */
+  @media screen and (max-width: 480px) {
+    .edit-form {
+      padding: 15px 20px;
+      max-width: 90%;
+    }
+    .edit-form h2 {
+      font-size: 1.5rem;
+    }
+    .form-actions button {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+  }
+  

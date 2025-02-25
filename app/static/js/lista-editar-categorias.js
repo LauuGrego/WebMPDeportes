@@ -1,75 +1,73 @@
-// URL del backend
-const API_URL = "http://127.0.0.1:8000/categorias";
+document.addEventListener("DOMContentLoaded", async () => {
+    // Obtener el token de autenticación del localStorage
+    const token = localStorage.getItem("access_token");
 
-// Función para cargar las categorías
-async function loadCategories() {
+    if (!token) {
+        alert("No estás autenticado. Por favor inicia sesión.");
+        window.location.href = "./../index.html"; // Redirige al inicio si no hay token
+        return;
+    }
+
     try {
-        // Obtener las categorías del backend
-        const response = await fetch(`${API_URL}/listar`);
-        if (!response.ok) {
-            throw new Error("Error al obtener las categorías");
-        }
+        const response = await fetch("http://127.0.0.1:8000/categorias/listar", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,  // Agregar el token en la cabecera
+            },
+        });
 
-        const categories = await response.json();
+        const data = await response.json();
 
-        // Seleccionar el contenedor de la lista de categorías
-        const categoryList = document.getElementById("category-list");
+        if (response.ok) {
+            const categoryList = document.getElementById("category-list");
+            categoryList.innerHTML = ""; // Limpiar la lista antes de agregar las categorías
 
-        // Limpiar la lista antes de agregar nuevas categorías
-        categoryList.innerHTML = "";
+            // Recorrer las categorías y agregarlas al DOM
+            data.forEach(category => {
+                const li = document.createElement("li");
 
-        // Agregar las categorías a la lista
-        categories.forEach((category) => {
-            const categoryItem = document.createElement("li");
-            categoryItem.className = "category-item";
+                // Nombre de la categoría
+                const categoryName = document.createElement("span");
+                categoryName.textContent = category.name;
 
-            // Nombre de la categoría
-            const categoryName = document.createElement("span");
-            categoryName.className = "category-name";
-            categoryName.textContent = category.name;
-
-            // Botón de eliminar (ícono de basura)
-            const btnDelete = document.createElement("button");
-            btnDelete.className = "btn-delete";
-            btnDelete.innerHTML = '<i class="fas fa-trash-alt"></i>';
-
-            // Agregar evento al botón de eliminar
-            btnDelete.addEventListener("click", async () => {
-                if (confirm(`¿Estás seguro de que quieres eliminar la categoría "${category.name}"?`)) {
+                // Cesto de basura
+                const deleteIcon = document.createElement("i");
+                deleteIcon.classList.add("fas", "fa-trash-alt", "delete-icon");
+                deleteIcon.addEventListener("click", async () => {
+                    // Funcionalidad para eliminar la categoría
                     try {
-                        const response = await fetch(`${API_URL}/eliminar/${encodeURIComponent(category.name)}`, {
+                        const responseDelete = await fetch(`http://127.0.0.1:8000/categorias/eliminar/${category.name}`, {
                             method: "DELETE",
+                            headers: {
+                                "Authorization": `Bearer ${token}`,
+                            },
                         });
 
-                        if (!response.ok) {
-                            throw new Error("Error al eliminar la categoría");
+                        if (responseDelete.ok) {
+                            li.remove(); // Eliminar el item de la lista
+                            alert(`Categoría '${category.name}' eliminada.`);
+                        } else {
+                            const data = await responseDelete.json();
+                            alert(`Error: ${data.detail}`);
                         }
-
-                        const result = await response.json();
-                        console.log("Categoría eliminada:", result);
-                        alert(result.detail); // Mostrar mensaje de éxito
-                        loadCategories(); // Recargar la lista de categorías
                     } catch (error) {
-                        console.error("Error:", error);
-                        alert("Hubo un error al eliminar la categoría");
+                        console.error("Error al eliminar categoría:", error);
+                        alert("Hubo un problema al intentar eliminar la categoría.");
                     }
-                }
+                });
+
+                // Agregar el nombre y el ícono al item
+                li.appendChild(categoryName);
+                li.appendChild(deleteIcon);
+
+                // Agregar el item a la lista
+                categoryList.appendChild(li);
             });
-
-            // Agregar nombre y botón de eliminar al ítem de la categoría
-            categoryItem.appendChild(categoryName);
-            categoryItem.appendChild(btnDelete);
-
-            // Agregar el ítem a la lista
-            categoryList.appendChild(categoryItem);
-        });
+        } else {
+            alert(`Error: ${data.detail}`);
+        }
     } catch (error) {
         console.error("Error al cargar las categorías:", error);
-        alert("Hubo un error al cargar las categorías");
+        alert("Hubo un problema al conectar con el servidor.");
     }
-}
-
-// Cargar las categorías cuando la página se cargue
-document.addEventListener("DOMContentLoaded", () => {
-    loadCategories();
 });

@@ -1,179 +1,80 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo - Marca Pasos</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo - Marca Pasos</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="./../images/logo-encabezado.png" type="image">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <header class="hero">
-        <nav class="navbar animate__animated animate__fadeInDown">
-            <div class="logo animate__animated animate__rotateIn">
-                <img src="./../images/logo.png" alt="Marca Pasos">
-            </div>
-            <ul class="nav-links animate__animated animate__fadeInDown">
-                <li><a href="./../index.html">Inicio</a></li>
-                <li><a href="#" id="open-login">Vista Editor</a></li>
-            </ul>
-        </nav>
-        <div class="search-container animate__animated animate__fadeInUp">
-            <!-- Barra de búsqueda principal -->
-            <input type="text" placeholder="Buscar productos..." class="search-input">
-            <button id="open-filters" class="btn-primary">Filtrar</button>
-        
-            <!-- Barra lateral de filtros -->
-            <div id="filters-sidebar" class="filters-sidebar">
-                <button id="close-filters" class="btn-close">&times;</button>
-                <h3>Filtros</h3>
-                <form id="search-filters">
-                    <input type="number" id="min-price" placeholder="Precio mínimo" class="search-input">
-                    <input type="number" id="max-price" placeholder="Precio máximo" class="search-input">
-                    <input type="text" id="search-type" placeholder="Tipo de producto..." class="search-input">
-                    <select id="search-category" class="search-input">
-                        <option value="">Todas las categorías</option>
-                        <!-- Las categorías se cargarán dinámicamente aquí -->
-                    </select>
-                    <input type="text" id="search-size" placeholder="Talla (separada por comas)" class="search-input">
-                    <button type="submit" class="btn-primary">Aplicar Filtros</button>
-                </form>
-            </div>
-        </div>
-    </header>
+  <header class="header">
+    <nav class="header__nav animate__animated animate__fadeInDown">
+      <ul class="header__nav-links animate__animated animate__fadeInDown">
+        <li><a href="./../index.html">Inicio</a></li>
+        <li><a href="#login-modal" id="open-login">Vista Editor</a></li>
+      </ul>
+    </nav>
+    <div class="header__logo animate__animated animate__backInDown">
+      <img src="./../images/logo.png" alt="Marca Pasos">
+    </div>
+  
+    <!-- Contenedor unificado para búsqueda, categorías y tipos -->
+<div class="header__filters animate__animated animate__fadeInLeft">
+  <div class="header__search">
+    <input type="text" placeholder="Buscar productos..." class="header__search-input">
+    <button class="btn--primary">
+      <i class="fas fa-search"></i> Buscar
+    </button>
+  </div>
 
-    <main>
-        <section id="catalog" class="catalog">
-            <h2 class="animate__animated animate__fadeInUp">Catálogo de Productos</h2>
-            <div class="product-cards">
-            </div>
-        </section>
+  <!-- Contenedor para las categorías -->
+<div class="header__categories animate__animated animate__fadeInLeft">
+  <div id="categories-buttons"></div>
+</div>
+
+<!-- Contenedor para los tipos -->
+<div class="header__types animate__animated animate__fadeInLeft">
+  <div id="types-buttons"></div>
+</div>
+
+  </header>
+
+  <div class="layout">
+    <main class="layout__main">
+      <section id="catalog" class="catalog">
+        <h2 class="animate__animated animate__fadeInUp">Catálogo</h2>
+        <div class="catalog__cards"></div>
+      </section>
     </main>
+  </div>
 
-    <!-- Modal de Detalles del Producto -->
-    <div id="product-modal" class="modal">
-        <div class="modal-content animate__animated animate__zoomIn">
-            <span class="close" onclick="closeProductModal()">&times;</span>
-            <div id="product-detail-content">
-                <!-- Contenido dinámico se cargará aquí -->
-            </div>
-        </div>
+  <!-- Ventana emergente -->
+  <div id="login-modal" class="modal">
+    <div class="modal__content animate__animated animate__zoomIn">
+      <span id="close-login" class="modal__close" tabindex="0">&times;</span>
+      <h2 class="modal__title">Iniciar Sesión</h2>
+      <form class="modal__form">
+        <label for="username" class="modal__label">Usuario:</label>
+        <input type="text" id="username" placeholder="Ingresa tu usuario" class="modal__input">
+        <label for="password" class="modal__label">Contraseña:</label>
+        <input type="password" id="password" placeholder="Ingresa tu contraseña" class="modal__input">
+        <button type="submit" class="modal__submit-btn animate__animated animate__pulse animate__infinite">Ingresar</button>
+      </form>
     </div>
+  </div>
 
-    <!-- Ventana emergente de Login -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content animate__animated animate__zoomIn">
-            <span class="close" onclick="closeLoginModal()">&times;</span>
-            <h2>Iniciar Sesión</h2>
-            <form>
-                <label for="username">Usuario:</label>
-                <input type="text" id="username" placeholder="Ingresa tu usuario">
-                <label for="password">Contraseña:</label>
-                <input type="password" id="password" placeholder="Ingresa tu contraseña">
-                <button type="submit">Ingresar</button>
-            </form>
-        </div>
-    </div>
+  <footer class="footer animate__animated animate__fadeInUp">
+    <p class="footer__text">&copy; 2025 Marca Pasos. Todos los derechos reservados.</p>
+    </footer>
 
-    <script src="./../js/botones-categorias.js"></script>
-    <script src="./../js/boton-emergente-vista-editor.js"></script>
-    <script src="./../js/obtener-productos.js"></script>
-    <script src="./../js/barra-busqueda.js"></script>
-
-    <script>
-    
-        // Abrir modal de producto
-        function openProductModal(productId) {
-            const product = products[productId];
-            const modalContent = document.getElementById("product-detail-content");
-            modalContent.innerHTML = `
-                <h2>${product.name}</h2>
-                <div class="product-images">
-                    <img src="${product.images[0]}" alt="${product.name}">
-                    <div class="thumbnails">
-                        ${product.images.map(img => `<img src="${img}" alt="Miniatura">`).join("")}
-                    </div>
-                </div>
-                <p class="price">${product.price}</p>
-                <p class="description">${product.description}</p>
-                <button class="btn-primary">Comprar</button>
-            `;
-            document.getElementById("product-modal").style.display = "flex";
-        }
-
-        // Cerrar modal de producto
-        function closeProductModal() {
-            document.getElementById("product-modal").style.display = "none";
-        }
-
-        // Abrir modal de login
-        document.getElementById("open-login").addEventListener("click", function (e) {
-            e.preventDefault();
-            document.getElementById("login-modal").style.display = "flex";
-        });
-
-        // Cerrar modal de login
-        function closeLoginModal() {
-            document.getElementById("login-modal").style.display = "none";
-        }
-
-        // Cerrar modales al hacer clic fuera de ellos
-        window.onclick = function (event) {
-            if (event.target.classList.contains("modal")) {
-                event.target.style.display = "none";
-            }
-        };
-
-        document.addEventListener("DOMContentLoaded", () => {
-    const openFiltersButton = document.getElementById("open-filters");
-    const closeFiltersButton = document.getElementById("close-filters");
-    const filtersSidebar = document.getElementById("filters-sidebar");
-    const overlay = document.createElement("div");
-    overlay.classList.add("overlay");
-
-    // Agregar el overlay al body
-    document.body.appendChild(overlay);
-
-    // Abrir la barra lateral
-    openFiltersButton.addEventListener("click", () => {
-        filtersSidebar.classList.add("open");
-        overlay.classList.add("active");
-    });
-
-    // Cerrar la barra lateral
-    closeFiltersButton.addEventListener("click", () => {
-        filtersSidebar.classList.remove("open");
-        overlay.classList.remove("active");
-    });
-
-    // Cerrar la barra lateral al hacer clic en el overlay
-    overlay.addEventListener("click", () => {
-        filtersSidebar.classList.remove("open");
-        overlay.classList.remove("active");
-    });
-
-    // Manejar el envío del formulario de filtros
-    const searchFiltersForm = document.getElementById("search-filters");
-    searchFiltersForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const filters = getFilters();
-        fetchProducts(filters);
-        filtersSidebar.classList.remove("open");
-        overlay.classList.remove("active");
-    });
-});
-
-// Función para obtener los valores de los filtros
-function getFilters() {
-    return {
-        name: document.querySelector(".search-input").value,
-        min_price: document.getElementById("min-price").value,
-        max_price: document.getElementById("max-price").value,
-        type: document.getElementById("search-type").value,
-        category: document.getElementById("search-category").value,
-        size: document.getElementById("search-size").value,
-    };
-}
-    </script>
+  <script src="./../js/botones-categorias.js"></script>
+  <script src="./../js/boton-emergente-vista-editor-catalogo.js"></script>
+  <script src="./../js/obtener-productos.js"></script>
+  <script src="./../js/barra-navegacion.js"></script>
+  <script src="./../js/botones-tipos.js"></script>
 </body>
 </html>
