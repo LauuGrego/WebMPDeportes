@@ -18,8 +18,10 @@ categories_collection = db_client.categories
 def get_product_by_id(product_id: str):
     product = products_collection.find_one({"_id": ObjectId(product_id)})
     if product:
-        product["_id"] = str(product["_id"])  # Convertir ObjectId a string
+        product["id"] = str(product["_id"])  # Asigna el id como string
+        del product["_id"]                 # Elimina el campo _id
     return product
+
 
 @router.get("/obtener_por_id/{product_id}")
 async def get_product(product_id: str):
@@ -194,3 +196,10 @@ async def list_products():
     
     # Eliminar el campo _id ya que ya lo hemos convertido a "id"
     return [{"id": product["id"], **{key: value for key, value in product.items() if key != "_id"}} for product in products]
+
+
+@router.get("/listar/tipos")
+async def list_product_types():
+    types = products_collection.distinct("type")
+    types = [t.strip().title() for t in types if t]
+    return types

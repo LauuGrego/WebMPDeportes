@@ -1,170 +1,191 @@
-/* Estilos generales */
+/* ==============================
+   VARIABLES GLOBALES & RESET
+============================== */
 :root {
-    --color-violeta: #7f58af;
     --color-naranja: #f39c12;
-    --color-fondo: #ffffff;
-    --color-texto: #333333;
-    --color-fondo-seccion: #f4f4f4;
-    --color-borde: #dddddd;
+    --color-secondary: #ffffff;
+    --color-dark: #000000;
+    --color-overlay: rgba(0, 0, 0, 0.5);
     --transition: 0.3s ease-in-out;
-}
-
-body {
+    --color-violeta: #7F58AF;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: 'Garamond', sans-serif;
-    background-color: var(--color-fondo);
-    color: var(--color-texto);
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    width: 100%;
-}
-
-a {
-    text-decoration: none;
-    color: var(--color-texto);
-}
-
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.logo img {
-    height: 60px;
-    transition: var(--transition);
-}
-
-.logo img:hover {
-    transform: scale(1.1);
-}
-
-/* Hero Section */
-.hero {
-    background: linear-gradient(to bottom, var(--color-violeta), var(--color-naranja));
-    color: var(--color-fondo);
-    text-align: center;
-    padding: 60px 10px;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    background-color: #dadada;
+    overflow-x: hidden;
+  }
+  
+  /* ==============================
+     HERO (HEADER)
+  ============================== */
+  .hero {
     position: relative;
-}
-
-.hero p {
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
-.navbar {
+    min-height: 100vh;
+    background-image: url('./../images/header-running.jpeg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    padding: 0 5%;
+    z-index: 0;
+  }
+  
+  /* Overlay: se coloca sobre la imagen de fondo pero debajo del contenido */
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--color-overlay);
+    z-index: -1;
+  }
+  
+  /* ==============================
+     NAVBAR
+  ============================== */
+  .navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 5%;
-    flex-wrap: wrap;
-}
-
-.nav-links {
+    padding: 20px 50px;
+    z-index: 2;
+  }
+  
+  .logo img {
+    height: 150px;
+  }
+  
+  .nav-links {
+    list-style: none;
     display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
+    gap: 20px;
+  }
+  
+  .nav-links li {
+    display: inline;
+  }
 
-.nav-links li a {
-    font-weight: bold;
-    padding: 8px 12px;
-    border-radius: 6px;
+  .nav-links li:last-child{
+    margin-left: 500px;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: var(--color-secondary);
+    font-size: 1.2rem;
+    font-weight: 200;
     transition: var(--transition);
-}
-
-.nav-links li a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: var(--color-fondo);
-}
-
-.btn-primary {
-    padding: 10px 20px;
-    background-color: var(--color-violeta);
-    color: var(--color-fondo);
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: var(--transition);
-    font-size: 1rem;
-    margin: 10px;
-}
-
-.btn-primary:hover {
-    background-color: var(--color-naranja);
-}
-
-.container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: transparent;
-    border-radius: 10px;
-}
-
-h1 {
+    margin-left: 15px;
+  }
+  
+  .nav-links a:hover,
+  .nav-links a:focus {
+    color: var(--color-naranja);
+  }
+  
+  /* ==============================
+     CONTENEDOR PRINCIPAL
+  ============================== */
+  .container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 40px 5%;
+    background-color: var(--color-secondary);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  
+  .container h1 {
     text-align: center;
-    color: var(--color-violeta);
     margin-bottom: 20px;
-}
-
-/* Lista de categorías */
-.category-list {
-    list-style-type: none;
+    font-size: 2rem;
+    color: var(--color-dark);
+  }
+  
+  /* ==============================
+     LISTA DE CATEGORÍAS
+  ============================== */
+  .category-list {
+    list-style: none;
     padding: 0;
     margin: 0;
-}
-
-/* Estilos para cada item de la lista */
-.category-list li {
+  }
+  
+  .category-list li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #f9f9f9;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border: 1px solid var(--color-naranja);
-}
-
-/* Hover para los items */
-.category-list li:hover {
-    transform: scale(1.03);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Estilos para el nombre de la categoría */
-.category-list li span {
-    font-size: 1.1rem;
-    color: #333;
-}
-
-/* Estilos para el icono de eliminar */
-.delete-icon {
-    background: none;
-    border: none;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-violeta);
+    transition: background var(--transition);
+  }
+  
+  
+  .category-list li span {
+    font-size: 1.2rem;
+    color: var(--color-dark);
+  }
+  
+  /* Ícono de eliminar */
+  .delete-icon {
+    color: var(--color-dark);
     cursor: pointer;
-    padding: 8px 12px;
-    font-size: 1rem;
-    transition: background-color var(--transition), color var(--transition);
-    border-radius: 5px;
-    text-align: right;
+    transition: color var(--transition), transform var(--transition);
+  }
+  
+  .delete-icon:hover,
+  .delete-icon:focus {
     color: var(--color-naranja);
-}
-
-/* Hover para el icono de eliminar */
-.delete-icon:hover {
-    background-color: var(--color-naranja);
-    color: var(--color-fondo);
-}
-
-/* Animación para el contenedor del cesto */
-.delete-icon:active {
-    transform: scale(0.9);
-}
+    transform: scale(1.1);
+  }
+  
+  /* ==============================
+     MEDIA QUERIES
+  ============================== */
+  @media screen and (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      gap: 15px;
+      padding: 15px 20px;
+    }
+    
+    .nav-links {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .container {
+      padding: 20px;
+      margin: 20px;
+    }
+    
+    .category-list li {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .delete-icon {
+      margin-top: 8px;
+    }
+  }
+  

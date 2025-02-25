@@ -1,305 +1,363 @@
-/* Estilos generales */
+/* ==============================
+   VARIABLES GLOBALES & RESET
+============================== */
 :root {
-    --color-violeta: #7f58af;
     --color-naranja: #f39c12;
-    --color-fondo: #ffffff;
-    --color-texto: #333333;
-    --color-fondo-seccion: #f4f4f4;
-    --color-borde: #dddddd;
+    --color-secondary: #ffffff;
+    --color-dark: #000000;
+    --color-overlay: rgba(0, 0, 0, 0.5);
     --transition: 0.3s ease-in-out;
-}
-
-body {
+    --color-violeta: #7F58AF;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: 'Garamond', sans-serif;
-    background-color: var(--color-fondo);
-    color: var(--color-texto);
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    width: 100%;
-}
-
-a {
-    text-decoration: none;
-    color: var(--color-texto);
-}
-
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.logo img {
-    height: 60px;
-    transition: var(--transition);
-}
-
-.logo img:hover {
-    transform: scale(1.1);
-}
-
-/* Hero Section */
-.hero {
-    background: linear-gradient(to bottom, var(--color-violeta), var(--color-naranja));
-    color: var(--color-fondo);
-    text-align: center;
-    padding: 60px 10px;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    background-color: #dadada;
+    overflow-x: hidden;
+  }
+  
+  /* ==============================
+     HERO (HEADER)
+  ============================== */
+  .hero {
     position: relative;
-}
-
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 5%;
-}
-
-.nav-links {
-    display: flex;
-    gap: 15px;
-}
-
-.nav-links li a {
-    font-weight: bold;
-    padding: 8px 12px;
-    border-radius: 6px;
-    transition: var(--transition);
-}
-
-.nav-links li a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: var(--color-fondo);
-}
-
-/* Barra de búsqueda */
-.search-container {
-    margin-top: 20px;
-    text-align: center;
-    padding: 10px 5%;
-}
-
-.search-input {
-    width: 100%;
-    max-width: 500px;
-    padding: 10px 15px;
-    border: 1px solid var(--color-borde);
-    border-radius: 8px;
-    font-size: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: var(--transition);
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: var(--color-naranja);
-}
-
-/* Contenedor principal */
-.container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-}
-
-/* Lista de productos */
-.product-list {
-    padding: 0;
-    margin: 0;
-}
-
-/* Estilos para cada producto */
-.product-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f9f9f9;
-    padding: 15px;
-    margin: 8px 0;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--color-naranja);
-}
-
-.product-item:hover {
-    transform: scale(1.03);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.product-name {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--color-violeta);
-}
-
-.product-description, .product-price, .product-stock {
-    font-size: 1rem;
-    color: var(--color-texto);
-}
-
-/* Imagen del producto */
-.product-image {
-    width: 150px;
-    height: 150px;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.product-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Botones */
-.product-actions {
+    min-height: 100vh;
+    background-image: url('./../images/header-running.jpeg');
+    background-size: cover;
+    background-position: center;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    padding: 0 5%;
+    z-index: 0;
+  }
+  
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--color-overlay);
+    z-index: -1;
+  }
+  
+  /* ==============================
+     HERO NAVIGATION
+  ============================== */
+  .hero__nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    z-index: 2;
+  }
+  
+  .hero__logo img {
+    height: 150px;
+  }
+  
+  .hero__nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+  }
+  
+.hero__nav-links li:last-child{
+  margin-left: 500px;
 }
+  
+  .hero__nav-link {
+    text-decoration: none;
+    color: var(--color-secondary);
+    font-size: 1.2rem;
+    font-weight: 200;
+    transition: var(--transition);
+    margin-left: 15px;
+  }
+  
+  .hero__nav-link:hover,
+  .hero__nav-link:focus {
+    color: var(--color-naranja);
+  }
+  
+  /* ==============================
+     HERO SEARCH
+  ============================== */
+  .hero__search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 50px 0;
+    z-index: 2;
+    margin-left: 0;
+    margin-top: 15px;
+  }
+  
+  
+  .hero__search-input {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--color-secondary);
+    color: var(--color-dark);
+    outline: none;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+    width: 300px;
+  }
+  
+  .hero__search-input:focus {
+    border-color: var(--color-violeta);
+    box-shadow: 0 0 0 3px rgba(127, 88, 175, 0.2);
+  }
+  
+  .hero__search-button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background: var(--color-naranja);
+    color: var(--color-dark);
+    cursor: pointer;
+    transition: background var(--transition);
+  }
+  
+  .hero__search-button:hover,
+  .hero__search-button:focus {
+    background: #e67e22;
+  }
+  
+  /* ==============================
+     CONTAINER & PRODUCT LIST
+  ============================== */
+  .container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 40px 5%;
+    background-color: var(--color-secondary);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  
+  .container__title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: var(--color-dark);
+  }
+  
+  .product-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .product-list li {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-violeta);
+    transition: background var(--transition);
+    margin-top: 15px;
+  }
 
-.product-actions button {
+  
+  .product-info {
+    flex: 1 1 60%;
+  }
+  
+  .product-info h3 {
+    font-size: 1.3rem;
+    color: var(--color-dark);
+    margin-bottom: 5px;
+  }
+  
+  .product-info p {
+    font-size: 1rem;
+    color: var(--color-dark);
+    margin: 2px 0;
+  }
+  
+  .product-image {
+    flex: 1 1 25%;
+    text-align: center;
+  }
+  
+  .product-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  
+  .product-actions {
+    flex: 1 1 100%;
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .btn-edit,
+  .btn-delete {
     padding: 8px 12px;
     border: none;
-    cursor: pointer;
     border-radius: 5px;
-    transition: background-color var(--transition);
-    font-weight: bold;
-}
-
-.btn-edit {
-    background-color: var(--color-violeta);
-    color: white;
-}
-
-.btn-edit:hover {
-    background-color: #6a47a3;
-}
-
-.btn-delete {
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background var(--transition);
+  }
+  
+  .btn-edit {
     background-color: var(--color-naranja);
-    color: white;
-}
-
-.btn-delete:hover {
-    background-color: #d97b05;
-}
-
-
-/* Modal */
+    color: var(--color-dark);
+  }
+  
+  .btn-edit:hover,
+  .btn-edit:focus {
+    background-color: #e67e22;
+  }
+  
+  .btn-delete {
+    background-color: transparent;
+    color: var(--color-dark);
+    border: 2px solid var(--color-dark);
+  }
+  
+  .btn-delete:hover,
+  .btn-delete:focus {
+    background-color: var(--color-dark);
+    color: var(--color-secondary);
+  }
+  
+/* ==============================
+   MODAL DE EDICIÓN
+============================== */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 999;
+    background: rgba(0,0,0,0.6);
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-y: auto;
-}
-
-.edit-form {
-    background: #fff;
-    padding: 20px;
-    max-height: 80vh; /* Ajustar el tamaño vertical */
-    overflow-y: auto; /* Habilitar scroll */
+    z-index: 1000;
+    padding: 20px; /* Para que en pantallas pequeñas no quede pegado al borde */
+  }
+  
+  .edit-form {
+    background: var(--color-secondary);
+    padding: 20px 30px;
     border-radius: 8px;
-    width: 600px;
-    max-width: 80%;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    position: relative;
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-.edit-form h2 {
-    margin-top: 0;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;  /* Limita la altura máxima para que entre en pantalla */
+    overflow-y: auto;  /* Permite scroll si el contenido es muy alto */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  
+  .edit-form h2 {
     text-align: center;
-    font-size: 1.5rem;
-    color: #333;
-}
-
-/* Etiquetas y campos */
-.edit-form label {
-    display: block;
-    margin: 10px 0 5px;
-    font-weight: bold;
-    color: #555;
-}
-
-.edit-form input {
-    width: 97%;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: var(--color-dark);
+  }
+  
+  .edit-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .edit-form label {
+    font-size: 1.2rem;
+    color: var(--color-dark);
+  }
+  
+  .edit-form input {
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
     font-size: 1rem;
-}
-
-/* Botones */
-.form-actions {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .edit-form input:focus {
+    border-color: var(--color-violeta);
+    box-shadow: 0 0 0 3px rgba(127, 88, 175, 0.2);
+  }
+  
+  .form-actions {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
-}
-
-.form-actions button {
+    margin-top: 10px;
+  }
+  
+  .form-actions button {
     padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
     font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
     transition: background 0.3s ease;
-}
-
-#save-edit {
-    background-color: #28a745;
-    color: white;
-}
-
-#save-edit:hover {
-    background-color: #218838;
-}
-
-#cancel-edit {
-    background-color: #dc3545;
-    color: white;
-}
-
-#cancel-edit:hover {
-    background-color: #c82333;
-}
-
-/* Animación de entrada */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-/* Responsivo para pantallas pequeñas */
-@media (max-width: 600px) {
+  }
+  
+  #save-edit {
+    background-color: var(--color-naranja);
+    color: var(--color-dark);
+  }
+  
+  #save-edit:hover,
+  #save-edit:focus {
+    background-color: #e67e22;
+  }
+  
+  #cancel-edit {
+    background-color: transparent;
+    color: var(--color-dark);
+    border: 2px solid var(--color-dark);
+  }
+  
+  #cancel-edit:hover,
+  #cancel-edit:focus {
+    background-color: var(--color-dark);
+    color: var(--color-secondary);}
+  
+  /* ==============================
+     MEDIA QUERIES PARA EL MODAL
+  ============================== */
+  @media screen and (max-width: 480px) {
     .edit-form {
-        width: 90%;
-        padding: 15px;
+      padding: 15px 20px;
+      max-width: 90%;
     }
-
-    .form-actions {
-        flex-direction: column;
-        gap: 10px;
+    .edit-form h2 {
+      font-size: 1.5rem;
     }
-
     .form-actions button {
-        width: 100%;
+      padding: 8px 16px;
+      font-size: 0.9rem;
     }
-}
-
-
+  }
+  

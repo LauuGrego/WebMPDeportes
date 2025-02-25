@@ -1,11 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const token = localStorage.getItem("access_token");// Obtener el token desde localStorage (o sessionStorage si lo prefieres)
+    // Obtener el token desde localStorage
+    const token = localStorage.getItem("access_token");
     
-
+    if (!token) {
+        console.error("No se encontró el token de acceso.");
+        return;
+    }
+    
     fetch('http://127.0.0.1:8000/categorias/listar', {
         method: 'GET',
-        headers: { "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+        headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
         }
     })
     .then(response => {
@@ -15,7 +21,11 @@ document.addEventListener('DOMContentLoaded', function() {
         return response.json();
     })
     .then(categories => {
-        const categorySelect = document.getElementById('category');
+        const categorySelect = document.getElementById('product-category'); // Asegúrate de que coincida con el id del select en tu HTML
+        if (!categorySelect) {
+            console.error("No se encontró el elemento de selección de categoría con id 'product-category'");
+            return;
+        }
         categories.forEach(category => {
             const option = document.createElement('option');
             option.value = category.name;

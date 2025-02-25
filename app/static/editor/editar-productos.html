@@ -1,39 +1,56 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Productos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link rel="stylesheet" href="editar-productos-styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Productos - Marca Pasos</title>
+  <!-- Font Awesome para íconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="icon" href="./../images/logo-encabezado.png" type="image">
+  <!-- Animate.css para animaciones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="editar-productos-styles.css">
 </head>
 <body>
-    <header class="hero">
-        <nav class="navbar animate__animated animate__fadeInDown">
-            <div class="logo animate__animated animate__rotateIn">
-                <img src="./../images/logo.png" alt="Marca Pasos">
-            </div>
-            <ul class="nav-links">
-                <li><a href="./inicio.html">Inicio</a></li>
-                <li><a href="./agregar-product.html">Agregar Producto</a></li>
-                <li><a href="./agregar-category.html">Agregar Categoría</a></li>
-                <li><a href="./editar-categorias.html">Editar Categoría</a></li>
-                <li><a href="./../index.html">Cerrar Sesión</a></li>
-            </ul>
-        </nav>
-        <div class="search-container animate__animated animate__fadeInUp">
-            <input type="text" placeholder="Buscar productos..." class="search-input">
-        </div>
-    </header>
-
-    <div class="container">
-        <h1>Lista de Productos</h1>
-        <ul class="product-list" id="product-list">
-            <!-- Productos cargados dinámicamente -->
-        </ul>
+  <!-- HEADER -->
+  <header class="hero" role="banner">
+    <nav class="hero__nav " aria-label="Navegación Principal">
+      
+      <ul class="hero__nav-links">
+        <li class="hero__nav-item"><a href="./inicio.html" class="hero__nav-link">Inicio</a></li>
+        <li class="hero__nav-item"><a href="./agregar-product.html#main" class="hero__nav-link">Agregar Producto</a></li>
+        <li class="hero__nav-item"><a href="./agregar-category.html#main" class="hero__nav-link">Agregar Categoría</a></li>
+        <li class="hero__nav-item"><a href="./editar-categorias.html#main" class="hero__nav-link">Editar Categoría</a></li>
+        <li class="hero__nav-item"><a href="./../index.html" class="hero__nav-link">Cerrar Sesión</a></li>
+      </ul>
+    </nav>
+    <div class="hero__logo">
+        <img src="./../images/logo.png" alt="Logo Marca Pasos">
+      </div>
+    <!-- Barra de búsqueda con botón -->
+    <div class="hero__search ">
+      <input type="text" id="hero-search" class="hero__search-input" placeholder="Buscar productos..." aria-label="Buscar productos">
+      <button type="button" class="hero__search-button btn--primary" aria-label="Buscar">
+        <i class="fas fa-search" aria-hidden="true"></i> Buscar
+      </button>
     </div>
+  </header>
 
-    <script src="./../js/lista-editar-productos.js"></script>
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main id="main" class="main" role="main">
+    <div class="container">
+      <h1 class="container__title">Lista de Productos</h1>
+      <ul class="product-list" id="product-list">
+        <!-- Los productos se cargarán dinámicamente aquí -->
+      </ul>
+    </div>
+  </main>
+
+  <!-- Se incluirán dinámicamente modales de edición -->
+  <script src="./../js/lista-editar-productos.js"></script>
+  <script src="./../js/barra-navegacion.js"></script>
+  <script src="./../js/barra-navegacion-edicion-productos"></script>
+  <script src="./../js/scroll-main.js"></script>
 </body>
 </html>

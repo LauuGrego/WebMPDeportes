@@ -1,11 +1,20 @@
 /* Variables */
 :root {
-    --color-primary: #f39c12;
+    --color-naranja: #f39c12;
     --color-secondary: #ffffff;
     --color-dark: #000000;
     --color-overlay: rgba(0, 0, 0, 0.5);
     --transition: 0.3s ease-in-out;
-    --color-violeta: #7F58AF
+    --color-violeta: #7F58AF;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Para evitar scrollbar horizontal */
+body {
+    overflow-x: hidden;
 }
 
 /* Reset básico */
@@ -13,20 +22,26 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Garamond', sans-serif;
+}
+
+.hidden {
+    opacity: 0;
+    visibility: hidden;
 }
 
 /* Hero */
 .hero {
     position: relative;
+    /* Se reemplaza height por min-height para evitar recortes de imagen en móviles */
+    min-height: 100vh; 
     background-image: url('./images/header-running.jpeg');
     background-size: cover;
     background-position: center;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: left;
+    align-items: flex-start; /* Mantiene el texto alineado a la izquierda */
     text-align: left;
     padding: 0 5%;
 }
@@ -47,28 +62,22 @@
     color: var(--color-secondary);
 }
 
-.hero__content h1 {
-    font-size: 3rem;
-    font-weight: bold;
-    justify-content: center;
-    animation-duration: 2.5s;
-}
-
 .hero__content p {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     margin: 10px 40px;
     animation-duration: 2.5s;
 }
 
 /* Botones */
 .btn-primary {
-    background: var(--color-primary);
+    background: var(--color-naranja);
     color: var(--color-dark);
     padding: 12px 20px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
     transition: var(--transition);
+    font-size: 1rem;
 }
 
 .btn-primary:hover {
@@ -140,25 +149,24 @@
     list-style: none;
     display: flex;
     gap: 20px;
-    flex-grow:1; /* Ocupa espacio entre logo y botones */
+    flex-grow: 1; /* Ocupa espacio entre logo y botones */
 }
 
 .navbar__links li {
     display: inline;
-    
     animation-duration: 1.5s;
 }
 
 .navbar__links a {
     text-decoration: none;
     color: var(--color-secondary);
-    font-size: 1rem;
+    font-size: 1.3rem;
     font-weight: 500;
     transition: var(--transition);
 }
 
 .navbar__links a:hover {
-    color: var(--color-primary);
+    color: var(--color-naranja);
 }
 
 .navbar__buttons {
@@ -168,15 +176,16 @@
 
 .hero__buttons {
     margin-top: 30px;
-    animation-duration: 1s;    
+    animation-duration: 1s;
+    /* Mantiene el botón algo desplazado a la derecha en pantallas grandes */
     margin-left: 145px;
-
 }
 
 .btn__outline {
     animation-duration: 3s;
 }
-/* 📌 Sección "Sobre Nosotros" */
+
+/* Sección "Sobre Nosotros" */
 .about {
     display: flex;
     align-items: center;
@@ -186,7 +195,6 @@
     justify-content: center;
 }
 
-/* 📌 Contenedor principal */
 .about__content {
     display: flex;
     align-items: center;
@@ -195,46 +203,48 @@
     width: 100%;
 }
 
-/* 📌 Contenedor de texto */
 .about__text-container {
     flex: 1;
     max-width: 50%;
-}
-
-/* 📌 Título */
-.about__title {
-    font-size: 2.3rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-/* 📌 Texto descriptivo */
-.about__text {
-    font-size: 1.1rem;
+    animation-duration: 2s;
+    font-size: 1.4rem;
     line-height: 1.6;
     margin-bottom: 15px;
     text-align: justify;
 }
 
-/* 📌 Resaltar palabras clave */
+.about__title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.about__text-container h2 {
+    animation-duration: 2s;
+}
+
+.about__text-container p {
+    animation-duration: 3s;
+}
+
 .about__highlight {
     font-weight: bold;
     color: #7F58AF;
 }
 
-/* 📌 Imagen a la derecha */
 .about__image {
     width: 450px;
     height: 500px;
-    background-image: url('./images/aboutus-shoes.jpg'); 
+    background-image: url('./images/aboutus-shoes.jpg');
     background-size: cover;
     background-position: center;
     border-radius: 10px;
     flex-shrink: 0;
+    animation-duration: 6s;
 }
 
-/* 📌 Sección Contacto */
+/* Sección Contacto */
 .contact {
     text-align: center;
     padding: 80px 20px;
@@ -242,15 +252,19 @@
 }
 
 .contact__title {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     margin-bottom: 30px;
     color: white;
+    animation-duration: 1.5s;
 }
 
+/* Se centra y se permiten varias filas si no cabe */
 .contact__social-links {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 30px;
+    flex-wrap: wrap;
 }
 
 .social-btn {
@@ -261,9 +275,10 @@
     background: transparent;
     color: white;
     text-decoration: none;
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     border-radius: 5px;
     transition: transform var(--transition);
+    animation-duration: 5s;
 }
 
 .social-btn__img {
@@ -274,7 +289,7 @@
     transform: scale(1.1);
 }
 
-/* 📌 Footer */
+/* Footer */
 .footer {
     background-color: var(--color-violeta);
     color: white;
@@ -283,16 +298,16 @@
 }
 
 .footer__text {
-    font-size: 1rem;
+    font-size: 1.3rem;
 }
 
-/* 📌 Modal de Login */
+/* Contenedor del modal */
 .modal {
-    display: none;
+    display: none; /* Se mostrará al activarse */
     position: fixed;
     z-index: 1000;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
@@ -300,94 +315,195 @@
     align-items: center;
 }
 
+/* Contenido del modal */
 .modal__content {
-    background: var(--color-fondo);
-    padding: 40px;
+    background: #ffffff;
+    padding: 30px 40px;
     border-radius: 8px;
-    width: 350px;
-    text-align: center;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     position: relative;
 }
 
-.modal__title {
-    margin-bottom: 20px;
-}
-
-.modal__input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid var(--color-borde);
-    border-radius: 5px;
-}
-
-.modal__submit-btn {
-    width: 100%;
-    padding: 10px;
-    background: var(--color-naranja);
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.modal__submit-btn:hover {
-    background: #e67e22;
-}
-
+/* Botón de cierre */
 .modal__close-btn {
     position: absolute;
     top: 10px;
     right: 10px;
     font-size: 30px;
-    color: var(--color-texto);
+    color: #888;
     cursor: pointer;
-    transition: color var(--transition);
+    transition: color 0.3s ease;
 }
-
 .modal__close-btn:hover {
-    color: var(--color-naranja);
+    color: #333;
 }
 
-/* 📱 Responsividad */
+/* Título del modal */
+.modal__title {
+    margin-bottom: 20px;
+    font-size: 30px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+}
+
+/* Formulario del modal */
+.modal__form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal__label {
+    font-size: 25px;
+    color: #555;
+    text-align: left;
+}
+
+.modal__input {
+    padding: 12px;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border 0.3s ease;
+}
+.modal__input:focus {
+    border-color: #917b73;
+    box-shadow: 0 0 5px var(--color-violeta);
+}
+
+.modal__submit-btn {
+    padding: 12px;
+    font-size: 25px;
+    font-weight: bold;
+    color: #fff;
+    background: var(--color-violeta);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+.modal__submit-btn:hover {
+    background: var(--color-naranja);
+}
+
+/* ==============================
+   Media Queries Responsivos
+============================== */
+
+/* Tablets y pantallas medianas (769px a 1024px) */
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+    .hero__content {
+        max-width: 80%;
+    }
+    .hero__content h1 {
+        font-size: 2.75rem;
+    }
+    .hero__content p {
+        font-size: 1.1rem;
+        margin: 10px 30px;
+    }
+    .navbar {
+        padding: 15px 30px;
+    }
+    .about {
+        padding: 70px 8%;
+    }
+    .contact {
+        padding: 70px 30px;
+    }
+    .about__image {
+        width: 100%;
+        max-width: 450px;
+        height: auto;
+    }
+}
+
+/* Dispositivos pequeños y tablets (máximo 768px) */
 @media screen and (max-width: 768px) {
     .navbar {
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
+        padding: 15px 20px;
     }
-    
-    .hero__title {
-        font-size: 2rem;
+    .hero {
+        padding: 0 3%;
     }
-
-    .hero__description {
+    .hero__content {
+        max-width: 90%;
+    }
+    .hero__content h1 {
+        font-size: 2.3rem;
+    }
+    .hero__content p {
         font-size: 1rem;
+        margin: 10px 20px;
     }
-
-    .about__title {
-        font-size: 2rem;
+    /* Evita el desplazamiento horizontal */
+    .hero__buttons {
+        margin-left: 0; 
+        margin-top: 20px;
+        text-align: center;
     }
-
-    .contact__title {
-        font-size: 2rem;
+    .navbar__links {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
     }
-
     .about {
         flex-direction: column;
         text-align: center;
+        padding: 60px 5%;
     }
-
+    /* Apila texto e imagen en "Sobre Nosotros" */
+    .about__content {
+        flex-direction: column;
+        gap: 30px;
+    }
+    .about__text-container {
+        max-width: 100%;
+    }
     .about__image {
         width: 100%;
-        max-width: 400px; /* Ajusta para pantallas pequeñas */
-        height: 250px;
-        margin-top: 20px;
+        max-width: 400px;
+        height: auto;
+        margin: 0 auto;
     }
-
-    .about__categories {
+    .contact {
+        padding: 60px 5%;
+    }
+    .contact__title {
+        font-size: 2rem;
+    }
+    .contact__social-links {
         flex-direction: column;
-        align-items: center;
+        gap: 20px;
     }
-    
+}
+
+/* Dispositivos muy pequeños (máximo 480px) */
+@media screen and (max-width: 480px) {
+    .hero__content h1 {
+        font-size: 2rem;
+    }
+    .hero__content p {
+        font-size: 0.95rem;
+        margin: 8px 15px;
+    }
+    .navbar {
+        padding: 10px 10px;
+    }
+    .contact__title {
+        font-size: 1.8rem;
+    }
+    .btn-primary,
+    .btn-secondary,
+    .btn-black,
+    .btn-outline {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
 }
