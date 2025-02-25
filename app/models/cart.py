@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from pydantic import BaseModel
 from typing import List
 
@@ -15,3 +16,22 @@ class Cart(BaseModel):
 
 class AddToCartRequest(BaseModel):
     quantity: int
+=======
+from pydantic import BaseModel
+from typing import List
+
+class CartItem(BaseModel):
+    product_id: str
+    name: str
+    price: float
+    quantity: int
+    total_price: float  # Total para este producto (price * quantity)
+
+class Cart(BaseModel):
+    user_id: str
+    items: List[CartItem]
+    total: float  # Total del carrito
+
+class AddToCartRequest(BaseModel):
+    quantity: int
+>>>>>>> fcbb013a6e421ae9310f98ac2227f1e8e347b22f

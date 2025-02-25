@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -177,3 +178,90 @@ function getFilters() {
     </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - Marca Pasos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="hero">
+        <nav class="navbar">
+            <div class="logo">
+                <img src="./../images/logo.png" alt="Marca Pasos">
+            </div>
+            <ul class="nav-links">
+                <li><a href="./../index.html">Inicio</a></li>
+                <li><a href="#login-modal" id="open-login">Vista Editor</a></li>
+                <!-- <li><a href="#shop" class="btn-primary">Tienda</a></li> -->
+            </ul>
+        </nav>
+        <div class="search-container">
+            <input type="text" placeholder="Buscar productos..." class="search-input">
+            <div class="categories">
+                <button class="category-btn active">Más populares</button>
+                <button class="category-btn">Categoria 1</button>
+                <button class="category-btn">Categoria 2</button>
+                <button class="category-btn">Categoria 3</button>
+                <button class="category-btn">Categoria 4</button>
+                <button class="category-btn">Categoria 5</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="catalog" class="catalog">
+            <h2>Catálogo de Productos</h2>
+            <div class="product-cards">
+                <div class="card">
+                    <img src=".//../../images/nike1.jpeg" alt="Producto 1">
+                    <h3>Producto 1</h3>
+                    <p>Descripción breve del producto 1.</p>
+                    <span class="price">$1,200</span>
+                    <button class="btn-primary">Comprar</button>
+                </div>
+                <div class="card">
+                    <img src=".//../../images/nike1.jpeg" alt="Producto 2">
+                    <h3>Producto 2</h3>
+                    <p>Descripción breve del producto 2.</p>
+                    <span class="price">$900</span>
+                    <button class="btn-primary">Comprar</button>
+                </div>
+                <div class="card">
+                    <img src=".//../../images/nike1.jpeg" alt="Producto 3">
+                    <h3>Producto 3</h3>
+                    <p>Descripción breve del producto 3.</p>
+                    <span class="price">$750</span>
+                    <button class="btn-primary">Comprar</button>
+                </div>
+                <div class="card">
+                    <img src=".//../../images/nike1.jpeg" alt="Producto 4">
+                    <h3>Producto 4</h3>
+                    <p>Descripción breve del producto 4.</p>
+                    <span class="price">$1,050</span>
+                    <button class="btn-primary">Comprar</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Ventana emergente -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-login" class="close">&times;</span>
+            <h2>Iniciar Sesión</h2>
+            <form>
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" placeholder="Ingresa tu usuario">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" placeholder="Ingresa tu contraseña">
+                <button type="submit">Ingresar</button>
+            </form>
+        </div>
+    </div>
+</body>
+<script src="./../js/boton-emergente-vista-editor.js"></script> 
+</html>
+>>>>>>> fcbb013a6e421ae9310f98ac2227f1e8e347b22f

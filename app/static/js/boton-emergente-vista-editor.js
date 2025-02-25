@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Selecciona los elementos necesarios
 const openLoginBtn = document.getElementById("open-login");
 const closeLoginBtn = document.getElementById("close-login");
@@ -54,3 +55,26 @@ loginForm.addEventListener("submit", async (event) => {
         alert(error.message); // Muestra el error si falla el login
     }
 });
+=======
+// Selecciona los elementos necesarios
+const openLoginBtn = document.getElementById('open-login');
+const closeLoginBtn = document.getElementById('close-login');
+const loginModal = document.getElementById('login-modal');
+
+// Muestra la ventana emergente
+openLoginBtn.addEventListener('click', () => {
+    loginModal.style.display = 'flex'; // Cambia el display a 'flex' para centrar
+});
+
+// Cierra la ventana emergente
+closeLoginBtn.addEventListener('click', () => {
+    loginModal.style.display = 'none';
+});
+
+// Cierra la ventana al hacer clic fuera de la tarjeta
+window.addEventListener('click', (e) => {
+    if (e.target === loginModal) {
+        loginModal.style.display = 'none';
+    }
+});
+>>>>>>> fcbb013a6e421ae9310f98ac2227f1e8e347b22f
