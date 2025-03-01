@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="catalog__card-details">
             <h3 class="catalog__card-title">${product.name}</h3>
             <p class="catalog__card-description">${product.description || "Descripción no disponible"}</p>
-            <p class="catalog__card-price">$${product.price.toFixed(2)}</p>
+            <p class="catalog__card-size">Talles Disponibles: ${product.size || "Sin Stock"}</p>
             <p class="catalog__card-stock">Cantidad Disponible: ${product.stock}</p>
           </div>
         `;

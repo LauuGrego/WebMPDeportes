@@ -127,6 +127,8 @@ ul {
     background-color: var(--color-fondo-seccion);
 }
 
+
+
 .add-product-section input[type="number"]:valid, 
 .add-product-section input[type="text"]:valid, 
 .add-product-section input[type="url"]:valid, 
@@ -143,6 +145,10 @@ ul {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+}
+
+.add-product__textarea {
+    resize: none;
 }
 
 .add-product-section button:hover {

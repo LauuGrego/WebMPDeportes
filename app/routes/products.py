@@ -35,67 +35,67 @@ async def get_product(product_id: str):
 # Agregar productos
 @router.post("/agregar", response_model=Product)
 async def create_product(product_data: ProductCreate, admin: User = Depends(admin_only)):
-    
-
+    # Normalizar los datos de entrada
     product_data.name = product_data.name.strip().title()
     product_data.category_name = product_data.category_name.strip().title()
     product_data.type = product_data.type.strip().title()
 
- 
     if product_data.size:
         product_data.size = [s.strip().title() for s in product_data.size if s.strip()]
-    """  
-    if product_data.color:
-        product_data.color = [s.strip().title() for s in product_data.color if s.strip()]
-"""
+
+
+    # Asegurarse de que image_url sea una lista; de lo contrario, asignar una lista vacía
+    if not product_data.image_url:
+        product_data.image_url = []
 
     category = categories_collection.find_one({"name": product_data.category_name})
     if not category:
         raise HTTPException(status_code=404, detail=f"La categoría '{product_data.category_name}' no existe.")
     
-  
     product_dict = product_data.model_dump()
     product_dict.pop("category_name")  
     product_dict["category_id"] = str(category["_id"])  
-    
 
     result = products_collection.insert_one(product_dict)
-
-   
     product_dict["_id"] = str(result.inserted_id)
     product_dict["id"] = product_dict.pop("_id")
     
     return product_dict
 
 
-# Actualizar productos
+
 @router.put("/actualizar/{product_id}", response_model=Product)
 async def modify_product(product_id: str, updated_product: ProductUpdate, admin: User = Depends(admin_only)):
     db_product = get_product_by_id(product_id)
     if not db_product:
         raise HTTPException(status_code=404, detail="Producto no encontrado.")
 
+    # Si se actualiza la categoría, normalizar y verificar su existencia
+    category = None
     if updated_product.category_name:
         updated_product.category_name = updated_product.category_name.strip().title()
         category = categories_collection.find_one({"name": updated_product.category_name})
         if not category:
             raise HTTPException(status_code=404, detail=f"La categoría '{updated_product.category_name}' no existe.")
 
+    # Normalizar listas
     if updated_product.size:
         updated_product.size = [s.strip().title() for s in updated_product.size if s.strip()]
+
+    if updated_product.image_url:
+        updated_product.image_url = [url.strip() for url in updated_product.image_url if url.strip()]
 
     # Obtener solo los campos que han sido enviados
     update_data = updated_product.model_dump(exclude_unset=True)
 
     # Si se actualizó la categoría, agrega el category_id
-    if updated_product.category_name:
+    if category:
         update_data["category_id"] = str(category["_id"])
 
-    # Actualizar solo los campos recibidos
+    # Actualizar solo los campos recibidos en la base de datos
     products_collection.update_one({"_id": ObjectId(product_id)}, {"$set": update_data})
 
     return get_product_by_id(product_id)
-
 
 
 

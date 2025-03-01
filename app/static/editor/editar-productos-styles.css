@@ -249,6 +249,64 @@
   }
   
 /* ==============================
+   ESTILOS PARA EL CARRUSEL DE PRODUCTOS
+============================== */
+.product-carousel {
+  position: relative;
+  width: 100%;
+  max-width: 400px; /* Ajusta según lo requieras para cada producto */
+  margin: 10px auto;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-carousel .carousel-images {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.product-carousel .carousel-item {
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.product-carousel .carousel-item img {
+  width: 100%;
+  display: block;
+  border-radius: inherit;
+}
+
+/* Botones para navegar en el carrusel */
+.product-carousel .carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--color-overlay);
+  border: none;
+  color: var(--color-secondary);
+  padding: 10px 15px;
+  cursor: pointer;
+  z-index: 10;
+  font-size: 1.5rem;
+  border-radius: 50%;
+}
+
+.product-carousel .carousel-button.prev {
+  left: 10px;
+}
+
+.product-carousel .carousel-button.next {
+  right: 10px;
+}
+
+.product-carousel .carousel-button:hover,
+.product-carousel .carousel-button:focus {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+
+/* ==============================
    MODAL DE EDICIÓN
 ============================== */
 .modal-overlay {

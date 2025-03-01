@@ -1,5 +1,7 @@
-/* Variables */
-:root {
+/* =========================
+   VARIABLES Y RESET BÁSICO
+   ========================= */
+   :root {
     --color-naranja: #f39c12;
     --color-secondary: #ffffff;
     --color-dark: #000000;
@@ -12,12 +14,6 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Para evitar scrollbar horizontal */
-body {
-    overflow-x: hidden;
-}
-
-/* Reset básico */
 * {
     margin: 0;
     padding: 0;
@@ -25,15 +21,22 @@ body {
     font-family: 'Garamond', sans-serif;
 }
 
+html, body {
+    max-width: 100%;
+    overflow-x: hidden; /* Evita el scroll horizontal en general */
+}
+
 .hidden {
     opacity: 0;
     visibility: hidden;
 }
 
-/* Hero */
+
+/* =========================
+   SECCIÓN: HERO (HEADER)
+   ========================= */
 .hero {
     position: relative;
-    /* Se reemplaza height por min-height para evitar recortes de imagen en móviles */
     min-height: 100vh; 
     background-image: url('./images/header-running.jpeg');
     background-size: cover;
@@ -41,7 +44,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start; /* Mantiene el texto alineado a la izquierda */
+    align-items: flex-start; 
     text-align: left;
     padding: 0 5%;
 }
@@ -58,17 +61,40 @@ body {
 
 .hero__content {
     position: relative;
-    max-width: 600px;
+    max-width: 90%; /* Se conserva el tamaño original en desktop */
     color: var(--color-secondary);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
 }
 
 .hero__content p {
     font-size: 1.5rem;
-    margin: 10px 40px;
+    margin: 0 40px;
     animation-duration: 2.5s;
 }
 
-/* Botones */
+.hero__content img {
+    height: 150px;
+    animation-duration: 1s;
+    margin-right: 50px;
+}
+
+.hero__buttons {
+    margin-top: 30px;
+    animation-duration: 1s;
+    margin-left: 145px; /* Preservado para desktop */
+}
+
+.btn__outline {
+    animation-duration: 3s;
+}
+
+
+/* =========================
+   BOTONES (GENERALES)
+   ========================= */
 .btn-primary {
     background: var(--color-naranja);
     color: var(--color-dark);
@@ -78,39 +104,14 @@ body {
     border-radius: 5px;
     transition: var(--transition);
     font-size: 1rem;
+   position: relative;
+   left: 1100px;
 }
 
 .btn-primary:hover {
     background: #e67e22;
 }
 
-.btn-secondary {
-    background: transparent;
-    border: 2px solid var(--color-secondary);
-    color: var(--color-secondary);
-    padding: 8px 15px;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.btn-secondary:hover {
-    background: var(--color-secondary);
-    color: var(--color-dark);
-}
-
-.btn-black {
-    background: var(--color-dark);
-    color: var(--color-secondary);
-    padding: 12px 24px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: var(--transition);
-}
-
-.btn-black:hover {
-    background: #222;
-}
 
 .btn-outline {
     background: transparent;
@@ -120,6 +121,8 @@ body {
     cursor: pointer;
     border-radius: 5px;
     transition: var(--transition);
+    font-size: 1.3rem;
+    margin-top: 0;
 }
 
 .btn-outline:hover {
@@ -127,34 +130,34 @@ body {
     color: var(--color-dark);
 }
 
-/* Navbar */
+
+/* =========================
+   NAVBAR
+   ========================= */
 .navbar {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     display: flex;
+    flex-wrap: wrap; /* Permite reacomodar elementos en varias líneas */
     justify-content: space-between;
     align-items: center;
-    padding: 20px 50px;
-}
-
-.hero__content img {
-    height: 150px;
-    animation-duration: 1s;
-    margin-right: 50px;
+    padding: 2% 5%;
 }
 
 .navbar__links {
     list-style: none;
     display: flex;
     gap: 20px;
-    flex-grow: 1; /* Ocupa espacio entre logo y botones */
+    flex-grow: 1;
+    flex-wrap: wrap;
 }
 
 .navbar__links li {
     display: inline;
     animation-duration: 1.5s;
+    margin: 15px;
 }
 
 .navbar__links a {
@@ -163,40 +166,34 @@ body {
     font-size: 1.3rem;
     font-weight: 500;
     transition: var(--transition);
+   
 }
 
 .navbar__links a:hover {
     color: var(--color-naranja);
 }
 
-.navbar__buttons {
-    display: flex;
-    gap: 10px;
-}
 
-.hero__buttons {
-    margin-top: 30px;
-    animation-duration: 1s;
-    /* Mantiene el botón algo desplazado a la derecha en pantallas grandes */
-    margin-left: 145px;
-}
 
-.btn__outline {
-    animation-duration: 3s;
-}
-
-/* Sección "Sobre Nosotros" */
+/* =========================
+   SECCIÓN: SOBRE NOSOTROS
+   ========================= */
 .about {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     background-color: var(--color-dark);
     color: var(--color-secondary);
     padding: 80px 10%;
     justify-content: center;
+    gap: 30px;
 }
 
 .about__content {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 50px;
@@ -204,7 +201,7 @@ body {
 }
 
 .about__text-container {
-    flex: 1;
+    flex: 1 1 100%;
     max-width: 50%;
     animation-duration: 2s;
     font-size: 1.4rem;
@@ -234,17 +231,21 @@ body {
 }
 
 .about__image {
-    width: 450px;
-    height: 500px;
+    flex: 0 1 450px;
+    width: 100%;
+    max-width: 450px;
+    height: 500px; /* Asegura que se vea el background */
     background-image: url('./images/aboutus-shoes.jpg');
     background-size: cover;
     background-position: center;
     border-radius: 10px;
-    flex-shrink: 0;
     animation-duration: 6s;
 }
 
-/* Sección Contacto */
+
+/* =========================
+   SECCIÓN: CONTACTO
+   ========================= */
 .contact {
     text-align: center;
     padding: 80px 20px;
@@ -258,7 +259,6 @@ body {
     animation-duration: 1.5s;
 }
 
-/* Se centra y se permiten varias filas si no cabe */
 .contact__social-links {
     display: flex;
     justify-content: center;
@@ -289,7 +289,10 @@ body {
     transform: scale(1.1);
 }
 
-/* Footer */
+
+/* =========================
+   FOOTER
+   ========================= */
 .footer {
     background-color: var(--color-violeta);
     color: white;
@@ -301,9 +304,12 @@ body {
     font-size: 1.3rem;
 }
 
-/* Contenedor del modal */
+
+/* =========================
+   MODAL
+   ========================= */
 .modal {
-    display: none; /* Se mostrará al activarse */
+    display: none; 
     position: fixed;
     z-index: 1000;
     top: 0;
@@ -315,7 +321,6 @@ body {
     align-items: center;
 }
 
-/* Contenido del modal */
 .modal__content {
     background: #ffffff;
     padding: 30px 40px;
@@ -326,7 +331,6 @@ body {
     position: relative;
 }
 
-/* Botón de cierre */
 .modal__close-btn {
     position: absolute;
     top: 10px;
@@ -336,11 +340,11 @@ body {
     cursor: pointer;
     transition: color 0.3s ease;
 }
+
 .modal__close-btn:hover {
     color: #333;
 }
 
-/* Título del modal */
 .modal__title {
     margin-bottom: 20px;
     font-size: 30px;
@@ -349,7 +353,6 @@ body {
     text-align: center;
 }
 
-/* Formulario del modal */
 .modal__form {
     display: flex;
     flex-direction: column;
@@ -370,6 +373,7 @@ body {
     outline: none;
     transition: border 0.3s ease;
 }
+
 .modal__input:focus {
     border-color: #917b73;
     box-shadow: 0 0 5px var(--color-violeta);
@@ -386,26 +390,26 @@ body {
     cursor: pointer;
     transition: background 0.3s ease;
 }
+
 .modal__submit-btn:hover {
     background: var(--color-naranja);
 }
 
-/* ==============================
-   Media Queries Responsivos
-============================== */
 
-/* Tablets y pantallas medianas (769px a 1024px) */
-@media screen and (max-width: 1024px) and (min-width: 769px) {
+/* =========================
+   MEDIA QUERIES
+   ========================= */
+
+/* TABLETS Y PANTALLAS MEDIAS (MÁX 1024px) */
+@media screen and (max-width: 1024px) {
     .hero__content {
         max-width: 80%;
     }
-    .hero__content h1 {
-        font-size: 2.75rem;
-    }
     .hero__content p {
-        font-size: 1.1rem;
-        margin: 10px 30px;
+        font-size: 1.6rem;
+        margin: 0 auto;
     }
+    
     .navbar {
         padding: 15px 30px;
     }
@@ -416,13 +420,16 @@ body {
         padding: 70px 30px;
     }
     .about__image {
-        width: 100%;
-        max-width: 450px;
+        max-width: 400px;
         height: auto;
+    }
+
+    .about__text {
+        margin: 10px;
     }
 }
 
-/* Dispositivos pequeños y tablets (máximo 768px) */
+/* DISPOSITIVOS PEQUEÑOS (MÁX 768px) */
 @media screen and (max-width: 768px) {
     .navbar {
         flex-direction: column;
@@ -431,34 +438,48 @@ body {
     }
     .hero {
         padding: 0 3%;
+        /* Centrar elementos del header en móviles */
+        align-items: center;
+        text-align: center;
     }
     .hero__content {
         max-width: 90%;
+        align-items: center;
     }
-    .hero__content h1 {
-        font-size: 2.3rem;
+    /* La imagen ocupará el 80% del ancho del contenedor */
+    .hero__content {
+        align-items: center;
     }
+   
+    .hero__content img {
+        width: 90%;
+        height: auto;
+        margin: 10px;
+        
+    }
+    /* Ajuste en el tamaño y centrado del texto */
     .hero__content p {
-        font-size: 1rem;
-        margin: 10px 20px;
+        font-size: 1.6rem;
+        margin: 0 auto;
     }
-    /* Evita el desplazamiento horizontal */
     .hero__buttons {
-        margin-left: 0; 
+        margin-left: 0;
         margin-top: 20px;
-        text-align: center;
+        align-self: center;
     }
-    .navbar__links {
-        flex-direction: column;
+    .navbar__links{
+        flex-direction: row;
         align-items: center;
         gap: 10px;
+    }
+    .navbar__links a {
+        font-size: 25px;
     }
     .about {
         flex-direction: column;
         text-align: center;
         padding: 60px 5%;
     }
-    /* Apila texto e imagen en "Sobre Nosotros" */
     .about__content {
         flex-direction: column;
         gap: 30px;
@@ -482,16 +503,17 @@ body {
         flex-direction: column;
         gap: 20px;
     }
+
+    .about__text {
+        margin: 10px;
+    }
 }
 
-/* Dispositivos muy pequeños (máximo 480px) */
+/* DISPOSITIVOS MUY PEQUEÑOS (MÁX 480px) */
 @media screen and (max-width: 480px) {
-    .hero__content h1 {
-        font-size: 2rem;
-    }
     .hero__content p {
-        font-size: 0.95rem;
-        margin: 8px 15px;
+        font-size: 1.6rem;
+        margin: 0 auto;
     }
     .navbar {
         padding: 10px 10px;
@@ -504,6 +526,14 @@ body {
     .btn-black,
     .btn-outline {
         padding: 10px 15px;
-        font-size: 0.9rem;
+        font-size: 1.5rem;
+    }
+    .btn-primary {
+        margin-top: 10px;
+        left: 0;
+        top: 0;
+    }
+    .about__text {
+        margin: 10px;
     }
 }

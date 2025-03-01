@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from fastapi import APIRouter, HTTPException, Depends
 from models.category import Category, CategoryBase, CategoryCreate
 from .users_JWT_auth import admin_only
@@ -57,58 +56,3 @@ async def search_categories_by_name(category_name: str):
     for category in matching_categories:
         category["_id"] = str(category["_id"])
     return matching_categories
-=======
-from fastapi import APIRouter, HTTPException, Depends
-from models.category import Category, CategoryBase, CategoryCreate
-from .users_JWT_auth import admin_only
-from models.user import User
-from db.client import db_client
-from bson import ObjectId
-
-router = APIRouter(prefix="/categorias", tags=["Categories"])
-
-# Colección de categorías
-categories_collection = db_client.categories
-
-@router.post("/agregar", status_code=201)
-async def create_category(category: CategoryCreate, admin: User = Depends(admin_only)):
-    category.name = category.name.title().strip()
-
-    if categories_collection.find_one({"name": category.name}):
-        raise HTTPException(status_code=400, detail="La categoría ya existe.")
-
-    new_category = {"name": category.name}
-    result = categories_collection.insert_one(new_category)
-
-    new_category["_id"] = str(result.inserted_id)
-    return new_category
-
-@router.get("/listar")
-async def list_categories(admin: User = Depends(admin_only)):
-    
-    categories = list(categories_collection.find({}, {"_id": 0, "name": 1}))
-    return categories
-
-@router.delete("/eliminar/{category_name}")
-async def delete_category_by_name(category_name: str, admin: User = Depends(admin_only)):
-    category_name = category_name.title().strip()
-
-    result = categories_collection.delete_one({"name": category_name})
-    if result.deleted_count == 0:
-        raise HTTPException(status_code=404, detail="Categoría no encontrada.")
-    return {"detail": f"La categoría '{category_name}' fue eliminada con éxito."}
-
-@router.get("/buscar/{category_name}")
-async def search_categories_by_name(category_name: str,admin: User = Depends(admin_only)):
-    category_name = category_name.title().strip()
-
-    matching_categories = list(
-        categories_collection.find({"name": {"$regex": category_name, "$options": "i"}})
-    )
-    if not matching_categories:
-        raise HTTPException(status_code=404, detail="No se encontraron categorías que coincidan con la búsqueda.")
-    
-    for category in matching_categories:
-        category["_id"] = str(category["_id"])
-    return matching_categories
->>>>>>> fcbb013a6e421ae9310f98ac2227f1e8e347b22f
