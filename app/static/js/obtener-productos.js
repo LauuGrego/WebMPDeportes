@@ -1,6 +1,11 @@
 // URL del backend
 const API_URL = "http://127.0.0.1:8000/productos/listar";
 
+// Variables globales para controlar la paginación
+let allProducts = [];
+const itemsPerPage = 6; // Número de productos a mostrar por "página"
+let currentItemsCount = itemsPerPage;
+
 // Función para obtener productos del backend
 async function fetchProducts(searchQuery = "") {
   try {
@@ -15,21 +20,32 @@ async function fetchProducts(searchQuery = "") {
     }
 
     const products = await response.json();
-    displayProducts(products);
+    // Barajamos los productos aleatoriamente
+    allProducts = shuffle(products);
+    displayProducts();
   } catch (error) {
     console.error(error);
   }
 }
 
-// Función para mostrar productos en el catálogo
-function displayProducts(products) {
-  // Seleccionamos el contenedor usando la clase BEM actual
+// Función para barajar un array (algoritmo Fisher-Yates)
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+// Función para mostrar productos en el catálogo (solo los que se deben visualizar)
+function displayProducts() {
   const catalogContainer = document.querySelector(".catalog__cards");
   catalogContainer.innerHTML = ""; // Limpiar catálogo antes de agregar nuevos productos
 
-  products.forEach((product) => {
+  // Se muestran solo los productos hasta currentItemsCount
+  const productsToShow = allProducts.slice(0, currentItemsCount);
+  productsToShow.forEach((product) => {
     const productCard = document.createElement("div");
-    // Usamos la clase BEM para la tarjeta de producto y añadimos las animaciones
     productCard.classList.add("catalog__card", "animate__animated", "animate__fadeInUp");
 
     productCard.innerHTML = `
@@ -45,9 +61,28 @@ function displayProducts(products) {
     `;
     catalogContainer.appendChild(productCard);
   });
+
+  // Mostrar u ocultar el botón "Ver más" según queden productos por mostrar
+  const loadMoreBtn = document.getElementById("loadMoreBtn");
+  if (currentItemsCount < allProducts.length) {
+    loadMoreBtn.style.display = "block";
+  } else {
+    loadMoreBtn.style.display = "none";
+  }
 }
 
-// Cargar los productos cuando se inicie la página
+// Función que incrementa la cantidad de productos mostrados y refresca el catálogo
+function loadMore() {
+  currentItemsCount += itemsPerPage;
+  displayProducts();
+}
+
+// Al cargar el DOM, se obtienen los productos y se asigna el evento al botón "Ver más"
 document.addEventListener("DOMContentLoaded", () => {
   fetchProducts();
+
+  const loadMoreBtn = document.getElementById("loadMoreBtn");
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener("click", loadMore);
+  }
 });

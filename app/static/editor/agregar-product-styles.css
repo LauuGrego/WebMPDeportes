@@ -31,7 +31,7 @@
   .header {
     position: relative;
     min-height: 100vh;
-    background-image: url('./../images/header-running.jpeg');
+    background-image: url('./../../images/header-running.jpeg');
     background-size: cover;
     background-position: center;
     display: flex;
