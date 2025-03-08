@@ -18,7 +18,7 @@
 
 html {
   scroll-behavior: smooth;
-  
+  overflow-x: hidden;
   font-family: 'Garamond', sans-serif;
 }
 
@@ -346,6 +346,13 @@ body {
   margin-top: 10px;
 }
 
+.catalog__card-click {
+  font-size: 1.5rem;
+  color: #000000;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
 #loadMoreBtn {
   display: block;
   margin: 20px auto;
@@ -577,4 +584,5 @@ body {
   .catalog__card-stock {
     font-size: 1rem;
   }
+  
 }

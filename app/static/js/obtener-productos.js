@@ -57,6 +57,7 @@ function displayProducts() {
         <p class="catalog__card-description">${product.description || "Descripción no disponible"}</p>
         <p class="catalog__card-size">Talles Disponibles: ${product.size || "Sin Stock"}</p>
         <p class="catalog__card-stock">Cantidad Disponible: ${product.stock}</p>
+        <p class="catalog__card-click">Click para ver mas</p>
       </div>
     `;
     catalogContainer.appendChild(productCard);

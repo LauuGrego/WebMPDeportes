@@ -32,4 +32,4 @@ class ProductUpdate(BaseModel):
     category_name: Optional[str] = None  # Opción de categoría si se quiere actualizar
 
     class Config:
-        from_attributes = True
+         from_attributes = True

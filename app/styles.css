@@ -218,11 +218,11 @@ html, body {
 }
 
 .about__text-container h2 {
-    animation-duration: 2s;
+    animation-duration: 1s;
 }
 
 .about__text-container p {
-    animation-duration: 3s;
+    animation-duration: 1s;
 }
 
 .about__highlight {

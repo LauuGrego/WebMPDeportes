@@ -78,7 +78,7 @@ async def modify_product(product_id: str, updated_product: ProductUpdate, admin:
         if not category:
             raise HTTPException(status_code=404, detail=f"La categoría '{updated_product.category_name}' no existe.")
 
-    # Normalizar listas
+    # Normalizar las listas de strings
     if updated_product.size:
         updated_product.size = [s.strip().title() for s in updated_product.size if s.strip()]
 
@@ -88,6 +88,11 @@ async def modify_product(product_id: str, updated_product: ProductUpdate, admin:
     # Obtener solo los campos que han sido enviados
     update_data = updated_product.model_dump(exclude_unset=True)
 
+    # Normalizar otros posibles campos string (si es necesario)
+    for key, value in update_data.items():
+        if isinstance(value, str):
+            update_data[key] = value.strip().title()
+
     # Si se actualizó la categoría, agrega el category_id
     if category:
         update_data["category_id"] = str(category["_id"])
@@ -96,6 +101,7 @@ async def modify_product(product_id: str, updated_product: ProductUpdate, admin:
     products_collection.update_one({"_id": ObjectId(product_id)}, {"$set": update_data})
 
     return get_product_by_id(product_id)
+
 
 
 
