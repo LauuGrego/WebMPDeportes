@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Obtener las categorías al cargar la página
   async function fetchCategories() {
     try {
-      const response = await fetch("http://localhost:8000/categorias/listar-public");
+      const response = await fetch("https://webmpdeportes.onrender.com/categorias/listar-public");
       if (!response.ok) {
         throw new Error("Error al obtener las categorías");
       }

@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const query = searchInput.value.trim();
     let url = query === "" 
       ? "https://webmpdeportes.onrender.com/productos/listar" 
-      : `https://webmpdeportes.onrender.com/buscar?name=${encodeURIComponent(query)}`;
+      : `https://webmpdeportes.onrender.com/productos/buscar?name=${encodeURIComponent(query)}`;
 
     try {
       const response = await fetch(url);
