@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Función para obtener los tipos de productos desde el backend
   async function fetchTypes() {
     try {
-      const response = await fetch("http://localhost:8000/productos/listar/tipos", {
+      const response = await fetch("https://webmpdeportes.onrender.com/productos/listar/tipos", {
         method: "GET",
         headers: { "Content-Type": "application/json" }
       });
