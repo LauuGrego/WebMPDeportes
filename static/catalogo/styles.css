@@ -353,22 +353,6 @@ body {
   margin-top: 10px;
 }
 
-#loadMoreBtn {
-  display: block;
-  margin: 20px auto;
-  padding: 10px 20px;
-  background: var(--color-naranja);
-  border: none;
-  border-radius: 5px;
-  color: var(--color-dark);
-  cursor: pointer;
-  font-size: 1.5rem;
-  transition: var(--transition);
-}
-#loadMoreBtn:hover {
-  background: #e67e22;
-}
-
 
 
 /* ==============================

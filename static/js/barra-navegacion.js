@@ -3,22 +3,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchButton = document.querySelector(".btn--primary");
   const productContainer = document.querySelector(".catalog__cards");
 
-  // Variables para controlar la paginación y orden aleatorio
-  let allProducts = [];
-  const itemsPerPage = 6;
-  let currentItemsCount = itemsPerPage;
-  let currentQuery = ""; // Almacena el filtro actual
-
   async function searchProducts() {
-    currentQuery = searchInput.value.trim();
-    let url = "";
-
-    // Si no se ingresa nada, se obtienen todos los productos
-    if (currentQuery === "") {
-      url = "http://localhost:8000/productos/listar";
-    } else {
-      url = `http://localhost:8000/productos/buscar?name=${encodeURIComponent(currentQuery)}`;
-    }
+    const query = searchInput.value.trim();
+    let url = query === "" 
+      ? "http://localhost:8000/productos/listar" 
+      : `http://localhost:8000/productos/buscar?name=${encodeURIComponent(query)}`;
 
     try {
       const response = await fetch(url);
@@ -27,42 +16,22 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       
       const products = await response.json();
-      // Mezcla los productos de manera aleatoria
-      allProducts = shuffle(products);
-      currentItemsCount = itemsPerPage; // Reinicia la cantidad de items a mostrar
-      displayProducts();
-
-      // Desplaza suavemente hacia la sección del catálogo
+      displayProducts(products); // Mostrar todos los productos de una vez
       productContainer.scrollIntoView({ behavior: "smooth" });
     } catch (error) {
       console.error("Error en la búsqueda:", error);
     }
   }
 
-  // Función para barajar un array (algoritmo Fisher-Yates)
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
-
-  function displayProducts() {
+  function displayProducts(products) {
     productContainer.innerHTML = ""; // Limpiar productos previos
 
-    if (allProducts.length === 0) {
+    if (products.length === 0) {
       productContainer.innerHTML = "<p>No se encontraron productos.</p>";
-      const loadMoreBtn = document.getElementById("loadMoreBtn");
-      if (loadMoreBtn) {
-        loadMoreBtn.style.display = "none";
-      }
       return;
     }
 
-    // Se muestran solo los productos hasta currentItemsCount
-    const productsToShow = allProducts.slice(0, currentItemsCount);
-    productsToShow.forEach(product => {
+    products.forEach(product => {
       const productCard = document.createElement("div");
       productCard.classList.add("catalog__card", "animate__animated", "animate__fadeInUp");
 
@@ -75,35 +44,21 @@ document.addEventListener("DOMContentLoaded", function () {
           <p class="catalog__card-description">${product.description || "Descripción no disponible"}</p>
           <p class="catalog__card-size">Talles Disponibles: ${product.size || "Sin Stock"}</p>
           <p class="catalog__card-stock">Cantidad Disponible: ${product.stock}</p>
-          <p class="catalog__card-click">Click para ver más</p>
         </div>
       `;
 
       productContainer.appendChild(productCard);
     });
-
-    // Mostrar u ocultar el botón "Ver más" según queden productos por mostrar
-    let loadMoreBtn = document.getElementById("loadMoreBtn");
-    if (!loadMoreBtn) {
-      loadMoreBtn = document.createElement("button");
-      loadMoreBtn.id = "loadMoreBtn";
-      loadMoreBtn.classList.add("btn--primary");
-      loadMoreBtn.textContent = "Ver más";
-      productContainer.parentNode.appendChild(loadMoreBtn);
-      loadMoreBtn.addEventListener("click", loadMore);
-    }
-    loadMoreBtn.style.display = currentItemsCount < allProducts.length ? "block" : "none";
   }
 
-  function loadMore() {
-    currentItemsCount += itemsPerPage;
-    displayProducts();
-  }
-
+  // Eventos de búsqueda
   searchButton.addEventListener("click", searchProducts);
   searchInput.addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
       searchProducts();
     }
   });
+
+  // Cargar productos iniciales
+  searchProducts();
 });
