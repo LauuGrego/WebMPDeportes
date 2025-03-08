@@ -4,13 +4,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-origins = ["http://127.0.0.1:5500",  # Aquí se especifica la URL de tu frontend
+"""origins = ["http://127.0.0.1:5500",  # Aquí se especifica la URL de tu frontend
             "http://localhost:5500",
             "https://marcapasosdeportes.netlify.app/"
-]
+]"""
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Permite todas las fuentes
+    allow_origins=["*"],  # Permite todas las fuentes
     allow_credentials=True,
     allow_methods=["*"],  # Permite todos los métodos HTTP
     allow_headers=["*"],  # Permite todos los encabezados
