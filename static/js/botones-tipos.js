@@ -41,8 +41,11 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!response.ok) {
         throw new Error("Error al obtener los productos");
       }
-      const products = await response.json();
-      displayProducts(products);
+      let products = await response.json();
+
+        // Barajar los productos antes de mostrarlos
+        const shuffledProducts = shuffleArray(products);
+        displayProducts(shuffledProducts);
 
       // Desplazar la vista suavemente hacia la sección de productos
       productContainer.scrollIntoView({ behavior: "smooth" });
@@ -51,7 +54,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Función para mostrar todos los productos de una sola vez
+  // **Función para barajar productos aleatoriamente (Fisher-Yates)**
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  // Función para mostrar los productos
   function displayProducts(products) {
     productContainer.innerHTML = ""; // Limpiar productos previos
 
@@ -73,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <p class="catalog__card-description">${product.description || "Descripción no disponible"}</p>
           <p class="catalog__card-size">Talles Disponibles: ${product.size || "Sin Stock"}</p>
           <p class="catalog__card-stock">Cantidad Disponible: ${product.stock}</p>
+          <p class="catalog__card-click">Click para ver más</p>
         </div>
       `;
 
@@ -80,6 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Llamar a la función para cargar los tipos de productos al inicio
+  // Cargar los tipos de productos al inicio
   fetchTypes();
 });

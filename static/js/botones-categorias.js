@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const categoriesContainer = document.getElementById("categories-buttons");
   const productContainer = document.querySelector(".catalog__cards");
 
+  // Obtener las categorías al cargar la página
   async function fetchCategories() {
     try {
       const response = await fetch("http://localhost:8000/categorias/listar-public");
@@ -15,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // Función para mostrar los botones de categorías
   function displayCategoryButtons(categories) {
     categoriesContainer.innerHTML = ""; // Limpiar botones previos
     categories.forEach(category => {
@@ -26,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Obtener productos por categoría
   async function fetchProductsByCategory(category) {
     try {
       const response = await fetch(`http://localhost:8000/productos/buscar?category=${encodeURIComponent(category)}`);
@@ -33,7 +36,10 @@ document.addEventListener("DOMContentLoaded", function () {
         throw new Error("Error al obtener los productos");
       }
       const products = await response.json();
-      displayProducts(products);
+      
+      // Barajar los productos antes de mostrarlos
+      const shuffledProducts = shuffleArray(products);
+      displayProducts(shuffledProducts);
 
       // Desplazar suavemente a la sección de productos
       productContainer.scrollIntoView({ behavior: "smooth" });
@@ -42,6 +48,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // **Función para barajar productos aleatoriamente (Fisher-Yates)**
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; // Intercambiar elementos
+    }
+    return array;
+  }
+
+  // Mostrar los productos en el contenedor
   function displayProducts(products) {
     productContainer.innerHTML = ""; // Limpiar productos previos
 
