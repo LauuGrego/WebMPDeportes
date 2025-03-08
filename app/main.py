@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import products, users, categories, users_JWT_auth, cart
+from app.routes import products, users, categories, users_JWT_auth, cart
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
