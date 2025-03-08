@@ -48,8 +48,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const query = searchInput.value.trim();
     // Si el campo está vacío, se obtienen todos los productos
     const url = query 
-      ? `http://127.0.0.1:8000/productos/buscar?name=${encodeURIComponent(query)}`
-      : "http://127.0.0.1:8000/productos/listar";
+      ? `https://webmpdeportes.onrender.com/productos/buscar?name=${encodeURIComponent(query)}`
+      : "https://webmpdeportes.onrender.com/productos/listar";
 
     try {
       const response = await fetch(url, {

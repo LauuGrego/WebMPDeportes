@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
-          const response = await fetch("http://127.0.0.1:8000/productos/agregar", {
+          const response = await fetch("https://webmpdeportes.onrender.com/productos/agregar", {
               method: "POST",
               headers: {
                   "Content-Type": "application/json",

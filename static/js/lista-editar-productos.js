@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para cargar productos desde la API
   function loadProducts() {
-    fetch('http://127.0.0.1:8000/productos/listar', {
+    fetch('https://webmpdeportes.onrender.com/productos/listar', {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para deshabilitar un producto (por ejemplo, poniendo stock en 0)
   function disableProduct(productId) {
-    fetch(`http://127.0.0.1:8000/productos/deshabilitar/${productId}`, {
+    fetch(`https://webmpdeportes.onrender.com/productos/deshabilitar/${productId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para obtener un producto y abrir el modal de edición
   function getProductById(productId) {
-    fetch(`http://127.0.0.1:8000/productos/obtener_por_id/${productId}`, {
+    fetch(`https://webmpdeportes.onrender.com/productos/obtener_por_id/${productId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.appendChild(modal);
 
     // Rellenar el <select> de categorías
-    fetch('http://127.0.0.1:8000/categorias/listar', {
+    fetch('https://webmpdeportes.onrender.com/categorias/listar', {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
@@ -213,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      fetch(`http://127.0.0.1:8000/productos/actualizar/${product.id}`, {
+      fetch(`https://webmpdeportes.onrender.com/productos/actualizar/${product.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

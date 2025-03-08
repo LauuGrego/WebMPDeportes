@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Obtener productos por categoría
   async function fetchProductsByCategory(category) {
     try {
-      const response = await fetch(`http://localhost:8000/productos/buscar?category=${encodeURIComponent(category)}`);
+      const response = await fetch(`https://webmpdeportes.onrender.com/productos/buscar?category=${encodeURIComponent(category)}`);
       if (!response.ok) {
         throw new Error("Error al obtener los productos");
       }

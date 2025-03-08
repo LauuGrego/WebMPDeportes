@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
   async function searchProducts() {
     const query = searchInput.value.trim();
     let url = query === "" 
-      ? "http://localhost:8000/productos/listar" 
-      : `http://localhost:8000/productos/buscar?name=${encodeURIComponent(query)}`;
+      ? "https://webmpdeportes.onrender.com/productos/listar" 
+      : `https://webmpdeportes.onrender.com/buscar?name=${encodeURIComponent(query)}`;
 
     try {
       const response = await fetch(url);

@@ -1,5 +1,5 @@
 // URL del backend
-const API_URL = "http://127.0.0.1:8000/productos/listar";
+const API_URL = "https://webmpdeportes.onrender.com/productos/listar";
 
 // Función para obtener productos del backend
 async function fetchProducts(searchQuery = "") {

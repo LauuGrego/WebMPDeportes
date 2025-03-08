@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Función para buscar productos filtrados por tipo
   async function fetchProductsByType(type) {
     try {
-      const response = await fetch(`http://localhost:8000/productos/buscar?type=${encodeURIComponent(type)}`, {
+      const response = await fetch(`https://webmpdeportes.onrender.com/productos/buscar?type=${encodeURIComponent(type)}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" }
       });
