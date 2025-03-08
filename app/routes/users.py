@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.models.user import User, UserBase, UserCreate
 from passlib.context import CryptContext
 from pymongo import ReturnDocument
-from db.client import db_client
-from routes.users_JWT_auth import admin_only, current_user, search_user
+from app.db.client import db_client
+from app.routes.users_JWT_auth import admin_only, current_user, search_user
 from bson import ObjectId
 
 router = APIRouter(prefix="/usuarios")

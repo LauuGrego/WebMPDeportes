@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends
-from models.category import Category, CategoryBase, CategoryCreate
+from app.models.category import Category, CategoryBase, CategoryCreate
 from .users_JWT_auth import admin_only
 from app.models.user import User
-from db.client import db_client
+from app.db.client import db_client
 from bson import ObjectId
 
 router = APIRouter(prefix="/categorias", tags=["Categories"])

@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, APIRouter, Depends
 from app.models.cart import Cart, CartItem, AddToCartRequest
-from db.client import db_client
-from models.user import User
+from app.db.client import db_client
+from app.models.user import User
 from .users_JWT_auth import current_user
 
 router = APIRouter(prefix="/carrito")
