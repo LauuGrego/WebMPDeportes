@@ -4,4 +4,4 @@ python-jose
 passlib
 pymongo
 python-multipart
-
+pydantic[email]
