@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from pymongo.collection import Collection
 from pymongo import MongoClient
 from bson import ObjectId
-from models.user import User, UserBase, UserCreate
+from app.models.user import User, UserBase, UserCreate
 from db.client import db_client
 import pymongo
 from typing import Optional

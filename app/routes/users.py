@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from models.user import User, UserBase, UserCreate
+from app.models.user import User, UserBase, UserCreate
 from passlib.context import CryptContext
 from pymongo import ReturnDocument
 from db.client import db_client

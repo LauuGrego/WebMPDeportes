@@ -1,7 +1,7 @@
 
 from fastapi import APIRouter, HTTPException, Depends, Request
 from typing import List, Optional
-from models.product import Product, ProductCreate, ProductUpdate
+from app.models.product import Product, ProductCreate, ProductUpdate
 from db.client import db_client
 from bson import ObjectId
 from .users_JWT_auth import admin_only

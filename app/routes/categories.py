@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from models.category import Category, CategoryBase, CategoryCreate
 from .users_JWT_auth import admin_only
-from models.user import User
+from app.models.user import User
 from db.client import db_client
 from bson import ObjectId
 
