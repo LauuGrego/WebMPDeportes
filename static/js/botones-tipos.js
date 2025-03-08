@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let allProducts = [];
   const itemsPerPage = 6; // Número de productos a mostrar por "página"
   let currentItemsCount = itemsPerPage;
+  let currentType = ""; // Almacena el tipo seleccionado actualmente
 
   // Función para obtener los tipos de productos desde el backend
   async function fetchTypes() {
@@ -38,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para buscar productos filtrados por tipo
   async function fetchProductsByType(type) {
+    currentType = type; // Guardamos el tipo seleccionado
     try {
       const response = await fetch(`http://localhost:8000/productos/buscar?type=${encodeURIComponent(type)}`, {
         method: "GET",
@@ -94,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <p class="catalog__card-description">${product.description || "Descripción no disponible"}</p>
           <p class="catalog__card-size">Talles Disponibles: ${product.size || "Sin Stock"}</p>
           <p class="catalog__card-stock">Cantidad Disponible: ${product.stock}</p>
-          <p class="catalog__card-click">Click para ver mas</p>
+          <p class="catalog__card-click">Click para ver más</p>
         </div>
       `;
       productContainer.appendChild(productCard);

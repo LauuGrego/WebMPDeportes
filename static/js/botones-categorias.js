@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let allProducts = [];
   const itemsPerPage = 6; // Número de productos a mostrar por "página"
   let currentItemsCount = itemsPerPage;
+  let currentCategory = ""; // Almacena la categoría actual seleccionada
 
   async function fetchCategories() {
     try {
@@ -32,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   async function fetchProductsByCategory(category) {
+    currentCategory = category; // Guardamos la categoría seleccionada
     try {
       const response = await fetch(`http://localhost:8000/productos/buscar?category=${encodeURIComponent(category)}`);
       if (!response.ok) {
@@ -84,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <p class="catalog__card-description">${product.description || "Descripción no disponible"}</p>
           <p class="catalog__card-size">Talles Disponibles: ${product.size || "Sin Stock"}</p>
           <p class="catalog__card-stock">Cantidad Disponible: ${product.stock}</p>
-          <p class="catalog__card-click">Click para ver mas</p>
+          <p class="catalog__card-click">Click para ver más</p>
         </div>
       `;
       productContainer.appendChild(productCard);

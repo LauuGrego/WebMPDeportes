@@ -7,16 +7,17 @@ document.addEventListener("DOMContentLoaded", function () {
   let allProducts = [];
   const itemsPerPage = 6;
   let currentItemsCount = itemsPerPage;
+  let currentQuery = ""; // Almacena el filtro actual
 
   async function searchProducts() {
-    const name = searchInput.value.trim();
+    currentQuery = searchInput.value.trim();
     let url = "";
 
     // Si no se ingresa nada, se obtienen todos los productos
-    if (name === "") {
+    if (currentQuery === "") {
       url = "http://localhost:8000/productos/listar";
     } else {
-      url = `http://localhost:8000/productos/buscar?name=${encodeURIComponent(name)}`;
+      url = `http://localhost:8000/productos/buscar?name=${encodeURIComponent(currentQuery)}`;
     }
 
     try {
@@ -74,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <p class="catalog__card-description">${product.description || "Descripción no disponible"}</p>
           <p class="catalog__card-size">Talles Disponibles: ${product.size || "Sin Stock"}</p>
           <p class="catalog__card-stock">Cantidad Disponible: ${product.stock}</p>
-          <p class="catalog__card-click">Click para ver mas</p>
+          <p class="catalog__card-click">Click para ver más</p>
         </div>
       `;
 
