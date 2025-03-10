@@ -275,12 +275,26 @@ body {
 /* Contenedor de la imagen con altura fija */
 .catalog__card-image {
   width: 100%;
-  height: 200px; /* Ajusta según lo requieras */
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
 }
+
+
+/* Ajustar el tamaño de la imagen según el formato */
+.catalog__card-image[data-format="horizontal"] {
+  height: 150px;
+}
+
+.catalog__card-image[data-format="vertical"] {
+  height: 300px;
+}
+
+.catalog__card-image[data-format="square"] {
+  height: 200px;
+}
+
 
 /* La imagen se centra sin deformarse */
 .catalog__card-image img {
@@ -353,7 +367,38 @@ body {
   margin-top: 10px;
 }
 
+/* Botón "Consultar Disponibilidad" */
+.whatsapp-button {
+  background-color: #25D366; /* Color verde de WhatsApp */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
 
+.whatsapp-button:hover,
+.whatsapp-button:focus {
+  background-color: #1EBE57; /* Color verde más oscuro para hover */
+  transform: scale(1.03);
+}
+
+.whatsapp-button:active {
+  transform: scale(0.95);
+}
+
+/* Icono de WhatsApp */
+.whatsapp-button::before {
+  content: url('https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg'); /* URL del icono de WhatsApp */
+  width: 20px;
+  height: 20px;
+}
 
 /* ==============================
    4. MODAL

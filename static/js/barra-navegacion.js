@@ -64,11 +64,19 @@ document.addEventListener("DOMContentLoaded", function () {
           <p class="catalog__card-description">${product.description || "Descripción no disponible"}</p>
           <p class="catalog__card-size">Talles Disponibles: ${product.size || "Sin Stock"}</p>
           <p class="catalog__card-stock">Cantidad Disponible: ${product.stock}</p>
+          <p class="catalog__card-click">Click para ver más</p>
+          <button class="whatsapp-button" onclick="redirectToWhatsApp('${product.name}')">Consultar Disponibilidad</button>
         </div>
       `;
 
       productContainer.appendChild(productCard);
     });
+  }
+  // Función para redirigir a WhatsApp con un mensaje predefinido
+  function redirectToWhatsApp(productName) {
+    const message = `¡Hola! Quiero saber más info acerca de ${productName}`;
+    const whatsappUrl = `https://wa.me/3445417684?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
   }
 
   // Eventos de búsqueda
@@ -78,6 +86,19 @@ document.addEventListener("DOMContentLoaded", function () {
       searchProducts();
     }
   });
+
+  function getImageFormat(imageUrl) {
+    const img = new Image();
+    img.src = imageUrl;
+    if (img.width > img.height) {
+      return "horizontal";
+    } else if (img.width < img.height) {
+      return "vertical";
+    } else {
+      return "square";
+    }
+  }
+
 
   // Cargar productos iniciales al entrar en la página
   searchProducts();

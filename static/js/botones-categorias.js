@@ -70,8 +70,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const productCard = document.createElement("div");
       productCard.classList.add("catalog__card", "animate__animated", "animate__fadeInUp");
 
+      const imageFormat = getImageFormat(product.image_url);
+
       productCard.innerHTML = `
-        <div class="catalog__card-image">
+        <div class="catalog__card-image" data-format="${imageFormat}">
           <img src="${product.image_url}" alt="${product.name}">
         </div>
         <div class="catalog__card-details">
@@ -79,6 +81,8 @@ document.addEventListener("DOMContentLoaded", function () {
           <p class="catalog__card-description">${product.description || "Descripción no disponible"}</p>
           <p class="catalog__card-size">Talles Disponibles: ${product.size || "Sin Stock"}</p>
           <p class="catalog__card-stock">Cantidad Disponible: ${product.stock}</p>
+          <p class="catalog__card-click">Click para ver más</p>
+          <button class="whatsapp-button" onclick="redirectToWhatsApp('${product.name}', '${product.image_url}')">Consultar Disponibilidad</button>
         </div>
       `;
 
@@ -86,6 +90,29 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+ 
+
+  // Función para redirigir a WhatsApp con un mensaje predefinido
+  function redirectToWhatsApp(productName, productImageUrl) {
+    const message = `¡Hola! Quiero saber más info acerca de ${productName}.`;
+    const whatsappUrl = `https://w
+    a.me/3445417684?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
+  }
+
+
+   // Función para determinar el formato de la imagen
+   function getImageFormat(imageUrl) {
+    const img = new Image();
+    img.src = imageUrl;
+    if (img.width > img.height) {
+      return "horizontal";
+    } else if (img.width < img.height) {
+      return "vertical";
+    } else {
+      return "square";
+    }
+  }
   // Cargar las categorías al inicio
   fetchCategories();
 });
