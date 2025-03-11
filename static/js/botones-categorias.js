@@ -95,8 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Función para redirigir a WhatsApp con un mensaje predefinido
   function redirectToWhatsApp(productName, productImageUrl) {
     const message = `¡Hola! Quiero saber más info acerca de ${productName}.`;
-    const whatsappUrl = `https://w
-    a.me/3445417684?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/3445417684?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
   }
 
