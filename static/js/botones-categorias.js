@@ -37,24 +37,13 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       const products = await response.json();
       
-      // Barajar los productos antes de mostrarlos
-      const shuffledProducts = shuffleArray(products);
-      displayProducts(shuffledProducts);
+      displayProducts(products);
 
       // Desplazar suavemente a la sección de productos
       productContainer.scrollIntoView({ behavior: "smooth" });
     } catch (error) {
       console.error("Error en la búsqueda por categoría:", error);
     }
-  }
-
-  // **Función para barajar productos aleatoriamente (Fisher-Yates)**
-  function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]]; // Intercambiar elementos
-    }
-    return array;
   }
 
   // Mostrar los productos en el contenedor
@@ -82,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <p class="catalog__card-size">Talles Disponibles: ${product.size || "Sin Stock"}</p>
           <p class="catalog__card-stock">Cantidad Disponible: ${product.stock}</p>
           <p class="catalog__card-click">Click para ver más</p>
-          <button class="whatsapp-button" onclick="redirectToWhatsApp('${product.name}', '${product.image_url}')">Consultar Disponibilidad</button>
+          <button class="whatsapp-button" onclick="redirectToWhatsApp('${product.name}')">Consultar Disponibilidad</button>
         </div>
       `;
 
@@ -90,18 +79,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
- 
-
-  // Función para redirigir a WhatsApp con un mensaje predefinido
-  function redirectToWhatsApp(productName, productImageUrl) {
-    const message = `¡Hola! Quiero saber más info acerca de ${productName}.`;
-    const whatsappUrl = `https://wa.me/3445417684?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
-  }
-
-
-   // Función para determinar el formato de la imagen
-   function getImageFormat(imageUrl) {
+  // Función para determinar el formato de la imagen
+  function getImageFormat(imageUrl) {
     const img = new Image();
     img.src = imageUrl;
     if (img.width > img.height) {
@@ -112,6 +91,19 @@ document.addEventListener("DOMContentLoaded", function () {
       return "square";
     }
   }
+ // Función para redirigir a WhatsApp con un mensaje predefinido
+ async function redirectToWhatsApp(productName) {
+  try {
+    const response = await fetch(`https://webmpdeportes.onrender.com/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
+    if (!response.ok) {
+      throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
+    }
+    const data = await response.json();
+    window.open(data.url, "_blank");
+  } catch (error) {
+    console.error("Error en la redirección a WhatsApp:", error);
+  }
+}
   // Cargar las categorías al inicio
   fetchCategories();
 });

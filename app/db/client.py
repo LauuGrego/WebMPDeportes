@@ -6,8 +6,6 @@ uri = "mongodb+srv://lautaro_grego:Grego.121103@marcapasosdeportes.p9vbo.mongodb
 # Create a new client and connect to the server
 db_client = MongoClient(uri, server_api=ServerApi('1')).MarcaPasosDeportes
 
-
-
 #db_client = MongoClient().local
 
 

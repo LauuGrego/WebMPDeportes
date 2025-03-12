@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const query = searchInput.value.trim();
     let url = query === "" 
       ? "https://webmpdeportes.onrender.com/productos/listar" 
-      : `https://webmpdeportes.onrender.com/productos/buscar?name=${encodeURIComponent(query)}`;
+      : `https://webmpdeportes.onrender.com/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`;
 
     try {
       const response = await fetch(url);
@@ -21,8 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       
       let products = await response.json();
-      console.log("Productos antes de barajar:", products); // Debug
-      products = shuffleArray([...products]); // Asegurar que estamos barajando una copia y no mutando directamente
       console.log("Productos después de barajar:", products); // Debug
 
       displayProducts(products);
@@ -31,16 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Error en la búsqueda:", error);
       productContainer.innerHTML = "<p>Error al cargar los productos.</p>";
     }
-  }
-
-  // **Función para barajar productos aleatoriamente (Fisher-Yates)**
-  function shuffleArray(array) {
-    let shuffled = [...array]; // Crear una copia para evitar mutaciones inesperadas
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
   }
 
   function displayProducts(products) {
@@ -72,11 +60,19 @@ document.addEventListener("DOMContentLoaded", function () {
       productContainer.appendChild(productCard);
     });
   }
+
   // Función para redirigir a WhatsApp con un mensaje predefinido
-  function redirectToWhatsApp(productName) {
-    const message = `¡Hola! Quiero saber más info acerca de ${productName}`;
-    const whatsappUrl = `https://wa.me/3445417684?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
+  async function redirectToWhatsApp(productName) {
+    try {
+      const response = await fetch(`https://webmpdeportes.onrender.com/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
+      if (!response.ok) {
+        throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
+      }
+      const data = await response.json();
+      window.open(data.url, "_blank");
+    } catch (error) {
+      console.error("Error en la redirección a WhatsApp:", error);
+    }
   }
 
   // Eventos de búsqueda
@@ -86,19 +82,6 @@ document.addEventListener("DOMContentLoaded", function () {
       searchProducts();
     }
   });
-
-  function getImageFormat(imageUrl) {
-    const img = new Image();
-    img.src = imageUrl;
-    if (img.width > img.height) {
-      return "horizontal";
-    } else if (img.width < img.height) {
-      return "vertical";
-    } else {
-      return "square";
-    }
-  }
-
 
   // Cargar productos iniciales al entrar en la página
   searchProducts();

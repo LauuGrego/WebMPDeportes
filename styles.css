@@ -72,8 +72,10 @@ html, body {
 .hero__content p {
     font-size: 1.5rem;
     margin: 0 40px;
+    margin-top: 30px;
     animation-duration: 2.5s;
 }
+
 
 .hero__content img {
     height: 150px;
@@ -397,6 +399,20 @@ html, body {
 
 
 /* =========================
+   SCROLL INDICATOR
+   ========================= */
+.scroll-indicator {
+    position: absolute;
+    bottom: 20px;
+    left: 160%;
+    transform: translateX(-50%);
+    font-size: 6rem;
+    color: var(--color-secondary);
+    animation-duration: 1.5s;
+}
+
+
+/* =========================
    MEDIA QUERIES
    ========================= */
 
@@ -426,6 +442,12 @@ html, body {
 
     .about__text {
         margin: 10px;
+    }
+
+    .scroll-indicator {
+        font-size: 4rem;
+        left: 50%;
+        bottom: 10px;
     }
 }
 
@@ -507,13 +529,25 @@ html, body {
     .about__text {
         margin: 10px;
     }
+
+    .scroll-indicator {
+        font-size: 4rem;
+        left: 40%;
+        bottom: -100px;
+    }
 }
 
 /* DISPOSITIVOS MUY PEQUEÑOS (MÁX 480px) */
 @media screen and (max-width: 480px) {
-    .hero__content p {
+    .hero__content p:first-child {
         font-size: 1.6rem;
-        margin: 0 auto;
+        margin: 50px auto;
+    }
+
+    .hero__content img {
+        width: 90%;
+        height: auto;
+        margin-bottom: 60px;
     }
     .navbar {
         padding: 10px 10px;
@@ -527,6 +561,7 @@ html, body {
     .btn-outline {
         padding: 10px 15px;
         font-size: 1.5rem;
+        margin-top: 50px;
     }
     .btn-primary {
         margin-top: 10px;
@@ -536,4 +571,52 @@ html, body {
     .about__text {
         margin: 10px;
     }
+
+    .scroll-indicator {
+        font-size: 4rem;
+        left: 42%;
+        bottom: -120px;
+    }
 }
+
+/* DISPOSITIVOS MUY PEQUEÑOS (MÁX 360px) */
+@media screen and (max-width: 360px) {
+    .hero__content p:first-child {
+        font-size: 1.4rem;
+        margin: 40px auto;
+    }
+
+    .hero__content img {
+        width: 80%;
+        height: auto;
+        margin: 50px;
+    }
+    .navbar {
+        padding: 8px 8px;
+    }
+    .contact__title {
+        font-size: 1.6rem;
+    }
+    .btn-primary,
+    .btn-secondary,
+    .btn-black,
+    .btn-outline {
+        font-size: 1.3rem;
+        margin-top: 5px;
+    }
+    .btn-primary {
+        margin-top: 8px;
+        left: 0;
+        top: 0;
+    }
+    .about__text {
+        margin: 8px;
+    }
+
+    .scroll-indicator {
+        font-size: 3.5rem;
+        left: 40%;
+        bottom: -80px;
+    }
+}
+

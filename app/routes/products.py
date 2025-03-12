@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, HTTPException, Depends, Request
 from typing import List, Optional
 from app.models.product import Product, ProductCreate, ProductUpdate
@@ -8,6 +7,7 @@ from .users_JWT_auth import admin_only
 from app.models.user import User
 import re
 from fastapi.responses import JSONResponse
+import random
 
 router = APIRouter(prefix="/productos", tags=["Products"])
 
@@ -105,60 +105,64 @@ async def modify_product(product_id: str, updated_product: ProductUpdate, admin:
 
 
 
-# Buscar productos por filtro
-@router.get("/buscar", response_model=List[Product])
-async def search_products(
-    name: Optional[str] = None,
-    min_price: Optional[float] = None,
-    max_price: Optional[float] = None,
-    type: Optional[str] = None,
-    category: Optional[str] = None,
-    size: Optional[List[str]] = None,
-   # color: Optional[str] = None
-):
-   
-    query = {}
+# Función para barajar productos aleatoriamente (Fisher-Yates)
+def shuffle_products(products: List[dict]) -> List[dict]:
+    shuffled = products[:]
+    random.shuffle(shuffled)
+    return shuffled
 
+# Buscar productos por nombre, tipo o categoría
+@router.get("/buscar", response_model=List[Product])
+async def search_products(name: Optional[str] = None, type: Optional[str] = None, category: Optional[str] = None):
+    if not name and not type and not category:
+        raise HTTPException(status_code=400, detail="Al menos uno de los parámetros 'name', 'type' o 'category' es requerido.")
+
+    query = []
+
+    def build_regex_query(field: str, value: str):
+        words = value.split()
+        regex_query = ".*".join([re.escape(word) for word in words])
+        return {field: {"$regex": regex_query, "$options": "i"}}
 
     if name:
-        query["name"] = {"$regex": re.escape(name), "$options": "i"}
-    
-
-    if min_price is not None:
-        query["price"] = {"$gte": min_price}
-    
-
-    if max_price is not None:
-        query["price"] = {"$lte": max_price}
-    
+        query.append(build_regex_query("name", name))
 
     if type:
-        query["type"] = {"$regex": re.escape(type), "$options": "i"}
-    
+        query.append(build_regex_query("type", type))
 
     if category:
-        category_obj = categories_collection.find_one({"name": category})
-        if category_obj:
-            query["category_id"] = str(category_obj["_id"])
-    
+        category_doc = categories_collection.find_one({"name": category.strip().title()})
+        if category_doc:
+            query.append({"category_id": str(category_doc["_id"])})
+        else:
+            raise HTTPException(status_code=404, detail=f"La categoría '{category}' no existe.")
 
-    if size:
-        query["size"] = {"$in": [s.strip().title() for s in size]}  
-    
-    """
-    if color:
-            query["color"] = {"$regex": re.escape(color), "$options": "i"}"""
+    products = list(products_collection.find({"$or": query}))
 
-    products = products_collection.find(query)
+    if not products:
+        # If no products found, search by individual words
+        query = []
+        if name:
+            for word in name.split():
+                query.append(build_regex_query("name", word))
+        if type:
+            for word in type.split():
+                query.append(build_regex_query("type", word))
+        products = list(products_collection.find({"$or": query}))
 
-    result = []
     for product in products:
         product["_id"] = str(product["_id"])
         product["id"] = product.pop("_id")
-        result.append(product)
 
-    return result
+    shuffled_products = shuffle_products(products)
+    return shuffled_products
 
+# Endpoint para redirigir a WhatsApp con un mensaje predefinido
+@router.get("/whatsapp_redirect")
+async def whatsapp_redirect(product_name: str):
+    message = f"¡Hola! Quiero saber más info acerca de {product_name}."
+    whatsapp_url = f"https://wa.me/3445417684?text={message}"
+    return {"url": whatsapp_url}
 
 
 # Deshabilitar productos
@@ -203,7 +207,11 @@ async def list_products():
         product["id"] = str(product["_id"])  # Convertir el ObjectId a string
     
     # Eliminar el campo _id ya que ya lo hemos convertido a "id"
-    return [{"id": product["id"], **{key: value for key, value in product.items() if key != "_id"}} for product in products]
+    products = [{"id": product["id"], **{key: value for key, value in product.items() if key != "_id"}} for product in products]
+    
+    # Barajar los productos antes de devolverlos
+    shuffled_products = shuffle_products(products)
+    return shuffled_products
 
 
 @router.get("/listar/tipos")
