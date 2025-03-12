@@ -574,8 +574,8 @@ html, body {
 
     .scroll-indicator {
         font-size: 4rem;
-        left: 42%;
-        bottom: -120px;
+        left: 40%;
+        bottom: -100px;
     }
 }
 
