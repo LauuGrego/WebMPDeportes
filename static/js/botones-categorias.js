@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Obtener las categorías al cargar la página
   async function fetchCategories() {
     try {
-      const response = await fetch("https://webmpdeportes.onrender.com/categorias/listar-public");
+      const response = await fetch("http://127.0.0.1:8000/categorias/listar-public");
       if (!response.ok) {
         throw new Error("Error al obtener las categorías");
       }
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Obtener productos por categoría
   async function fetchProductsByCategory(category) {
     try {
-      const response = await fetch(`https://webmpdeportes.onrender.com/productos/buscar?category=${encodeURIComponent(category)}`);
+      const response = await fetch(`http://127.0.0.1:8000/productos/buscar?category=${encodeURIComponent(category)}`);
       if (!response.ok) {
         throw new Error("Error al obtener los productos");
       }
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       productCard.innerHTML = `
         <div class="catalog__card-image" data-format="${imageFormat}">
-          <img src="${product.image_url}" alt="${product.name}">
+          <img src="/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}">
         </div>
         <div class="catalog__card-details">
           <h3 class="catalog__card-title">${product.name}</h3>
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
  // Función para redirigir a WhatsApp con un mensaje predefinido
  async function redirectToWhatsApp(productName) {
   try {
-    const response = await fetch(`https://webmpdeportes.onrender.com/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
+    const response = await fetch(`http://127.0.0.1:8000/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
     if (!response.ok) {
       throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
     }

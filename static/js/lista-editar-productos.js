@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para cargar productos desde la API
   function loadProducts() {
-    fetch('https://webmpdeportes.onrender.com/productos/listar', {
+    fetch('http://127.0.0.1:8000/productos/listar', {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <p class="product-category">Categoría: ${product.category_id || 'No especificado'}</p>
             </div>
             <div class="product-image">
-              ${imageUrl ? `<img src="${imageUrl}" alt="${product.name}" class="img-responsive"/>` : '<p>Sin imagen</p>'}
+              ${imageUrl ? `<img src="/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}" class="img-responsive"/>` : '<p>Sin imagen</p>'}
             </div>
             <div class="product-actions">
               <button class="btn-edit" data-id="${productId}"><i class="fas fa-edit"></i> Editar</button>
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para deshabilitar un producto (por ejemplo, poniendo stock en 0)
   function disableProduct(productId) {
-    fetch(`https://webmpdeportes.onrender.com/productos/deshabilitar/${productId}`, {
+    fetch(`http://127.0.0.1:8000/productos/deshabilitar/${productId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para obtener un producto y abrir el modal de edición
   function getProductById(productId) {
-    fetch(`https://webmpdeportes.onrender.com/productos/obtener_por_id/${productId}`, {
+    fetch(`http://127.0.0.1:8000/productos/obtener_por_id/${productId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -149,8 +149,12 @@ document.addEventListener("DOMContentLoaded", function () {
           <label>Stock:</label>
           <input type="number" id="edit-stock" value="${product.stock}" required>
 
-          <label>Imagen URL:</label>
-          <input type="text" id="edit-image" value="${(product.image_url && product.image_url.length > 0) ? product.image_url[0] : ''}">
+          <label>Imagen:</label>
+          <input type="file" id="edit-image" accept="image/*">
+          <div style="position: relative; display: inline-block;">
+            <img id="edit-image-preview" style="max-width: 200px; margin-top: 10px;" />
+            <button type="button" id="remove-image-preview" class="remove-image-button" style="display: none;">❌</button>
+          </div>
 
           <label>Categoría:</label>
           <select id="edit-category" required>
@@ -167,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.appendChild(modal);
 
     // Rellenar el <select> de categorías
-    fetch('https://webmpdeportes.onrender.com/categorias/listar', {
+    fetch('http://127.0.0.1:8000/categorias/listar', {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
@@ -195,31 +199,60 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .catch(err => console.error("Error al cargar categorías para edición:", err));
 
+    // Evento para previsualizar la imagen seleccionada
+    document.getElementById('edit-image').addEventListener('change', () => {
+      const file = document.getElementById('edit-image').files[0];
+      const preview = document.getElementById('edit-image-preview');
+      const removeButton = document.getElementById('remove-image-preview');
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.src = e.target.result;
+          removeButton.style.display = 'block'; // Mostrar el botón
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.src = "";
+        removeButton.style.display = 'none'; // Ocultar el botón
+      }
+    });
+
+    // Evento para eliminar la imagen previsualizada
+    document.getElementById('remove-image-preview').addEventListener('click', () => {
+      const preview = document.getElementById('edit-image-preview');
+      const fileInput = document.getElementById('edit-image');
+      const removeButton = document.getElementById('remove-image-preview');
+      preview.src = "";
+      fileInput.value = ""; // Limpiar el input de archivo
+      removeButton.style.display = 'none'; // Ocultar el botón
+    });
+
     // Evento para guardar cambios
     document.getElementById('save-edit').addEventListener('click', () => {
-      const updatedProduct = {
-        name: document.getElementById('edit-name').value.trim(),
-        description: document.getElementById('edit-description').value.trim(),
-        type: document.getElementById('edit-type').value.trim(),
-        size: document.getElementById('edit-size').value.split(',').map(s => s.trim()).filter(Boolean),
-        stock: parseInt(document.getElementById('edit-stock').value),
-        image_url: [document.getElementById('edit-image').value.trim()], // Enviamos un arreglo
-        category_name: document.getElementById('edit-category').value.trim()
-      };
+      const updatedProduct = new FormData();
+      updatedProduct.append("name", document.getElementById('edit-name').value.trim());
+      updatedProduct.append("description", document.getElementById('edit-description').value.trim());
+      updatedProduct.append("type", document.getElementById('edit-type').value.trim());
+      updatedProduct.append("size", document.getElementById('edit-size').value.trim());
+      updatedProduct.append("stock", parseInt(document.getElementById('edit-stock').value));
+      const imageFile = document.getElementById('edit-image').files[0];
+      if (imageFile) {
+        updatedProduct.append("image", imageFile, `${document.getElementById('edit-name').value.trim().replace(/\s+/g, "_")}.jpg`);
+      }
+      updatedProduct.append("category_name", document.getElementById('edit-category').value.trim());
 
       // Validar campos obligatorios
-      if (!updatedProduct.name || !updatedProduct.type || isNaN(updatedProduct.stock)) {
+      if (!updatedProduct.get("name") || !updatedProduct.get("type") || isNaN(updatedProduct.get("stock"))) {
         alert("Por favor, completa los campos obligatorios correctamente.");
         return;
       }
 
-      fetch(`https://webmpdeportes.onrender.com/productos/actualizar/${product.id}`, {
+      fetch(`http://127.0.0.1:8000/productos/actualizar/${product.id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(updatedProduct)
+        body: updatedProduct
       })
         .then(response => {
           if (response.ok) {

@@ -1,5 +1,5 @@
 // URL del backend
-const API_URL = "https://webmpdeportes.onrender.com/productos/listar";
+const API_URL = "http://127.0.0.1:8000/productos/listar";
 
 // Función para obtener productos del backend
 async function fetchProducts(searchQuery = "") {
@@ -36,7 +36,7 @@ function displayProducts(products) {
 
     productCard.innerHTML = `
       <div class="catalog__card-image">
-        <img src="${product.image_url}" alt="${product.name}">
+        <img src="/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}">
       </div>
       <div class="catalog__card-details">
         <h3 class="catalog__card-title">${product.name}</h3>
@@ -55,7 +55,7 @@ function displayProducts(products) {
 // Función para redirigir a WhatsApp con un mensaje predefinido
 async function redirectToWhatsApp(productName) {
   try {
-    const response = await fetch(`https://webmpdeportes.onrender.com/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
+    const response = await fetch(`http://127.0.0.1:8000/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
     if (!response.ok) {
       throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
     }

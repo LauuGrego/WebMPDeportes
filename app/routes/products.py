@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, Request
+from fastapi import APIRouter, HTTPException, Depends, Request, File, UploadFile, Form
 from typing import List, Optional
 from app.models.product import Product, ProductCreate, ProductUpdate
 from app.db.client import db_client
@@ -8,12 +8,18 @@ from app.models.user import User
 import re
 from fastapi.responses import JSONResponse
 import random
+import os
+from pathlib import Path
 
 router = APIRouter(prefix="/productos", tags=["Products"])
 
 # Colección de productos y categorías
 products_collection = db_client.products
 categories_collection = db_client.categories
+
+# Define the folder to store product images
+IMAGE_FOLDER = Path("products_image")
+IMAGE_FOLDER.mkdir(exist_ok=True)  # Create the folder if it doesn't exist
 
 # Obtener producto por ID
 def get_product_by_id(product_id: str):
@@ -34,75 +40,112 @@ async def get_product(product_id: str):
 
 # Agregar productos
 @router.post("/agregar", response_model=Product)
-async def create_product(product_data: ProductCreate, admin: User = Depends(admin_only)):
-    # Normalizar los datos de entrada
-    product_data.name = product_data.name.strip().title()
-    product_data.category_name = product_data.category_name.strip().title()
-    product_data.type = product_data.type.strip().title()
+async def create_product(
+    name: str = Form(...),
+    type: str = Form(...),
+    size: str = Form(...),
+    description: str = Form(...),
+    stock: int = Form(...),
+    category_name: str = Form(...),
+    image: UploadFile = File(...),
+    admin: User = Depends(admin_only)
+):
+    # Debugging: Log incoming data
+    print("Product Data:", name, type, size, description, stock, category_name)
+    print("Image Filename:", image.filename)
 
-    if product_data.size:
-        product_data.size = [s.strip().title() for s in product_data.size if s.strip()]
+    try:
+        # Normalize input
+        name = name.strip().title()
+        type = type.strip().title()
+        category_name = category_name.strip().title()
+        size_list = [s.strip().title() for s in size.split(",") if s.strip()]
 
+        # Save the image to the products_image folder
+        image_filename = f"{name.replace(' ', '_')}.jpg"
+        image_path = IMAGE_FOLDER / image_filename
+        with open(image_path, "wb") as f:
+            f.write(await image.read())
 
-    # Asegurarse de que image_url sea una lista; de lo contrario, asignar una lista vacía
-    if not product_data.image_url:
-        product_data.image_url = []
+        # Check if the category exists
+        category = categories_collection.find_one({"name": category_name})
+        if not category:
+            raise HTTPException(status_code=404, detail=f"La categoría '{category_name}' no existe.")
 
-    category = categories_collection.find_one({"name": product_data.category_name})
-    if not category:
-        raise HTTPException(status_code=404, detail=f"La categoría '{product_data.category_name}' no existe.")
-    
-    product_dict = product_data.model_dump()
-    product_dict.pop("category_name")  
-    product_dict["category_id"] = str(category["_id"])  
+        # Prepare the product dictionary
+        product_dict = {
+            "name": name,
+            "type": type,
+            "size": size_list,
+            "description": description,
+            "stock": stock,
+            "category_id": str(category["_id"]),
+            "image": str(image_path),  # Save the image path in the database
+        }
 
-    result = products_collection.insert_one(product_dict)
-    product_dict["_id"] = str(result.inserted_id)
-    product_dict["id"] = product_dict.pop("_id")
-    
-    return product_dict
+        # Insert the product into the database
+        result = products_collection.insert_one(product_dict)
+        product_dict["_id"] = str(result.inserted_id)
+        product_dict["id"] = product_dict.pop("_id")
 
+        # Exclude the image field from the response
+        product_dict.pop("image", None)
+
+        return product_dict
+
+    except Exception as e:
+        print("Error al procesar el producto:", e)
+        raise HTTPException(status_code=422, detail=str(e))
 
 
 @router.put("/actualizar/{product_id}", response_model=Product)
-async def modify_product(product_id: str, updated_product: ProductUpdate, admin: User = Depends(admin_only)):
+async def modify_product(
+    product_id: str,
+    name: Optional[str] = Form(None),
+    type: Optional[str] = Form(None),
+    size: Optional[str] = Form(None),
+    description: Optional[str] = Form(None),
+    stock: Optional[int] = Form(None),
+    category_name: Optional[str] = Form(None),
+    image: Optional[UploadFile] = File(None),
+    admin: User = Depends(admin_only)
+):
     db_product = get_product_by_id(product_id)
     if not db_product:
         raise HTTPException(status_code=404, detail="Producto no encontrado.")
 
-    # Si se actualiza la categoría, normalizar y verificar su existencia
-    category = None
-    if updated_product.category_name:
-        updated_product.category_name = updated_product.category_name.strip().title()
-        category = categories_collection.find_one({"name": updated_product.category_name})
+    update_data = {}
+
+    # Update fields if provided
+    if name:
+        update_data["name"] = name.strip().title()
+    if type:
+        update_data["type"] = type.strip().title()
+    if size:
+        update_data["size"] = [s.strip().title() for s in size.split(",") if s.strip()]
+    if description:
+        update_data["description"] = description.strip()
+    if stock is not None:
+        update_data["stock"] = stock
+    if category_name:
+        category_name = category_name.strip().title()
+        category = categories_collection.find_one({"name": category_name})
         if not category:
-            raise HTTPException(status_code=404, detail=f"La categoría '{updated_product.category_name}' no existe.")
-
-    # Normalizar las listas de strings
-    if updated_product.size:
-        updated_product.size = [s.strip().title() for s in updated_product.size if s.strip()]
-
-    if updated_product.image_url:
-        updated_product.image_url = [url.strip() for url in updated_product.image_url if url.strip()]
-
-    # Obtener solo los campos que han sido enviados
-    update_data = updated_product.model_dump(exclude_unset=True)
-
-    # Normalizar otros posibles campos string (si es necesario)
-    for key, value in update_data.items():
-        if isinstance(value, str):
-            update_data[key] = value.strip().title()
-
-    # Si se actualizó la categoría, agrega el category_id
-    if category:
+            raise HTTPException(status_code=404, detail=f"La categoría '{category_name}' no existe.")
         update_data["category_id"] = str(category["_id"])
 
-    # Actualizar solo los campos recibidos en la base de datos
+    # Handle image update
+    if image:
+        image_filename = f"{(update_data.get('name') or db_product['name']).replace(' ', '_')}.jpg"
+        image_path = IMAGE_FOLDER / image_filename
+        with open(image_path, "wb") as f:
+            f.write(await image.read())
+        update_data["image"] = str(image_path)
+
+    # Update the product in the database
     products_collection.update_one({"_id": ObjectId(product_id)}, {"$set": update_data})
 
     return get_product_by_id(product_id)
-
-
 
 
 # Función para barajar productos aleatoriamente (Fisher-Yates)
@@ -205,6 +248,7 @@ async def list_products():
     # Convertir el _id de ObjectId a string antes de devolverlo
     for product in products:
         product["id"] = str(product["_id"])  # Convertir el ObjectId a string
+        product["image"] = "Imagen omitida por razones de tamaño"  # Placeholder para la imagen
     
     # Eliminar el campo _id ya que ya lo hemos convertido a "id"
     products = [{"id": product["id"], **{key: value for key, value in product.items() if key != "_id"}} for product in products]

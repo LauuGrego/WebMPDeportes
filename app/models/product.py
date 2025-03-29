@@ -9,7 +9,7 @@ class ProductBase(BaseModel):
     size: List[str]
     description: Optional[str] = None
     stock: int
-    image_url: List[str] = []  # Lista vacía por defecto
+    image: Optional[bytes] = None  # Cambiado a bytes para almacenar imágenes
 
     class Config:
         from_attributes = True
@@ -21,6 +21,12 @@ class Product(ProductBase):
     id: str  
     category_id: str
 
+    class Config:
+        from_attributes = True
+        json_encoders = {
+            bytes: lambda v: "Imagen omitida por razones de tamaño"  # Placeholder for binary data
+        }
+
 class ProductUpdate(BaseModel):
     name: Optional[str] = None
     price: Optional[float] = None
@@ -28,7 +34,7 @@ class ProductUpdate(BaseModel):
     size: Optional[List[str]] = None
     description: Optional[str] = None
     stock: Optional[int] = None
-    image_url: Optional[List[str]] = None
+    image: Optional[bytes] = None  # Cambiado a bytes
     category_name: Optional[str] = None  # Opción de categoría si se quiere actualizar
 
     class Config:

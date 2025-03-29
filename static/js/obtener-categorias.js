@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    fetch('https://webmpdeportes.onrender.com/categorias/listar', {
+    fetch('http://127.0.0.1:8000/categorias/listar', {
         method: 'GET',
         headers: { 
             "Content-Type": "application/json",

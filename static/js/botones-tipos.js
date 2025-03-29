@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Función para buscar productos filtrados por tipo
   async function fetchProductsByType(type) {
     try {
-      const response = await fetch(`https://webmpdeportes.onrender.com/productos/buscar?type=${encodeURIComponent(type)}`, {
+      const response = await fetch(`http://127.0.0.1:8000/productos/buscar?type=${encodeURIComponent(type)}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" }
       });
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       productCard.innerHTML = `
         <div class="catalog__card-image">
-          <img src="${product.image_url}" alt="${product.name}">
+          <img src="/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}">
         </div>
         <div class="catalog__card-details">
           <h3 class="catalog__card-title">${product.name}</h3>
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Función para redirigir a WhatsApp con un mensaje predefinido
   async function redirectToWhatsApp(productName) {
     try {
-      const response = await fetch(`https://webmpdeportes.onrender.com/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
+      const response = await fetch(`http://127.0.0.1:8000/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
       if (!response.ok) {
         throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
       }
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Cargar los tipos de productos al inicio
-  fetch("https://webmpdeportes.onrender.com/productos/listar/tipos", {
+  fetch("http://127.0.0.1:8000/productos/listar/tipos", {
     method: "GET",
     headers: { "Content-Type": "application/json" }
   })

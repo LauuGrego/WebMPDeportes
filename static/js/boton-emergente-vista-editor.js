@@ -31,7 +31,7 @@ loginForm.addEventListener("submit", async (event) => {
     formData.append("password", loginForm.password.value);
 
     try {
-        const response = await fetch("https://webmpdeportes.onrender.com/usuarios/login", {
+        const response = await fetch("http://127.0.0.1:8000/usuarios/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",

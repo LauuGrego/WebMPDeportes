@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <p class="product-category">Categoría: ${product.category_id || "No especificado"}</p>
         </div>
         <div class="product-image">
-          ${product.image_url ? `<img src="${product.image_url}" alt="${product.name}" class="img-responsive"/>` : "<p>Sin imagen</p>"}
+          ${product.image ? `<img src="/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}" class="img-responsive"/>` : "<p>Sin imagen</p>"}
         </div>
         <div class="product-actions">
           <button class="btn-edit" data-id="${product.id || product._id}"><i class="fas fa-edit"></i> Editar</button>
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const query = searchInput.value.trim();
     // Si el campo está vacío, se obtienen todos los productos
     const url = query 
-      ? `https://webmpdeportes.onrender.com/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`
+      ? `http://127.0.0.1:8000/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`
       : "http://127.0.0.1:8000/productos/listar";
 
     try {

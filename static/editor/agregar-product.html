@@ -8,6 +8,8 @@
   <link rel="icon" href="./../../images/logo-encabezado.png" type="image">
   <!-- Carga de Font Awesome para iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Replace or add the correct font links -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Proxima+Nova:wght@400;700&display=swap">
 </head>
 <body>
   <!-- HEADER -->
@@ -63,8 +65,8 @@
           <input type="number" id="product-stock" name="stock" class="add-product__input" placeholder="00" required>
         </div>
         <div class="add-product__group">
-          <label for="product-image" class="add-product__label">URL de Imagen:</label>
-          <input type="url" id="product-image" name="image_url" class="add-product__input" placeholder="https://www.example.com/" required>
+          <label for="product-image" class="add-product__label">Cargar Imagen:</label>
+          <input type="file" id="product-image" name="image_file" class="add-product__file-input" accept="image/*" required>
         </div>
         <div class="add-product__group">
           <label for="product-category" class="add-product__label">Categoría:</label>
