@@ -27,6 +27,7 @@ def get_product_by_id(product_id: str):
     if product:
         product["id"] = str(product["_id"])  # Asigna el id como string
         del product["_id"]                 # Elimina el campo _id
+        product.pop("image", None)         # Excluir el campo 'image' del producto
     return product
 
 
@@ -256,7 +257,6 @@ async def list_products():
     # Barajar los productos antes de devolverlos
     shuffled_products = shuffle_products(products)
     return shuffled_products
-
 
 @router.get("/listar/tipos")
 async def list_product_types():
