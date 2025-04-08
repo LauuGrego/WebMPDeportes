@@ -81,7 +81,7 @@ async def create_product(
             "description": description,
             "stock": stock,
             "category_id": str(category["_id"]),
-            "image_url": str(image_path),  # Save the image path in the database
+            "image": str(image_path),  # Save the image path in the database
         }
 
         # Insert the product into the database
@@ -108,7 +108,7 @@ async def modify_product(
     description: Optional[str] = Form(None),
     stock: Optional[int] = Form(None),
     category_name: Optional[str] = Form(None),
-    image_url: Optional[UploadFile] = File(None),
+    image: Optional[UploadFile] = File(None),
     admin: User = Depends(admin_only)
 ):
     db_product = get_product_by_id(product_id)
@@ -136,11 +136,11 @@ async def modify_product(
         update_data["category_id"] = str(category["_id"])
 
     # Handle image update
-    if image_url:
+    if image:
         image_filename = f"{(update_data.get('name') or db_product['name']).replace(' ', '_')}.jpg"
         image_path = IMAGE_FOLDER / image_filename
         with open(image_path, "wb") as f:
-            f.write(await image_url.read())
+            f.write(await image.read())
         update_data["image"] = str(image_path)
 
     # Update the product in the database

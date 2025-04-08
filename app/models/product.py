@@ -9,7 +9,7 @@ class ProductBase(BaseModel):
     size: List[str]
     description: Optional[str] = None
     stock: int
-    image_url: Optional[str] = None  
+    image: Optional[str] = None  
 
     class Config:
         from_attributes = True
