@@ -209,19 +209,13 @@ async def whatsapp_redirect(product_name: str):
     if not product:
         raise HTTPException(status_code=404, detail="Producto no encontrado.")
     
-    # Get the product image path
-    image_path = product.get("image")
-    if not image_path or not os.path.exists(image_path):
-        raise HTTPException(status_code=404, detail="Imagen del producto no encontrada.")
-    
     # Construct the WhatsApp message
     message = f"¡Hola! Quiero saber más info acerca de {product_name}."
     whatsapp_url = f"https://wa.me/3445417684?text={message}"
     
     # Return the WhatsApp URL and the image path
     return {
-        "url": whatsapp_url,
-        "image_path": image_path
+        "url": whatsapp_url
     }
 
 
