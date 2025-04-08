@@ -56,3 +56,14 @@ async def search_categories_by_name(category_name: str):
     for category in matching_categories:
         category["_id"] = str(category["_id"])
     return matching_categories
+
+@router.get("/buscar-por-id/{category_id}")
+async def get_category_by_id(category_id: str):
+    if not ObjectId.is_valid(category_id):
+        raise HTTPException(status_code=400, detail="ID de categoría no válido.")
+    
+    category = categories_collection.find_one({"_id": ObjectId(category_id)}, {"_id": 0, "name": 1})
+    if not category:
+        raise HTTPException(status_code=404, detail="Categoría no encontrada.")
+    
+    return {"name": category["name"]}

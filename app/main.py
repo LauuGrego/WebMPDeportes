@@ -30,4 +30,8 @@ app.include_router(users_JWT_auth.router)
 
 app.include_router(cart.router)
 
+@app.head("/monitor")
+async def monitor():
+    return {"status": "ok"}
+
 

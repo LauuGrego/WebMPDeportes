@@ -70,7 +70,7 @@ html, body {
 }
 
 .hero__content p {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     margin: 0 40px;
     margin-top: 30px;
     animation-duration: 2.5s;
@@ -78,7 +78,7 @@ html, body {
 
 
 .hero__content img {
-    height: 150px;
+    height: 180px;
     animation-duration: 1s;
     margin-right: 50px;
 }
@@ -105,9 +105,8 @@ html, body {
     cursor: pointer;
     border-radius: 5px;
     transition: var(--transition);
-    font-size: 1rem;
+    font-size: 1.3rem;
    position: relative;
-   left: 1100px;
 }
 
 .btn-primary:hover {
@@ -123,7 +122,7 @@ html, body {
     cursor: pointer;
     border-radius: 5px;
     transition: var(--transition);
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     margin-top: 0;
 }
 
@@ -159,13 +158,14 @@ html, body {
 .navbar__links li {
     display: inline;
     animation-duration: 1.5s;
-    margin: 15px;
+    margin: 0 20px;
+    margin-left: 60px;
 }
 
 .navbar__links a {
     text-decoration: none;
     color: var(--color-secondary);
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     font-weight: 500;
     transition: var(--transition);
    
@@ -174,8 +174,6 @@ html, body {
 .navbar__links a:hover {
     color: var(--color-naranja);
 }
-
-
 
 /* =========================
    SECCIÓN: SOBRE NOSOTROS
@@ -404,7 +402,7 @@ html, body {
 .scroll-indicator {
     position: absolute;
     bottom: 20px;
-    left: 160%;
+    left: 200%;
     transform: translateX(-50%);
     font-size: 6rem;
     color: var(--color-secondary);

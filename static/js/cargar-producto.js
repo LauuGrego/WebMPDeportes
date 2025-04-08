@@ -42,14 +42,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Obtiene los valores del formulario
     const name = document.getElementById("product-name").value.trim();
     const type = document.getElementById("product-type").value.trim();
-    const size = document.getElementById("product-size").value.trim();
+    const sizes = document.getElementById("selected-sizes").value.trim(); // Use selected sizes
     const description = document.getElementById("product-description").value.trim();
     const stock = document.getElementById("product-stock").value.trim();
     const imageFile = document.getElementById("product-image").files[0];
     const categoryName = document.getElementById("product-category").value.trim();
 
     // Validaciones básicas
-    if (!name || !type || !size || !description || isNaN(stock) || !imageFile) {
+    if (!name || !type || !sizes || !description || isNaN(stock) || !imageFile) {
       alert("Por favor, completa todos los campos correctamente.");
       return;
     }
@@ -66,13 +66,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("type", type);
-      formData.append("size", size); // Send as a comma-separated string
+      formData.append("size", sizes); // Send selected sizes
       formData.append("description", description);
       formData.append("stock", stock);
       formData.append("image", imageFile, `${name.replace(/\s+/g, "_")}.jpg`); // Renombrar archivo
       formData.append("category_name", categoryName);
 
-      const response = await fetch("http://127.0.0.1:8000/productos/agregar", {
+      const response = await fetch("https://webmpdeportes.onrender.com/productos/agregar", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,

@@ -1,7 +1,7 @@
-
 // Selecciona los elementos necesarios
 const openLoginBtn = document.getElementById("open-login");
 const closeLoginBtn = document.getElementById("close-login");
+const closeLoginBtnX = document.querySelector(".modal__close--login");
 const loginModal = document.getElementById("login-modal");
 const loginForm = document.querySelector("#login-modal form");
 
@@ -12,6 +12,11 @@ openLoginBtn.addEventListener("click", () => {
 
 // Cierra la ventana emergente
 closeLoginBtn.addEventListener("click", () => {
+    loginModal.style.display = "none";
+});
+
+// Cierra la ventana emergente al hacer clic en la "X"
+closeLoginBtnX.addEventListener("click", () => {
     loginModal.style.display = "none";
 });
 
@@ -31,7 +36,7 @@ loginForm.addEventListener("submit", async (event) => {
     formData.append("password", loginForm.password.value);
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/usuarios/login", {
+        const response = await fetch("https://webmpdeportes.onrender.com/usuarios/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",

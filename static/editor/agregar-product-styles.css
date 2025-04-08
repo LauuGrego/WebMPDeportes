@@ -267,6 +267,51 @@
     display: none;
   }
 
+  /* Styles for size selection buttons */
+  .size-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .size-button {
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: 2px solid var(--color-violeta);
+    border-radius: 5px;
+    background-color: var(--color-secondary);
+    color: var(--color-dark);
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  }
+
+  .size-button:hover {
+    background-color: var(--color-violeta);
+    color: var(--color-secondary);
+    transform: scale(1.05);
+  }
+
+  .size-button:active {
+    background-color: var(--color-naranja);
+    color: var(--color-dark);
+    transform: scale(0.95);
+  }
+
+  /* Ensure buttons are visually distinct when selected */
+  .size-button.selected {
+    background-color: var(--color-naranja);
+    color: var(--color-dark);
+    border-color: var(--color-naranja);
+  }
+
+  /* Adjust layout for size options */
+  .size-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
   /* ==============================
      MEDIA QUERIES RESPONSIVOS
   ============================== */
@@ -291,5 +336,8 @@
     .add-product {
       padding: 20px;
       margin: 20px;
+    }
+    .size-selection {
+      justify-content: center;
     }
   }

@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/categorias/listar", {
+        const response = await fetch("https://webmpdeportes.onrender.com/categorias/listar", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,  // Agregar el token en la cabecera
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 deleteIcon.addEventListener("click", async () => {
                     // Funcionalidad para eliminar la categoría
                     try {
-                        const responseDelete = await fetch(`http://127.0.0.1:8000/categorias/eliminar/${category.name}`, {
+                        const responseDelete = await fetch(`https://webmpdeportes.onrender.com/categorias/eliminar/${category.name}`, {
                             method: "DELETE",
                             headers: {
                                 "Authorization": `Bearer ${token}`,

@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para cargar productos desde la API
   function loadProducts() {
-    fetch('http://127.0.0.1:8000/productos/listar', {
+    fetch('https://webmpdeportes.onrender.com/productos/listar', {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
@@ -54,6 +54,12 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
           `;
           productList.appendChild(li);
+
+          // Marcar talles seleccionados en la lista de productos
+          const sizeElement = li.querySelector('.product-size');
+          if (sizeElement && Array.isArray(product.size)) {
+            sizeElement.innerHTML = `Talles: ${product.size.map(size => `<span class="size-tag">${size}</span>`).join(', ')}`;
+          }
         });
       })
       .catch(error => {
@@ -85,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para deshabilitar un producto (por ejemplo, poniendo stock en 0)
   function disableProduct(productId) {
-    fetch(`http://127.0.0.1:8000/productos/deshabilitar/${productId}`, {
+    fetch(`https://webmpdeportes.onrender.com/productos/deshabilitar/${productId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -105,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para obtener un producto y abrir el modal de edición
   function getProductById(productId) {
-    fetch(`http://127.0.0.1:8000/productos/obtener_por_id/${productId}`, {
+    fetch(`https://webmpdeportes.onrender.com/productos/obtener_por_id/${productId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -143,8 +149,10 @@ document.addEventListener("DOMContentLoaded", function () {
           <label>Tipo:</label>
           <input type="text" id="edit-type" value="${product.type}" required>
 
-          <label>Talles (separados por comas):</label>
-          <input type="text" id="edit-size" value="${Array.isArray(product.size) ? product.size.join(', ') : ''}">
+          <label>Talles:</label>
+          <div id="edit-size-buttons" class="size-buttons">
+            ${generateSizeButtons(product.size || [])}
+          </div>
 
           <label>Stock:</label>
           <input type="number" id="edit-stock" value="${product.stock}" required>
@@ -170,8 +178,18 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
     document.body.appendChild(modal);
 
-    // Rellenar el <select> de categorías
-    fetch('http://127.0.0.1:8000/categorias/listar', {
+    // Seleccionar botones de talles actuales
+    const selectedSizes = product.size || [];
+    document.querySelectorAll('#edit-size-buttons .size-button').forEach(button => {
+      if (selectedSizes.includes(button.textContent.trim())) {
+        button.classList.add('selected');
+      }
+      button.addEventListener('click', () => {
+        button.classList.toggle('selected');
+      });
+    });
+
+    fetch(`https://webmpdeportes.onrender.com/categorias/buscar-por-id/${product.category_id}`, {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
@@ -179,25 +197,40 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     })
       .then(response => response.json())
-      .then(categories => {
-        const select = document.getElementById('edit-category');
-        if (select) {
-          select.innerHTML = "";
-          categories.forEach(cat => {
-            const option = document.createElement('option');
-            option.value = cat.name; // Usamos el nombre de la categoría
-            option.textContent = cat.name;
-            if (cat.name === (product.category_name || "")) {
-              option.selected = true;
-            }
-            select.appendChild(option);
-          });
-          if (!select.value && select.options.length > 0) {
-            select.selectedIndex = 0;
+      .then(currentCategory => {
+        fetch('https://webmpdeportes.onrender.com/categorias/listar', {
+          method: 'GET',
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
           }
-        }
+        })
+          .then(response => response.json())
+          .then(categories => {
+            const select = document.getElementById('edit-category');
+            if (select) {
+              select.innerHTML = "";
+              // Agregar la categoría actual como la primera opción
+              const currentOption = document.createElement('option');
+              currentOption.value = currentCategory.name;
+              currentOption.textContent = currentCategory.name;
+              currentOption.selected = true;
+              select.appendChild(currentOption);
+
+              // Agregar las demás categorías
+              categories.forEach(cat => {
+                if (cat.name !== currentCategory.name) {
+                  const option = document.createElement('option');
+                  option.value = cat.name;
+                  option.textContent = cat.name;
+                  select.appendChild(option);
+                }
+              });
+            }
+          })
+          .catch(err => console.error("Error al cargar categorías para edición:", err));
       })
-      .catch(err => console.error("Error al cargar categorías para edición:", err));
+      .catch(err => console.error("Error al buscar la categoría actual:", err));
 
     // Evento para previsualizar la imagen seleccionada
     document.getElementById('edit-image').addEventListener('change', () => {
@@ -233,7 +266,9 @@ document.addEventListener("DOMContentLoaded", function () {
       updatedProduct.append("name", document.getElementById('edit-name').value.trim());
       updatedProduct.append("description", document.getElementById('edit-description').value.trim());
       updatedProduct.append("type", document.getElementById('edit-type').value.trim());
-      updatedProduct.append("size", document.getElementById('edit-size').value.trim());
+      const selectedSizes = Array.from(document.querySelectorAll('#edit-size-buttons button.selected'))
+        .map(button => button.textContent.trim());
+      updatedProduct.append("size", selectedSizes.join(','));
       updatedProduct.append("stock", parseInt(document.getElementById('edit-stock').value));
       const imageFile = document.getElementById('edit-image').files[0];
       if (imageFile) {
@@ -247,7 +282,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      fetch(`http://127.0.0.1:8000/productos/actualizar/${product.id}`, {
+      fetch(`https://webmpdeportes.onrender.com/productos/actualizar/${product.id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -271,5 +306,18 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('cancel-edit').addEventListener('click', () => {
       document.body.removeChild(modal);
     });
+  }
+
+  // Función para generar botones de talles
+  function generateSizeButtons(selectedSizes) {
+    const sizes = [
+      "S", "M", "L", "XL", "XXL", "XXXL",
+      ...Array.from({ length: 51 }, (_, i) => (22 + i * 0.5).toFixed(1))
+    ];
+    return sizes.map(size => `
+      <button type="button" class="size-button ${selectedSizes.includes(size) ? 'selected' : ''}">
+        ${size}
+      </button>
+    `).join('');
   }
 });

@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no">
   <title>Catálogo - Marca Pasos</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="./../../images/logo-encabezado.png" type="image">
@@ -13,72 +12,100 @@
 <body>
   <header class="header">
     <nav class="header__nav animate__animated animate__fadeInDown">
-      <ul class="header__nav-links animate__animated animate__fadeInDown">
-        <li><a href="./../../index.html">Inicio</a></li>
-      </ul>
-      <div class="navbar__buttons">
-        <a href="#login-modal">
-          <button id="open-login"class="animate__animated animate__backInRight btn-primary">Vista Editor</button>
-        </a>
+      <div class="header__top">
+        <div class="header__logo animate__animated animate__backInLeft">
+          <img src="./../../images/logo.png" alt="Marca Pasos">
+        </div>
+        <div class="header__links">
+          <a href="../../index.html">Inicio</a>
+          <a id="open-login" href="javascript:void(0);">Vista Editor</a>
+        </div>
+        <div class="header__search">
+          <input type="text" placeholder="Buscar productos..." class="header__search-input">
+          <button class="btn--primary">
+            <i class="fas fa-search"></i> Buscar
+          </button>
+        </div>
       </div>
     </nav>
-    <div class="header__logo animate__animated animate__backInLeft">
-      <img src="./../../images/logo.png" alt="Marca Pasos">
-    </div>
-  
-    <!-- Contenedor unificado para búsqueda, categorías y tipos -->
-<div class="header__filters animate__animated animate__fadeInLeft">
-  <div class="header__search">
-    <input type="text" placeholder="Buscar productos..." class="header__search-input">
-    <button class="btn--primary">
-      <i class="fas fa-search"></i> Buscar
-    </button>
-  </div>
-
-  <!-- Contenedor para las categorías -->
-<div class="header__categories animate__animated animate__fadeInLeft">
-  <div id="categories-buttons"></div>
-</div>
-
-<!-- Contenedor para los tipos -->
-<div class="header__types animate__animated animate__fadeInLeft">
-  <div id="types-buttons"></div>
-</div>
-
   </header>
 
+<!-- Botón de menú móvil -->
+<div class="mobile-filters-btn">
+  <i class="fas fa-filter"></i>
+  <span>Filtros</span>
+</div>
+
+<!-- Overlay para móvil -->
+<div class="mobile-filters-overlay"></div>
+
   <div class="layout">
+    <!-- Menú Lateral -->
+    <aside class="sidebar">
+      <!-- Añade esta sección para los links móviles -->
+      <section class="sidebar__section mobile-nav">
+        <div class="header__links mobile-links">
+          <a href="../../index.html">Inicio</a>
+        </div>
+      </section>
+    
+      <!-- Secciones existentes -->
+      <section class="sidebar__section">
+        <h3 class="sidebar__title">Categorías</h3>
+        <div id="categories-buttons" class="sidebar__buttons scrollable-buttons"></div>
+      </section>
+      <section class="sidebar__section">
+        <h3 class="sidebar__title">Tipos</h3>
+        <div id="types-buttons" class="sidebar__buttons scrollable-buttons"></div>
+      </section>
+    </aside>
+
     <main class="layout__main">
       <section id="catalog" class="catalog">
-        <h2 class="animate__animated animate__fadeInUp">Catálogo</h2>
-        <div class="catalog__cards"></div>
+        <div class="catalog__grid">
+          <!-- Las tarjetas se insertarán dinámicamente aquí -->
+        </div>
       </section>
     </main>
   </div>
 
-  <!-- Ventana emergente -->
-  <div id="login-modal" class="modal">
-    <div class="modal__content animate__animated animate__zoomIn">
-      <span id="close-login" class="modal__close" tabindex="0">&times;</span>
-      <h2 class="modal__title">Iniciar Sesión</h2>
-      <form class="modal__form">
-        <label for="username" class="modal__label">Usuario:</label>
-        <input type="text" id="username" placeholder="Ingresa tu usuario" class="modal__input">
-        <label for="password" class="modal__label">Contraseña:</label>
-        <input type="password" id="password" placeholder="Ingresa tu contraseña" class="modal__input">
-        <button type="submit" class="modal__submit-btn animate__animated animate__pulse animate__infinite">Ingresar</button>
+  <!-- Modal Login -->
+  <div id="login-modal" class="modal modal--login">
+    <div class="modal__content modal__content--login animate__animated animate__zoomIn">
+      <span id="close-login" class="modal__close modal__close--login" tabindex="0">&times;</span>
+      <h2 class="modal__title modal__title--login">Iniciar Sesión</h2>
+      <form class="modal__form modal__form--login">
+        <label for="username" class="modal__label modal__label--login">Usuario:</label>
+        <input type="text" id="username" placeholder="Ingresa tu usuario" class="modal__input modal__input--login">
+        <label for="password" class="modal__label modal__label--login">Contraseña:</label>
+        <input type="password" id="password" placeholder="Ingresa tu contraseña" class="modal__input modal__input--login">
+        <button type="submit" class="modal__submit-btn modal__submit-btn--login animate__animated animate__pulse animate__infinite">Ingresar</button>
       </form>
     </div>
   </div>
 
+  <!-- Modal Detalles Producto -->
+  <div id="product-details-modal" class="modal modal--product">
+    <div class="modal__content modal__content--product">
+      <span id="close-product-modal" class="modal__close modal__close--product">&times;</span>
+      <div class="modal__image">
+        <!-- Imagen del producto se insertará dinámicamente -->
+      </div>
+      <div class="modal__info">
+        <!-- Información del producto se insertará dinámicamente -->
+      </div>
+    </div>
+  </div>
+
   <footer class="footer animate__animated animate__fadeInUp">
-    <p class="footer__text">&copy; 2025 GregoLauDesigns. Todos los derechos reservados.</p>
-    </footer>
+    <p class="footer__text">&copy; 2025 Lautaro Gregoraschuk. Todos los derechos reservados.</p>
+  </footer>
 
   <script src="./../js/botones-categorias.js"></script>
   <script src="./../js/boton-emergente-vista-editor-catalogo.js"></script>
   <script src="./../js/obtener-productos.js"></script>
   <script src="./../js/barra-navegacion.js"></script>
   <script src="./../js/botones-tipos.js"></script>
+  <script src="./../js/menu_lateral_mobile.js"> </script>
 </body>
 </html>

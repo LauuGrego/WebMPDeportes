@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    fetch('http://127.0.0.1:8000/categorias/listar', {
+    fetch('https://webmpdeportes.onrender.com/categorias/listar', {
         method: 'GET',
         headers: { 
             "Content-Type": "application/json",
@@ -36,4 +36,18 @@ document.addEventListener('DOMContentLoaded', function() {
     .catch(error => {
         console.error("Error al cargar las categorías:", error);
     });
+
+    // Función para redirigir a WhatsApp con un mensaje predefinido
+    async function redirectToWhatsApp(productName) {
+        try {
+            const response = await fetch(`https://webmpdeportes.onrender.com/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
+            if (!response.ok) {
+                throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
+            }
+            const data = await response.json();
+            window.open(data.url, "_blank");
+        } catch (error) {
+            console.error("Error en la redirección a WhatsApp:", error);
+        }
+    }
 });

@@ -204,9 +204,25 @@ async def search_products(name: Optional[str] = None, type: Optional[str] = None
 # Endpoint para redirigir a WhatsApp con un mensaje predefinido
 @router.get("/whatsapp_redirect")
 async def whatsapp_redirect(product_name: str):
+    # Find the product by name
+    product = products_collection.find_one({"name": {"$regex": f"^{re.escape(product_name)}$", "$options": "i"}})
+    if not product:
+        raise HTTPException(status_code=404, detail="Producto no encontrado.")
+    
+    # Get the product image path
+    image_path = product.get("image")
+    if not image_path or not os.path.exists(image_path):
+        raise HTTPException(status_code=404, detail="Imagen del producto no encontrada.")
+    
+    # Construct the WhatsApp message
     message = f"¡Hola! Quiero saber más info acerca de {product_name}."
     whatsapp_url = f"https://wa.me/3445417684?text={message}"
-    return {"url": whatsapp_url}
+    
+    # Return the WhatsApp URL and the image path
+    return {
+        "url": whatsapp_url,
+        "image_path": image_path
+    }
 
 
 # Deshabilitar productos
@@ -216,10 +232,10 @@ async def disable_product(product_id: str, admin: User = Depends(admin_only)):
     if not db_product:
         raise HTTPException(status_code=404, detail="Producto no encontrado.")
     
-    # Deshabilitar el producto (poner el stock en 0)
+    # Deshabilitar el producto (poner el stock en 0 y vaciar la lista de size)
     updated_product = products_collection.find_one_and_update(
         {"_id": ObjectId(product_id)},
-        {"$set": {"stock": 0}},
+        {"$set": {"stock": 0, "size": []}},  # Set stock to 0 and clear size list
         return_document=True  # Esto devuelve el documento actualizado
     )
     
@@ -263,3 +279,28 @@ async def list_product_types():
     types = products_collection.distinct("type")
     types = [t.strip().title() for t in types if t]
     return types
+
+@router.put("/actualizar_talles")
+async def update_product_sizes():
+    products = list(products_collection.find({}))
+    if not products:
+        raise HTTPException(status_code=404, detail="No se encontraron productos.")
+
+    for product in products:
+        if "size" in product and isinstance(product["size"], list):
+            updated_sizes = []
+            for size in product["size"]:
+                try:
+                    # Attempt to convert size to a float; only add if successful
+                    numeric_size = float(size)
+                    updated_sizes.append(f"{numeric_size:.1f}")
+                except ValueError:
+                    # Ignore non-numeric sizes
+                    continue
+            if updated_sizes:  # Only update if there are valid numeric sizes
+                products_collection.update_one(
+                    {"_id": product["_id"]},
+                    {"$set": {"size": updated_sizes}}
+                )
+
+    return {"message": "Talles numéricos actualizados correctamente para todos los productos."} 

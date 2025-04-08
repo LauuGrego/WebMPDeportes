@@ -1,10 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
   const typesContainer = document.getElementById("types-buttons");
-  const productContainer = document.querySelector(".catalog__cards");
+  const productContainer = document.querySelector(".catalog__grid");
+  const hamburgerMenuTypes = document.querySelector("#hamburger-menu-content .header__types");
 
-  // Función para crear botones para cada tipo
+  // Fetch types and display buttons
+  async function fetchTypes() {
+    try {
+      const response = await fetch("https://webmpdeportes.onrender.com/productos/listar/tipos");
+      if (!response.ok) {
+        throw new Error("Error al obtener los tipos de productos");
+      }
+      const types = await response.json();
+      displayTypeButtons(types);
+    } catch (error) {
+      console.error("Error cargando los tipos de productos:", error);
+    }
+  }
+
+  // Display type buttons in both containers
   function displayTypeButtons(types) {
-    typesContainer.innerHTML = ""; // Limpiar botones previos
+    typesContainer.innerHTML = ""; // Clear previous buttons
+
     types.forEach(type => {
       const button = document.createElement("button");
       button.classList.add("type-button");
@@ -14,31 +30,23 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Función para buscar productos filtrados por tipo
+  // Fetch products by type
   async function fetchProductsByType(type) {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/productos/buscar?type=${encodeURIComponent(type)}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" }
-      });
+      const response = await fetch(`https://webmpdeportes.onrender.com/productos/buscar?type=${encodeURIComponent(type)}`);
       if (!response.ok) {
         throw new Error("Error al obtener los productos");
       }
-      let products = await response.json();
-
-      // Barajar los productos antes de mostrarlos
+      const products = await response.json();
       displayProducts(products);
-
-      // Desplazar la vista suavemente hacia la sección de productos
-      productContainer.scrollIntoView({ behavior: "smooth" });
     } catch (error) {
       console.error("Error en la búsqueda por tipo:", error);
     }
   }
 
-  // Función para mostrar los productos
+  // Display products
   function displayProducts(products) {
-    productContainer.innerHTML = ""; // Limpiar productos previos
+    productContainer.innerHTML = ""; // Clear previous products
 
     if (products.length === 0) {
       productContainer.innerHTML = "<p>No se encontraron productos para este tipo.</p>";
@@ -47,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     products.forEach(product => {
       const productCard = document.createElement("div");
-      productCard.classList.add("catalog__card", "animate__animated", "animate__fadeInUp");
+      productCard.classList.add("catalog__card");
 
       productCard.innerHTML = `
         <div class="catalog__card-image">
@@ -56,10 +64,15 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="catalog__card-details">
           <h3 class="catalog__card-title">${product.name}</h3>
           <p class="catalog__card-description">${product.description || "Descripción no disponible"}</p>
-          <p class="catalog__card-size">Talles Disponibles: ${product.size || "Sin Stock"}</p>
-          <p class="catalog__card-stock">Cantidad Disponible: ${product.stock}</p>
-          <p class="catalog__card-click">Click para ver más</p>
-          <button class="whatsapp-button" onclick="redirectToWhatsApp('${product.name}')">Consultar Disponibilidad</button>
+          <p class="catalog__card-stock">Stock: ${product.stock}</p>
+          <div class="catalog__card-actions">
+            <button class="catalog__card-button" onclick="redirectToWhatsApp('${product.name}')">
+              <i class="fab fa-whatsapp"></i> Consultar
+            </button>
+            <button class="catalog__details-button" onclick="viewDetails('${product.id}')">
+              Ver detalles
+            </button>
+          </div>
         </div>
       `;
 
@@ -67,10 +80,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Función para redirigir a WhatsApp con un mensaje predefinido
+  // Redirect to WhatsApp with predefined message
   async function redirectToWhatsApp(productName) {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
+      const response = await fetch(`https://webmpdeportes.onrender.com/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
       if (!response.ok) {
         throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
       }
@@ -81,12 +94,35 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Cargar los tipos de productos al inicio
-  fetch("http://127.0.0.1:8000/productos/listar/tipos", {
-    method: "GET",
-    headers: { "Content-Type": "application/json" }
-  })
-    .then(response => response.json())
-    .then(types => displayTypeButtons(types))
-    .catch(error => console.error("Error cargando los tipos de productos:", error));
+  // Handle "View Details" button
+  function viewDetails(productId) {
+    const modal = document.getElementById("product-details-modal");
+    const modalImage = modal.querySelector(".modal__image");
+    const modalInfo = modal.querySelector(".modal__info");
+
+    // Fetch product details dynamically
+    fetch(`https://webmpdeportes.onrender.com/productos/detalles/${productId}`)
+      .then(response => response.json())
+      .then(product => {
+        modalImage.innerHTML = `<img src="/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}">`;
+        modalInfo.innerHTML = `
+          <h2>${product.name}</h2>
+          <p>${product.description || "Descripción no disponible"}</p>
+          <p><strong>Stock:</strong> ${product.stock}</p>
+          <button class="btn--primary" onclick="redirectToWhatsApp('${product.name}')">
+            <i class="fab fa-whatsapp"></i> Consultar
+          </button>
+        `;
+        modal.style.display = "flex"; // Show the modal
+      })
+      .catch(error => console.error("Error al cargar los detalles del producto:", error));
+  }
+
+  // Close modal functionality
+  document.getElementById("close-product-modal").addEventListener("click", () => {
+    document.getElementById("product-details-modal").style.display = "none";
+  });
+
+  // Load types on page load
+  fetchTypes();
 });

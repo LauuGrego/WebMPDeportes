@@ -6,9 +6,7 @@
   <title>Agregar Producto - Marca Pasos</title>
   <link rel="stylesheet" href="agregar-product-styles.css">
   <link rel="icon" href="./../../images/logo-encabezado.png" type="image">
-  <!-- Carga de Font Awesome para iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Replace or add the correct font links -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Proxima+Nova:wght@400;700&display=swap">
 </head>
 <body>
@@ -16,30 +14,29 @@
   <header class="header" role="banner">
     <nav class="header__nav" aria-label="Navegación Principal">
       <ul class="header__nav-links">
-        <li class="header__nav-item ">
+        <li class="header__nav-item">
           <a href="./inicio.html" class="header__nav-link btn-header">Inicio</a>
         </li>
-        <li class="header__nav-item ">
+        <li class="header__nav-item">
           <a href="./agregar-category.html#main" class="header__nav-link btn-header">Agregar Categoría</a>
         </li>
-        <li class="header__nav-item ">
+        <li class="header__nav-item">
           <a href="./editar-categorias.html#main" class="header__nav-link btn-header">Editar Categoría</a>
         </li>
-        <li class="header__nav-item ">
+        <li class="header__nav-item">
           <a href="./editar-productos.html#main" class="header__nav-link btn-header">Editar Producto</a>
         </li>
-        <li class="header__nav-item ">
+        <li class="header__nav-item">
           <a href="./../../index.html" class="header__nav-link btn-header">Cerrar Sesión</a>
         </li>
       </ul>
     </nav>
     <div class="header__logo">
-        <img  src="./../../images/logo.png" alt="Logo Marca Pasos">
-      </div>
-   
+      <img src="./../../images/logo.png" alt="Logo Marca Pasos">
+    </div>
   </header>
 
-  <!-- MAIN: Sección Agregar Producto -->
+  <!-- MAIN -->
   <main id="main" class="main" role="main">
     <section id="add-product" class="add-product">
       <h2 class="add-product__title">Agregar Producto</h2>
@@ -54,7 +51,11 @@
         </div>
         <div class="add-product__group">
           <label for="product-size" class="add-product__label">Talle:</label>
-          <input type="text" id="product-size" name="size" class="add-product__input" placeholder="39,40,41,42" required>
+          <div id="product-size" class="size-selection">
+            <div class="size-options" id="numeric-sizes"></div>
+            <div class="size-options" id="letter-sizes"></div>
+          </div>
+          <input type="hidden" id="selected-sizes" name="sizes" value="">
         </div>
         <div class="add-product__group">
           <label for="product-description" class="add-product__label">Descripción:</label>
@@ -71,7 +72,7 @@
         <div class="add-product__group">
           <label for="product-category" class="add-product__label">Categoría:</label>
           <select id="product-category" name="category_name" class="add-product__select" required>
-            <!-- Las opciones se cargarán dinámicamente -->
+            <!-- Se cargarán dinámicamente -->
           </select>
         </div>
         <button type="submit" class="btn--primary add-product__submit">Agregar Producto</button>
@@ -79,6 +80,8 @@
     </section>
   </main>
 
+  <!-- SCRIPTS -->
+  <script src="./../js/talles_productos.js"></script>
   <script src="./../js/cargar-producto.js"></script>
   <script src="./../js/obtener-categorias.js"></script>
   <script src="./../js/scroll-main.js"></script>

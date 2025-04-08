@@ -1,5 +1,5 @@
 // URL del backend
-const API_URL = "http://127.0.0.1:8000/productos/listar";
+const API_URL = "https://webmpdeportes.onrender.com/productos/listar";
 
 // Función para obtener productos del backend
 async function fetchProducts(searchQuery = "") {
@@ -21,18 +21,28 @@ async function fetchProducts(searchQuery = "") {
   }
 }
 
+// Función para ver detalles del producto (redirige a nueva página)
+function viewDetails(productId) {
+  // Guardar el ID del producto en localStorage para usarlo en la página de detalles
+  localStorage.setItem('selectedProductId', productId);
+  
+  // Redirigir a la página de detalles
+  window.location.href = './../productos/producto.html';
+}
+
 // Función para mostrar productos en el catálogo
 function displayProducts(products) {
+  const productContainer = document.querySelector(".catalog__grid");
   productContainer.innerHTML = ""; // Limpiar productos previos
 
   if (products.length === 0) {
-    productContainer.innerHTML = "<p>No se encontraron productos para este tipo.</p>";
+    productContainer.innerHTML = "<p>No se encontraron productos.</p>";
     return;
   }
 
   products.forEach(product => {
     const productCard = document.createElement("div");
-    productCard.classList.add("catalog__card", "animate__animated", "animate__fadeInUp");
+    productCard.classList.add("catalog__card");
 
     productCard.innerHTML = `
       <div class="catalog__card-image">
@@ -41,10 +51,14 @@ function displayProducts(products) {
       <div class="catalog__card-details">
         <h3 class="catalog__card-title">${product.name}</h3>
         <p class="catalog__card-description">${product.description || "Descripción no disponible"}</p>
-        <p class="catalog__card-size">Talles Disponibles: ${product.size || "Sin Stock"}</p>
-        <p class="catalog__card-stock">Cantidad Disponible: ${product.stock}</p>
-        <p class="catalog__card-click">Click para ver más</p>
-        <button class="whatsapp-button" onclick="redirectToWhatsApp('${product.name}')">Consultar Disponibilidad</button>
+        <div class="catalog__card-actions">
+          <button class="catalog__card-button" onclick="redirectToWhatsApp('${product.name}')">
+            <i class="fab fa-whatsapp"></i> Consultar
+          </button>
+          <button class="catalog__details-button" onclick="viewDetails('${product.id}')">
+            Ver detalles
+          </button>
+        </div>
       </div>
     `;
 
@@ -55,7 +69,8 @@ function displayProducts(products) {
 // Función para redirigir a WhatsApp con un mensaje predefinido
 async function redirectToWhatsApp(productName) {
   try {
-    const response = await fetch(`http://127.0.0.1:8000/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
+    const encodedProductName = encodeURIComponent(productName);
+    const response = await fetch(`https://webmpdeportes.onrender.com/productos/whatsapp_redirect?product_name=${encodedProductName}`);
     if (!response.ok) {
       throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
     }
@@ -77,6 +92,14 @@ function getImageFormat(imageUrl) {
     return "square";
   }
 }
+
+// Funcionalidad para cerrar el modal
+document.addEventListener("click", function (event) {
+  const modal = document.getElementById("product-details-modal");
+  if (event.target.id === "close-product-modal" || event.target === modal) {
+    modal.style.display = "none"; // Ocultar el modal
+  }
+});
 
 // Cargar productos al inicio
 fetchProducts();

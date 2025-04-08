@@ -437,6 +437,61 @@ input[type="file"]::-webkit-file-upload-button:focus {
   background-color: #e67e22;
 }
 
+/* ==============================
+   ESTILOS PARA BOTONES DE SELECCIÓN MÚLTIPLE DE TALLES
+============================== */
+.size-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.size-button {
+  padding: 8px 12px;
+  border: 1px solid var(--color-dark);
+  border-radius: 5px;
+  background-color: var(--color-secondary);
+  color: var(--color-dark);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.size-button.selected {
+  background-color: var(--color-naranja);
+  color: var(--color-secondary);
+}
+
+.size-button:hover {
+  background-color: var(--color-violeta);
+  color: var(--color-secondary);
+}
+
+/* ==============================
+   ESTILOS PARA EL SELECTOR DE CATEGORÍA
+============================== */
+#edit-category {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: var(--color-secondary);
+  color: var(--color-dark);
+  outline: none;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+#edit-category:focus {
+  border-color: var(--color-violeta);
+  box-shadow: 0 0 0 3px rgba(127, 88, 175, 0.2);
+}
+
+#edit-category option {
+  padding: 10px;
+  background-color: var(--color-secondary);
+  color: var(--color-dark);
+}
+
   /* ==============================
      MEDIA QUERIES PARA EL MODAL
   ============================== */
