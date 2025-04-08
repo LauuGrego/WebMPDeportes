@@ -265,11 +265,6 @@ async def list_products():
     # Convertir el _id de ObjectId a string antes de devolverlo
     for product in products:
         product["id"] = str(product["_id"])  # Convertir el ObjectId a string
-        image_path = product.get("image_url")
-        if image_path and os.path.exists(image_path):
-            product["image_url"] = str(image_path)
-        else:
-            product["image_url"] = None
         product.pop("_id", None)  # Eliminar el campo _id
     
     # Eliminar el campo _id ya que ya lo hemos convertido a "id"
