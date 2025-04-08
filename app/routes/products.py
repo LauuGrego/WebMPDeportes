@@ -254,7 +254,7 @@ async def disable_product(product_id: str, admin: User = Depends(admin_only)):
 
 #Listar Productos
 @router.get("/listar")
-async def list_products(request: Request):
+async def list_products():
     # Se buscan todos los productos, incluyendo el _id
     products = list(products_collection.find({}))
     
