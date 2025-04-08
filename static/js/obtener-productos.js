@@ -46,7 +46,7 @@ function displayProducts(products) {
 
     productCard.innerHTML = `
       <div class="catalog__card-image">
-        <img src="/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}">
+       <img src="https://webmpdeportes.onrender.com/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}">
       </div>
       <div class="catalog__card-details">
         <h3 class="catalog__card-title">${product.name}</h3>
