@@ -81,7 +81,7 @@ async def create_product(
             "description": description,
             "stock": stock,
             "category_id": str(category["_id"]),
-            "image": str(image_path),  # Save the image path in the database
+            "image_url": str(image_path),  # Save the image path in the database
         }
 
         # Insert the product into the database
@@ -108,7 +108,7 @@ async def modify_product(
     description: Optional[str] = Form(None),
     stock: Optional[int] = Form(None),
     category_name: Optional[str] = Form(None),
-    image: Optional[UploadFile] = File(None),
+    image_url: Optional[UploadFile] = File(None),
     admin: User = Depends(admin_only)
 ):
     db_product = get_product_by_id(product_id)
@@ -136,11 +136,11 @@ async def modify_product(
         update_data["category_id"] = str(category["_id"])
 
     # Handle image update
-    if image:
+    if image_url:
         image_filename = f"{(update_data.get('name') or db_product['name']).replace(' ', '_')}.jpg"
         image_path = IMAGE_FOLDER / image_filename
         with open(image_path, "wb") as f:
-            f.write(await image.read())
+            f.write(await image_url.read())
         update_data["image"] = str(image_path)
 
     # Update the product in the database
@@ -254,7 +254,7 @@ async def disable_product(product_id: str, admin: User = Depends(admin_only)):
 
 #Listar Productos
 @router.get("/listar")
-async def list_products():
+async def list_products(request: Request):
     # Se buscan todos los productos, incluyendo el _id
     products = list(products_collection.find({}))
     
@@ -265,7 +265,12 @@ async def list_products():
     # Convertir el _id de ObjectId a string antes de devolverlo
     for product in products:
         product["id"] = str(product["_id"])  # Convertir el ObjectId a string
-        product["image"] = "Imagen omitida por razones de tamaño"  # Placeholder para la imagen
+        image_path = product.get("image_url")
+        if image_path and os.path.exists(image_path):
+            product["image_url"] = str(image_path)
+        else:
+            product["image_url"] = None
+        product.pop("_id", None)  # Eliminar el campo _id
     
     # Eliminar el campo _id ya que ya lo hemos convertido a "id"
     products = [{"id": product["id"], **{key: value for key, value in product.items() if key != "_id"}} for product in products]
@@ -304,3 +309,4 @@ async def update_product_sizes():
                 )
 
     return {"message": "Talles numéricos actualizados correctamente para todos los productos."} 
+

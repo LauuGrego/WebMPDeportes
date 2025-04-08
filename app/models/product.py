@@ -9,7 +9,7 @@ class ProductBase(BaseModel):
     size: List[str]
     description: Optional[str] = None
     stock: int
-    image: Optional[bytes] = None  # Cambiado a bytes para almacenar imágenes
+    image_url: Optional[str] = None  
 
     class Config:
         from_attributes = True
@@ -34,7 +34,7 @@ class ProductUpdate(BaseModel):
     size: Optional[List[str]] = None
     description: Optional[str] = None
     stock: Optional[int] = None
-    image: Optional[bytes] = None  # Cambiado a bytes
+    image_url: Optional[str] = None  
     category_name: Optional[str] = None  # Opción de categoría si se quiere actualizar
 
     class Config:

@@ -6,3 +6,4 @@ pymongo
 python-multipart
 pydantic[email]
 pillow
+requests
