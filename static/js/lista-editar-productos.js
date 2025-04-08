@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <p class="product-category">Categoría: ${product.category_id || 'No especificado'}</p>
             </div>
             <div class="product-image">
-              ${imageUrl ? `<img src="/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}" class="img-responsive"/>` : '<p>Sin imagen</p>'}
+              ${imageUrl ? `<img src="https://webmpdeportes.onrender.com/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}" class="img-responsive"/>` : '<p>Sin imagen</p>'}
             </div>
             <div class="product-actions">
               <button class="btn-edit" data-id="${productId}"><i class="fas fa-edit"></i> Editar</button>
