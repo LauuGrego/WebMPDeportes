@@ -46,20 +46,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-// Función para redirigir a WhatsApp (similar a la del catálogo)
 async function redirectToWhatsApp(productName) {
   try {
     const encodedProductName = encodeURIComponent(productName);
-    const response = await fetch(`${API_URL}/whatsapp_redirect?product_name=${encodedProductName}`);
-    
+    const response = await fetch(`https://webmpdeportes.onrender.com/productos/whatsapp_redirect?product_name=${encodedProductName}`);
     if (!response.ok) {
       throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
     }
-    
     const data = await response.json();
     window.open(data.url, "_blank");
   } catch (error) {
     console.error("Error en la redirección a WhatsApp:", error);
-    alert("Error al intentar redirigir a WhatsApp");
   }
 }
