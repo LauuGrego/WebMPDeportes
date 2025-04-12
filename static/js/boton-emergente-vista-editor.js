@@ -1,65 +1,71 @@
-// Selecciona los elementos necesarios
-const openLoginBtn = document.getElementById("open-login");
-const closeLoginBtn = document.getElementById("close-login");
-const closeLoginBtnX = document.querySelector(".modal__close--login");
-const loginModal = document.getElementById("login-modal");
-const loginForm = document.querySelector("#login-modal form");
+document.addEventListener("DOMContentLoaded", () => {
+    // Selecciona los elementos necesarios
+    const openLoginBtn = document.getElementById("open-login");
+    const closeLoginBtn = document.getElementById("close-login");
+    const closeLoginBtnX = document.querySelector(".modal__close--login");
+    const loginModal = document.getElementById("login-modal");
+    const loginForm = document.querySelector("#login-modal form");
 
-// Muestra la ventana emergente
-openLoginBtn.addEventListener("click", () => {
-    loginModal.style.display = "flex";
-});
-
-// Cierra la ventana emergente
-closeLoginBtn.addEventListener("click", () => {
-    loginModal.style.display = "none";
-});
-
-// Cierra la ventana emergente al hacer clic en la "X"
-closeLoginBtnX.addEventListener("click", () => {
-    loginModal.style.display = "none";
-});
-
-// Cierra la ventana al hacer clic fuera de la tarjeta
-window.addEventListener("click", (e) => {
-    if (e.target === loginModal) {
-        loginModal.style.display = "none";
-    }
-});
-
-// Manejo del envío del formulario de login
-loginForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const formData = new URLSearchParams();
-    formData.append("username", loginForm.username.value);
-    formData.append("password", loginForm.password.value);
-
-    try {
-        const response = await fetch("https://webmpdeportes.onrender.com/usuarios/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: formData,
+    // Verifica que los elementos existan antes de agregar los event listeners
+    if (openLoginBtn) {
+        openLoginBtn.addEventListener("click", () => {
+            loginModal.style.display = "flex";
         });
+    }
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.detail || "Error en el inicio de sesión");
+    if (closeLoginBtn) {
+        closeLoginBtn.addEventListener("click", () => {
+            loginModal.style.display = "none";
+        });
+    }
+
+    if (closeLoginBtnX) {
+        closeLoginBtnX.addEventListener("click", () => {
+            loginModal.style.display = "none";
+        });
+    }
+
+    window.addEventListener("click", (e) => {
+        if (e.target === loginModal) {
+            loginModal.style.display = "none";
         }
+    });
 
-        const data = await response.json();
-        localStorage.setItem("access_token", data.access_token);
+    if (loginForm) {
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
 
-        // Cierra el modal
-        loginModal.style.display = "none";
+            const formData = new URLSearchParams();
+            formData.append("username", loginForm.username.value);
+            formData.append("password", loginForm.password.value);
 
-        // Redirige al editor
-        window.location.href = "/static/editor/inicio.html"; // Asegúrate de que esta ruta sea correcta
+            try {
+                const response = await fetch("https://webmpdeportes.onrender.com/usuarios/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: formData,
+                });
 
-    } catch (error) {
-        alert(error.message);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || "Error en el inicio de sesión");
+                }
+
+                const data = await response.json();
+                localStorage.setItem("access_token", data.access_token);
+
+                // Cierra el modal
+                loginModal.style.display = "none";
+
+                // Redirige al editor
+                window.location.href = "/static/editor/inicio.html";
+
+            } catch (error) {
+                alert(error.message);
+            }
+        });
     }
 });
 
