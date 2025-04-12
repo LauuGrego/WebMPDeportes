@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.routes import products, users, categories, users_JWT_auth, cart
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
@@ -19,6 +20,8 @@ app.add_middleware(
 
 #statics
 #app.mount()
+
+app.mount("/static/images", StaticFiles(directory="static/images"), name="static_images")
 
 app.include_router(products.router)
 

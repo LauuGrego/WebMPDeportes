@@ -7,67 +7,66 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Función para cargar productos desde la API
-  function loadProducts() {
-    fetch('https://webmpdeportes.onrender.com/productos/listar', {
-      method: 'GET',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+  async function loadProducts(searchQuery = '') {
+    try {
+      const response = await fetch(`https://webmpdeportes.onrender.com/productos/listar?search=${encodeURIComponent(searchQuery)}`);
+      if (!response.ok) throw new Error('Error al cargar los productos');
+      const products = await response.json();
+  
+  
+      const catalogCards = document.getElementById('catalogCards');
+      catalogCards.innerHTML = ''; // Limpiar contenido previo
+  
+  
+      if (products.length === 0) {
+        catalogCards.innerHTML = '<p>No se encontraron productos.</p>';
+        return;
       }
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error en la solicitud al backend');
-        }
-        return response.json();
-      })
-      .then(products => {
-        const productList = document.getElementById('product-list');
-        if (!productList) {
-          console.error("No se encontró el elemento #product-list en el DOM.");
-          return;
-        }
-        productList.innerHTML = ""; // Limpiar lista
-
-        products.forEach(product => {
-          // Manejar _id de MongoDB y mostrar la primera imagen si existe
-          const productId = product.id || product._id;
-          const imageUrl = (product.image_url && product.image_url.length > 0) ? product.image_url[0] : null;
-
-          const li = document.createElement('li');
-          li.classList.add('product-item');
-          li.innerHTML = `
-            <div class="product-info">
-              <h3 class="product-name">${product.name}</h3>
-              <p class="product-description">${product.description || 'Sin descripción'}</p>
-              <p class="product-type">Tipo: ${product.type}</p>
-              <p class="product-size">Talles: ${Array.isArray(product.size) ? product.size.join(', ') : 'No especificado'}</p>
-              <p class="product-stock">Stock: ${product.stock}</p>
-              <p class="product-category">Categoría: ${product.category_id || 'No especificado'}</p>
+  
+  
+      products.forEach(product => {
+        const productImage = product.image
+          ? `data:image/jpeg;base64,${product.image}`
+          : '/static/images/default-product.png'; // Default image fallback
+  
+  
+        const productCard = `
+          <div class="card">
+            <img src="${productImage}" alt="${product.name}" class="card__image" />
+            <div class="card__info">
+              <h2 class="card__title">${product.name}</h2>
+              <p class="card__description">${product.description}</p>
+              <div class="card__footer">
+                <span class="card__price">$${product.price || 'N/A'}</span>
+                <div class="card__buttons">
+                  <button class="ver-detalles-btn" data-producto-id="${product.id}">Ver detalles</button>
+                  <a href="https://wa.me/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="card__whatsapp" target="_blank" aria-label="Consultar por WhatsApp">
+                    <i class="fab fa-whatsapp"></i> Consultar
+                  </a>
+                </div>
+              </div>
             </div>
-           <div class="product-image">
-              ${product.name ? `<img src="https://webmpdeportes.onrender.com/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}" class="img-responsive"/>` : '<p>Sin imagen</p>'}
-            </div>
-            <div class="product-actions">
-              <button class="btn-edit" data-id="${productId}"><i class="fas fa-edit"></i> Editar</button>
-              <button class="btn-delete" data-id="${productId}"><i class="fas fa-trash-alt"></i> Eliminar</button>
-            </div>
-          `;
-          productList.appendChild(li);
-
-          // Marcar talles seleccionados en la lista de productos
-          const sizeElement = li.querySelector('.product-size');
-          if (sizeElement && Array.isArray(product.size)) {
-            sizeElement.innerHTML = `Talles: ${product.size.map(size => `<span class="size-tag">${size}</span>`).join(', ')}`;
-          }
-        });
-      })
-      .catch(error => {
-        console.error("Error al cargar los productos:", error);
+          </div>
+        `;
+        catalogCards.insertAdjacentHTML('beforeend', productCard);
       });
+    } catch (error) {
+      console.error('Error al cargar los productos:', error);
+    }
   }
-
-  loadProducts();
+  
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.querySelector('.header__search-input');
+    loadProducts();
+  
+  
+    searchInput.addEventListener('input', () => {
+      const searchQuery = searchInput.value;
+      loadProducts(searchQuery);
+    });
+  });
+  
 
   // Asignar eventos para editar y eliminar
   const productListElement = document.getElementById('product-list');
