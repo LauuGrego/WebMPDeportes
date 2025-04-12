@@ -56,7 +56,7 @@ loginForm.addEventListener("submit", async (event) => {
         loginModal.style.display = "none";
 
         // Redirige al editor
-        window.location.href = "static/editor/inicio.html";
+        window.location.href = "/static/editor/inicio.html"; // Asegúrate de que esta ruta sea correcta
 
     } catch (error) {
         alert(error.message);
