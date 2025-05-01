@@ -69,10 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append("size", sizes); // Send selected sizes
       formData.append("description", description);
       formData.append("stock", stock);
-      formData.append("image", imageFile, `${name.replace(/\s+/g, "_")}.jpg`); // Renombrar archivo
+      formData.append("image", imageFile); // No need to rename; Cloudinary handles it
       formData.append("category_name", categoryName);
 
-      const response = await fetch("https://webmpdeportes.onrender.com/productos/agregar", {
+      const response = await fetch("http://127.0.0.1:8000/productos/agregar", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,

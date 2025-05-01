@@ -11,7 +11,7 @@ class ProductBase(BaseModel):
     description: Optional[str] = None
     stock: int
     image: Optional[bytes] = None  # Store image as binary data
-    image_path: Optional[str] = None  # Add image_path to store the image file path
+    image_url: Optional[str] = None  # Guardar el enlace de la imagen en lugar de datos binarios
 
 
     class Config:
@@ -42,7 +42,7 @@ class ProductUpdate(BaseModel):
     description: Optional[str] = None
     stock: Optional[int] = None
     image: Optional[bytes] = None  # Cambiado a bytes
-    image_path: Optional[str] = None  # Add image_path for updates
+    image_url: Optional[str] = None  # Actualizar el enlace de la imagen
     category_name: Optional[str] = None  # Opción de categoría si se quiere actualizar
 
 

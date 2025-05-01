@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Fetch types and display buttons
   async function fetchTypes() {
     try {
-      const response = await fetch("https://webmpdeportes.onrender.com/productos/listar/tipos");
+      const response = await fetch("http://127.0.0.1:8000/productos/listar/tipos");
       if (!response.ok) {
         throw new Error("Error al obtener los tipos de productos");
       }
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Fetch products by type
   async function fetchProductsByType(type) {
     try {
-      const response = await fetch(`https://webmpdeportes.onrender.com/productos/buscar?type=${encodeURIComponent(type)}`);
+      const response = await fetch(`http://127.0.0.1:8000/productos/buscar?type=${encodeURIComponent(type)}`);
       if (!response.ok) {
         throw new Error("Error al obtener los productos");
       }
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Redirect to WhatsApp with predefined message
   async function redirectToWhatsApp(productName) {
     try {
-      const response = await fetch(`https://webmpdeportes.onrender.com/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
+      const response = await fetch(`http://127.0.0.1:8000/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
       if (!response.ok) {
         throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
       }
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const modalInfo = modal.querySelector(".modal__info");
 
     // Fetch product details dynamically
-    fetch(`https://webmpdeportes.onrender.com/productos/detalles/${productId}`)
+    fetch(`http://127.0.0.1:8000/productos/detalles/${productId}`)
       .then(response => response.json())
       .then(product => {
         modalImage.innerHTML = `<img src="/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}">`;

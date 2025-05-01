@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Fetch categories and display buttons
   async function fetchCategories() {
     try {
-      const response = await fetch("https://webmpdeportes.onrender.com/categorias/listar-public");
+      const response = await fetch("http://127.0.0.1:8000/categorias/listar-public");
       if (!response.ok) {
         throw new Error("Error al obtener las categorías");
       }
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Fetch products by category
   async function fetchProductsByCategory(category) {
     try {
-      const response = await fetch(`https://webmpdeportes.onrender.com/productos/buscar?category=${encodeURIComponent(category)}`);
+      const response = await fetch(`http://127.0.0.1:8000/productos/buscar?category=${encodeURIComponent(category)}`);
       if (!response.ok) {
         throw new Error("Error al obtener los productos");
       }
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Function to redirect to WhatsApp with a predefined message
   async function redirectToWhatsApp(productName) {
     try {
-      const response = await fetch(`https://webmpdeportes.onrender.com/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
+      const response = await fetch(`http://127.0.0.1:8000/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
       if (!response.ok) {
         throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
       }
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const modalInfo = modal.querySelector(".modal__info");
 
     // Fetch product details dynamically
-    fetch(`https://webmpdeportes.onrender.com/productos/detalles/${productId}`)
+    fetch(`http://127.0.0.1:8000/productos/detalles/${productId}`)
       .then(response => response.json())
       .then(product => {
         modalImage.innerHTML = `<img src="/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}">`;

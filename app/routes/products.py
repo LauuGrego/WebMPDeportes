@@ -13,6 +13,7 @@ from pathlib import Path
 from fastapi.responses import StreamingResponse
 from io import BytesIO
 import base64  # Importar para codificar imágenes en Base64
+from cloudinary.uploader import upload as cloudinary_upload
 
 
 router = APIRouter(prefix="/productos", tags=["Products"])
@@ -84,12 +85,10 @@ async def create_product(
         size_list = [s.strip().title() for s in size.split(",") if s.strip()]
 
 
-        # Read the image as binary data
+        # Subir la imagen a Cloudinary
         image_data = await image.read()
-
-
-        # Save the image to the filesystem
-        image_path = save_image_to_directory(image_data, name)
+        upload_result = cloudinary_upload(image_data, folder="products", public_id=name.replace(" ", "_"))
+        image_url = upload_result.get("secure_url")
 
 
         # Check if the category exists
@@ -106,7 +105,7 @@ async def create_product(
             "description": description,
             "stock": stock,
             "category_id": str(category["_id"]),
-            "image_path": image_path,  # Save the image path in the database
+            "image_url": image_url,  # Guardar solo el enlace de la imagen
         }
 
 
@@ -168,9 +167,9 @@ async def modify_product(
     # Handle image update
     if image:
         image_data = await image.read()
-        # Save the image to the filesystem
-        image_path = save_image_to_directory(image_data, update_data.get("name", db_product["name"]))
-        update_data["image_path"] = image_path  # Update the image_path in the database
+        upload_result = cloudinary_upload(image_data, folder="products", public_id=name.replace(" ", "_"))
+        image_url = upload_result.get("secure_url")
+        update_data["image_url"] = image_url  # Actualizar el enlace de la imagen
 
 
     # Update the product in the database
@@ -239,6 +238,11 @@ async def search_products(name: Optional[str] = None, type: Optional[str] = None
     for product in products:
         product["_id"] = str(product["_id"])
         product["id"] = product.pop("_id")
+        # Ensure image_url is a string, extract the first URL if it's a list
+        if isinstance(product.get("image_url"), list):
+            product["image_url"] = product["image_url"][0] if product["image_url"] else "/static/images/default-product.png"
+        else:
+            product["image_url"] = product.get("image_url", "/static/images/default-product.png")
         if "image_path" in product and product["image_path"]:
             try:
                 with open(product["image_path"], "rb") as image_file:
@@ -253,19 +257,13 @@ async def search_products(name: Optional[str] = None, type: Optional[str] = None
     return products
 
 
-# Obtener imagen del producto desde el directorio
+# Obtener imagen del producto (elimina el manejo de archivos locales)
 @router.get("/imagen/{product_id}")
 async def get_product_image(product_id: str):
     product = products_collection.find_one({"_id": ObjectId(product_id)})
-    if not product:
-        raise HTTPException(status_code=404, detail="Producto no encontrado.")
-   
-    image_path = Path(product.get("image_path", ""))
-    if not image_path.exists():
-        image_path = Path("static/images/default-product.jpg")  # Imagen por defecto
-
-
-    return StreamingResponse(image_path.open("rb"), media_type="image/jpeg")
+    if not product or "image_url" not in product:
+        raise HTTPException(status_code=404, detail="Imagen del producto no encontrada.")
+    return {"image_url": product["image_url"]}
 
 
 
@@ -338,14 +336,11 @@ async def list_products(search: Optional[str] = None):
     for product in products:
         product["id"] = str(product["_id"])  # Convertir el ObjectId a string
         del product["_id"]  # Eliminar el campo _id
-        if "image_path" in product and product["image_path"]:
-            try:
-                with open(product["image_path"], "rb") as image_file:
-                    product["image"] = base64.b64encode(image_file.read()).decode("utf-8")
-            except FileNotFoundError:
-                product["image"] = None
+        # Ensure image_url is a string, extract the first URL if it's a list
+        if isinstance(product.get("image_url"), list):
+            product["image_url"] = product["image_url"][0] if product["image_url"] else "/static/images/default-product.png"
         else:
-            product["image"] = None  # No image available
+            product["image_url"] = product.get("image_url", "/static/images/default-product.png")
         product["price"] = float(product["price"]) if "price" in product and isinstance(product["price"], (int, float)) else None  # Ensure price is a number or None
    
     return products

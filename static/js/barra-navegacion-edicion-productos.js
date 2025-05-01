@@ -46,24 +46,21 @@ document.addEventListener("DOMContentLoaded", () => {
   // Función principal para buscar productos
   async function searchProducts() {
     const query = searchInput.value.trim();
-    // Si el campo está vacío, se obtienen todos los productos
-    const url = query 
-      ? `https://webmpdeportes.onrender.com/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`
-      : "https://webmpdeportes.onrender.com/productos/listar";
+    let url = query === ""
+      ? "http://127.0.0.1:8000/productos/listar"
+      : `http://127.0.0.1:8000/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`;
 
     try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" }
-      });
+      const response = await fetch(url);
       if (!response.ok) {
-        throw new Error("Error al obtener los productos");
+        throw new Error(`Error al obtener los productos: ${response.statusText}`);
       }
+
       const products = await response.json();
       displayProducts(products);
-      scrollToProducts();
     } catch (error) {
       console.error("Error en la búsqueda:", error);
+      productContainer.innerHTML = "<p>Error al cargar los productos.</p>";
     }
   }
 

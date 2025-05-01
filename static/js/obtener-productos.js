@@ -1,12 +1,15 @@
 // URL del backend
-const API_URL = "https://webmpdeportes.onrender.com/productos/listar";
+const API_URL = "http://127.0.0.1:8000/productos/listar";
+
+let currentPage = 1; // Track the current page
+const productsPerPage = 10; // Number of products per page
 
 // Función para obtener productos del backend
-async function fetchProducts(searchQuery = "") {
+async function fetchProducts(searchQuery = "", page = 1) {
   try {
-    let url = API_URL;
+    let url = `${API_URL}?page=${page}&limit=${productsPerPage}`;
     if (searchQuery) {
-      url += `?name=${encodeURIComponent(searchQuery)}`;
+      url += `&name=${encodeURIComponent(searchQuery)}`;
     }
 
     const response = await fetch(url);
@@ -14,8 +17,8 @@ async function fetchProducts(searchQuery = "") {
       throw new Error("Error al obtener los productos");
     }
 
-    let products = await response.json();
-    displayProducts(products);
+    const products = await response.json();
+    displayProducts(products, page);
   } catch (error) {
     console.error(error);
   }
@@ -31,12 +34,17 @@ function viewDetails(productId) {
 }
 
 // Función para mostrar productos en el catálogo
-function displayProducts(products) {
+function displayProducts(products, page) {
   const productContainer = document.querySelector(".catalog__grid");
-  productContainer.innerHTML = ""; // Limpiar productos previos
+  const loadMoreButton = document.getElementById("load-more-button");
 
-  if (products.length === 0) {
+  if (page === 1) {
+    productContainer.innerHTML = ""; // Clear previous products only on the first page
+  }
+
+  if (products.length === 0 && page === 1) {
     productContainer.innerHTML = "<p>No se encontraron productos.</p>";
+    loadMoreButton.style.display = "none"; // Hide the button if no products
     return;
   }
 
@@ -44,9 +52,12 @@ function displayProducts(products) {
     const productCard = document.createElement("div");
     productCard.classList.add("catalog__card");
 
+    // Use Cloudinary image URL or fallback to a default image
+    const productImage = product.image_url || '/static/images/default-product.png';
+
     productCard.innerHTML = `
       <div class="catalog__card-image">
-       <img src="https://webmpdeportes.onrender.com/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}">
+        <img src="${productImage}" alt="${product.name}">
       </div>
       <div class="catalog__card-details">
         <h3 class="catalog__card-title">${product.name}</h3>
@@ -64,13 +75,20 @@ function displayProducts(products) {
 
     productContainer.appendChild(productCard);
   });
+
+  // Show or hide the "Ver más" button based on the number of products returned
+  if (products.length < productsPerPage) {
+    loadMoreButton.style.display = "none";
+  } else {
+    loadMoreButton.style.display = "block";
+  }
 }
 
 // Función para redirigir a WhatsApp con un mensaje predefinido
 async function redirectToWhatsApp(productName) {
   try {
     const encodedProductName = encodeURIComponent(productName);
-    const response = await fetch(`https://webmpdeportes.onrender.com/productos/whatsapp_redirect?product_name=${encodedProductName}`);
+    const response = await fetch(`http://127.0.0.1:8000/productos/whatsapp_redirect?product_name=${encodedProductName}`);
     if (!response.ok) {
       throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
     }
@@ -99,6 +117,12 @@ document.addEventListener("click", function (event) {
   if (event.target.id === "close-product-modal" || event.target === modal) {
     modal.style.display = "none"; // Ocultar el modal
   }
+});
+
+// Event listener for the "Ver más" button
+document.getElementById("load-more-button").addEventListener("click", () => {
+  currentPage++;
+  fetchProducts("", currentPage);
 });
 
 // Cargar productos al inicio

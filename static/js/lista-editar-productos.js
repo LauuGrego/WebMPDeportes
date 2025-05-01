@@ -6,67 +6,74 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  // Función para cargar productos desde la API
-  async function loadProducts(searchQuery = '') {
+  let currentPage = 1; // Track the current page
+  const productsPerPage = 10; // Number of products per page
+
+  // Function to load products from the API
+  async function loadProducts(searchQuery = '', page = 1) {
     try {
-      const response = await fetch(`https://webmpdeportes.onrender.com/productos/listar?search=${encodeURIComponent(searchQuery)}`);
+      let url = `http://127.0.0.1:8000/productos/listar?page=${page}&limit=${productsPerPage}`;
+      if (searchQuery) {
+        url += `&name=${encodeURIComponent(searchQuery)}`;
+      }
+
+      const response = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (!response.ok) throw new Error('Error al cargar los productos');
       const products = await response.json();
-  
-  
-      const catalogCards = document.getElementById('catalogCards');
-      catalogCards.innerHTML = ''; // Limpiar contenido previo
-  
-  
-      if (products.length === 0) {
-        catalogCards.innerHTML = '<p>No se encontraron productos.</p>';
+
+      const productListElement = document.getElementById('product-list');
+      if (page === 1) {
+        productListElement.innerHTML = ''; // Clear previous products only on the first page
+      }
+
+      if (products.length === 0 && page === 1) {
+        productListElement.innerHTML = '<p>No se encontraron productos.</p>';
+        document.getElementById('load-more-button').style.display = 'none';
         return;
       }
-  
-  
+
       products.forEach(product => {
-        const productImage = product.image
-          ? `data:image/jpeg;base64,${product.image}`
-          : '/static/images/default-product.png'; // Default image fallback
-  
-  
-        const productCard = `
-          <div class="card">
-            <img src="${productImage}" alt="${product.name}" class="card__image" />
-            <div class="card__info">
-              <h2 class="card__title">${product.name}</h2>
-              <p class="card__description">${product.description}</p>
-              <div class="card__footer">
-                <span class="card__price">$${product.price || 'N/A'}</span>
-                <div class="card__buttons">
-                  <button class="ver-detalles-btn" data-producto-id="${product.id}">Ver detalles</button>
-                  <a href="https://wa.me/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="card__whatsapp" target="_blank" aria-label="Consultar por WhatsApp">
-                    <i class="fab fa-whatsapp"></i> Consultar
-                  </a>
-                </div>
-              </div>
-            </div>
+        const productImage = product.image_url || '/static/images/default-product.png'; // Use Cloudinary image URL or fallback
+
+        const productItem = document.createElement('li');
+        productItem.innerHTML = `
+          <div class="product-info">
+            <h3>${product.name}</h3>
+            <p>${product.description || 'Sin descripción'}</p>
+            <img src="${productImage}" alt="${product.name}" class="product-image">
+          </div>
+          <div class="product-actions">
+            <button class="btn-edit" data-id="${product.id}">Editar</button>
+            <button class="btn-delete" data-id="${product.id}">Eliminar</button>
           </div>
         `;
-        catalogCards.insertAdjacentHTML('beforeend', productCard);
+        productListElement.appendChild(productItem);
       });
+
+      // Show or hide the "Ver más" button based on the number of products returned
+      const loadMoreButton = document.getElementById('load-more-button');
+      if (products.length < productsPerPage) {
+        loadMoreButton.style.display = 'none';
+      } else {
+        loadMoreButton.style.display = 'block';
+      }
     } catch (error) {
       console.error('Error al cargar los productos:', error);
     }
   }
-  
-  
-  document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.querySelector('.header__search-input');
-    loadProducts();
-  
-  
-    searchInput.addEventListener('input', () => {
-      const searchQuery = searchInput.value;
-      loadProducts(searchQuery);
-    });
+
+  // Event listener for the "Ver más" button
+  document.getElementById('load-more-button').addEventListener('click', () => {
+    currentPage++;
+    loadProducts('', currentPage);
   });
-  
+
+  // Load the first page of products on page load
+  loadProducts();
 
   // Asignar eventos para editar y eliminar
   const productListElement = document.getElementById('product-list');
@@ -90,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para deshabilitar un producto (por ejemplo, poniendo stock en 0)
   function disableProduct(productId) {
-    fetch(`https://webmpdeportes.onrender.com/productos/deshabilitar/${productId}`, {
+    fetch(`http://127.0.0.1:8000/productos/deshabilitar/${productId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -110,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para obtener un producto y abrir el modal de edición
   function getProductById(productId) {
-    fetch(`https://webmpdeportes.onrender.com/productos/obtener_por_id/${productId}`, {
+    fetch(`http://127.0.0.1:8000/productos/obtener_por_id/${productId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -188,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 
-    fetch(`https://webmpdeportes.onrender.com/categorias/buscar-por-id/${product.category_id}`, {
+    fetch(`http://127.0.0.1:8000/categorias/buscar-por-id/${product.category_id}`, {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
@@ -197,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then(response => response.json())
       .then(currentCategory => {
-        fetch('https://webmpdeportes.onrender.com/categorias/listar', {
+        fetch('http://127.0.0.1:8000/categorias/listar', {
           method: 'GET',
           headers: {
             "Content-Type": "application/json",
@@ -281,7 +288,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      fetch(`https://webmpdeportes.onrender.com/productos/actualizar/${product.id}`, {
+      fetch(`http://127.0.0.1:8000/productos/actualizar/${product.id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`

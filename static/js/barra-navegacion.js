@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
   async function searchProducts() {
     const query = searchInput.value.trim();
     let url = query === "" 
-      ? "https://webmpdeportes.onrender.com/productos/listar" 
-      : `https://webmpdeportes.onrender.com/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`;
+      ? "http://127.0.0.1:8000/productos/listar" 
+      : `http://127.0.0.1:8000/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`;
 
     try {
       const response = await fetch(url);
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Función para redirigir a WhatsApp con un mensaje predefinido
   async function redirectToWhatsApp(productName) {
     try {
-      const response = await fetch(`https://webmpdeportes.onrender.com/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
+      const response = await fetch(`http://127.0.0.1:8000/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
       if (!response.ok) {
         throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
       }
@@ -94,4 +94,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Cargar productos iniciales al entrar en la página
   searchProducts();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Verifica que los elementos del DOM existan antes de interactuar con ellos
+  const navToggle = document.querySelector(".nav-toggle");
+  const navMenu = document.querySelector(".nav-menu");
+
+  if (!navToggle) {
+    console.error("Elemento con la clase '.nav-toggle' no encontrado. Verifica el HTML.");
+    return;
+  }
+
+  if (!navMenu) {
+    console.error("Elemento con la clase '.nav-menu' no encontrado. Verifica el HTML.");
+    return;
+  }
+
+  // Agregar evento para alternar la visibilidad del menú
+  navToggle.addEventListener("click", () => {
+    navMenu.classList.toggle("is-active");
+  });
 });

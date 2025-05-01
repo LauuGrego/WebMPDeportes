@@ -489,6 +489,25 @@ body {
   transform: scale(1.05);
 }
 
+.catalog__load-more-button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--color-secondary);
+  background-color: var(--color-violeta);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.catalog__load-more-button:hover {
+  background-color: #6a479e;
+  transform: scale(1.05);
+}
+
 /* ==============================
    4. MODAL
 ============================== */

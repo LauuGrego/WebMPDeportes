@@ -1,5 +1,5 @@
 // URL del backend
-const API_URL = "https://webmpdeportes.onrender.com/productos/obtener_por_id";
+const API_URL = "http://127.0.0.1:8000/productos/obtener_por_id";
 
 document.addEventListener('DOMContentLoaded', async () => {
   const productId = localStorage.getItem('selectedProductId');
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function redirectToWhatsApp(productName) {
   try {
     const encodedProductName = encodeURIComponent(productName);
-    const response = await fetch(`https://webmpdeportes.onrender.com/productos/whatsapp_redirect?product_name=${encodedProductName}`);
+    const response = await fetch(`http://127.0.0.1:8000/productos/whatsapp_redirect?product_name=${encodedProductName}`);
     if (!response.ok) {
       throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
     }
