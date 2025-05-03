@@ -29,8 +29,6 @@ app.add_middleware(
 #statics
 #app.mount()
 
-app.mount("/static/images", StaticFiles(directory="static/images"), name="static_images")
-
 app.include_router(products.router)
 
 app.include_router(categories.router)
