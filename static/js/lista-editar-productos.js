@@ -3,18 +3,6 @@ let currentPage = 1;
 const productsPerPage = 10;
 let isLoading = false;
 
-// Función para mostrar spinner de carga
-function showLoadingSpinner() {
-  const spinner = document.getElementById('loadingSpinner');
-  if (spinner) spinner.style.display = 'block';
-}
-
-// Función para ocultar spinner de carga
-function hideLoadingSpinner() {
-  const spinner = document.getElementById('loadingSpinner');
-  if (spinner) spinner.style.display = 'none';
-}
-
 // Función para agregar botón "Ver más"
 function addLoadMoreButton() {
   const paginationContainer = document.querySelector('.pagination');
@@ -40,7 +28,6 @@ async function fetchProducts(page = 1, append = false) {
   try {
     if (isLoading) return;
     isLoading = true;
-    showLoadingSpinner();
 
     const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/listar?page=${page}&limit=${productsPerPage}`, {
       headers: {
@@ -60,11 +47,9 @@ async function fetchProducts(page = 1, append = false) {
     }
 
     isLoading = false;
-    hideLoadingSpinner();
   } catch (error) {
     console.error('Error:', error);
     isLoading = false;
-    hideLoadingSpinner();
   }
 }
 
@@ -112,8 +97,8 @@ function initializeSizeButtons() {
   }
 
   // Generar talles numéricos del 18 al 47 en incrementos de 0.5
-  for (let size = 18; size <= 47; size += 0.5) {
-    const display = Number.isInteger(size) ? size : size.toFixed(1);
+  for (let size = 18.0; size <= 47.0; size += 0.5) {
+    const display = size.toFixed(1); // Fuerza 1 decimal
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'size-button';
@@ -130,26 +115,6 @@ function initializeSizeButtons() {
     btn.dataset.size = size;
     btn.textContent = size;
     letterSizesContainer.appendChild(btn);
-  });
-
-  // Manejar selección de talles
-  document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('size-button')) {
-      const size = e.target.dataset.size;
-      const input = document.getElementById('selected-sizes');
-      const selected = new Set(input.value ? input.value.split(',') : []);
-      
-      // Toggle selección
-      e.target.classList.toggle('selected');
-      if (selected.has(size)) {
-        selected.delete(size);
-      } else {
-        selected.add(size);
-      }
-      
-      // Actualizar campo oculto
-      input.value = Array.from(selected).join(',');
-    }
   });
 }
 
@@ -179,7 +144,6 @@ function preselectSizeButtons(selectedSizes) {
   });
 }
 
-// Función para abrir modal de edición
 async function openEditModal(productId) {
   try {
     const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/obtener_por_id/${productId}`, {
@@ -187,11 +151,17 @@ async function openEditModal(productId) {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
     });
-    if (!response.ok) throw new Error('Error al obtener producto');
+    if (!response.ok) throw new Error('Error al obtener los datos del producto');
     
     const product = await response.json();
     const form = document.getElementById('editForm');
+
+    // Resetear formulario y limpiar selecciones previas
     form.reset();
+    document.getElementById('selected-sizes').value = '';
+    document.querySelectorAll('.size-button.selected').forEach(btn => {
+      btn.classList.remove('selected');
+    });
 
     // Llenar datos básicos
     form.elements.name.value = product.name;
@@ -200,10 +170,10 @@ async function openEditModal(productId) {
     form.elements.price.value = product.price;
     form.elements.description.value = product.description;
 
-    // Llenar categoría
+    // Categoría
     await populateCategorySelect(product.category_id);
 
-    // Mostrar imagen
+    // Imagen
     const imagePreview = document.getElementById('imagePreview');
     imagePreview.innerHTML = "";
     if (product.image_path) {
@@ -214,20 +184,40 @@ async function openEditModal(productId) {
       imagePreview.appendChild(img);
     }
 
-    // Preseleccionar talles
+    // Inicializar botones de talles
+    initializeSizeButtons();
+
+    // Preseleccionar talles existentes
     if (product.size) {
-      preselectSizeButtons(product.size);
-      document.getElementById('selected-sizes').value = 
-        Array.isArray(product.size) ? product.size.join(',') : product.size;
+      // Normalizar los talles (manejar tanto arrays como strings separados por comas)
+      const sizesArray = Array.isArray(product.size) 
+        ? product.size.map(s => s.toString().trim().toUpperCase())
+        : product.size.split(',').map(s => s.trim().toUpperCase());
+      
+      // Seleccionar los botones correspondientes
+      document.querySelectorAll('.size-button').forEach(button => {
+        const buttonSize = button.dataset.size.toString().trim().toUpperCase();
+        if (sizesArray.includes(buttonSize)) {
+          button.classList.add('selected');
+          
+          // Actualizar campo oculto de talles seleccionados
+          const input = document.getElementById('selected-sizes');
+          input.value = input.value 
+            ? `${input.value},${button.dataset.size}`
+            : button.dataset.size;
+        }
+      });
     }
 
     form.dataset.productId = productId;
     document.getElementById('editModal').style.display = 'block';
+    
   } catch (error) {
     console.error('Error:', error);
-    alert('Error al cargar el producto para editar');
+    alert('Error al cargar los datos del producto');
   }
 }
+
 
 // Función para obtener y listar categorías
 async function populateCategorySelect(selectedCategoryId = null) {
@@ -285,53 +275,72 @@ async function saveProductChanges(event) {
   event.preventDefault();
   const form = event.target;
   const productId = form.dataset.productId;
-
-  const formData = new FormData(form);
-  const priceInput = form.elements.price.value.replace(/\./g, '').replace(',', '.');
-  if (priceInput) formData.set('price', parseFloat(priceInput).toFixed(2));
-
-  // Subir imagen si hay una nueva
-  const imageInput = document.getElementById('productImageInput');
-  if (imageInput.files.length > 0) {
+  
+  // 1) Sube la imagen (si el usuario seleccionó una)
+  let imageUrl;
+  const fileInput = document.getElementById('productImageInput');
+  if (fileInput.files.length > 0) {
     try {
-      const imageUrl = await uploadImageToCloudinary(imageInput.files[0]);
-      formData.set('image_url', imageUrl);
-    } catch (error) {
-      console.error("Error al subir imagen:", error);
-      alert("Error al subir la imagen");
-      return;
+      imageUrl = await uploadImageToCloudinary(fileInput.files[0]);
+    } catch (err) {
+      console.error("Error subiendo imagen:", err);
+      return alert("No se pudo subir la imagen");
     }
   }
 
-  // Agregar categoría
-  const categorySelect = document.getElementById('category');
-  if (categorySelect.value) {
-    formData.append('category_name', categorySelect.options[categorySelect.selectedIndex].text);
-  }
+  // 2) Construye el payload JSON
+  const payload = {
+    name:        form.elements.name.value,
+    type:        form.elements.type.value,
+    stock:       Number(form.elements.stock.value),
+    price:       parseFloat(
+                   form.elements.price.value
+                     .replace(/\./g,'')
+                     .replace(',','.')
+                 ).toFixed(2),
+    description: form.elements.description.value,
+    category_id: form.elements.category.value || null,
+    size:        document
+                   .getElementById('selected-sizes')
+                   .value
+                   .split(',')
+                   .filter(s => s)   // descarta entradas vacías
+  };
+  if (imageUrl) payload.image_url = imageUrl;
 
-  // Agregar talles seleccionados
-  const selectedSizes = document.getElementById('selected-sizes').value;
-  if (selectedSizes) {
-    formData.set('size', selectedSizes);
-  }
+  // DEBUG: comprueba en consola qué vas a enviar
+  console.log("PUT /productos/actualizar/", productId, payload);
 
+  // 3) Haz el PUT con JSON puro
   try {
-    const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/actualizar/${productId}`, {
-      method: 'PUT',
-      body: formData,
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+    const resp = await fetch(
+      `https://webmpdeportes-production.up.railway.app/productos/actualizar/${productId}`,
+      {
+        method:  'PUT',
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify(payload)
       }
-    });
-    if (!response.ok) throw new Error('Error al actualizar producto');
-    
-    alert('Producto actualizado con éxito');
+    );
+    if (!resp.ok) {
+      const text = await resp.text();
+      throw new Error(`Error ${resp.status}: ${text}`);
+    }
+
+    alert('✅ Producto actualizado con éxito');
     closeEditModal();
-    fetchProducts();
-  } catch (error) {
-    console.error('Error:', error);
+
+    // Refresca la lista (siempre desde la página 1, o la que toque)
+    await fetchProducts(1);
+  }
+  catch(err) {
+    console.error("Error al actualizar:", err);
+    alert(`No se pudo actualizar el producto:\n${err.message}`);
   }
 }
+
 
 // Eliminar producto
 async function deleteProduct(productId) {
@@ -382,17 +391,12 @@ const UPLOAD_PRESET = "marcapasos_images";
 
 // Inicialización al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
-  // Spinner
-  const spinner = document.createElement('div');
-  spinner.id = 'loadingSpinner';
-  spinner.innerHTML = '<div class="spinner"></div>';
-  document.body.appendChild(spinner);
 
   // Inicializar botones de talles
   initializeSizeButtons();
   
   // Cargar productos
-  fetchProducts(currentPage).finally(() => hideLoadingSpinner());
+  fetchProducts(currentPage);
   
   // Configurar formulario
   document.getElementById('editForm').addEventListener('submit', saveProductChanges);
@@ -401,7 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Función para buscar productos
 async function searchProducts(searchTerm) {
   try {
-    const response = await fetch(`https://https://https://https://https://https://webmpdeportes-production.up.railway.app/productos/listar?search=${encodeURIComponent(searchTerm)}&limit=${productsPerPage}`, {
+    const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/listar?search=${encodeURIComponent(searchTerm)}&limit=${productsPerPage}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }

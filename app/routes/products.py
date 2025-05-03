@@ -299,3 +299,20 @@ async def buscar_por_categoria_o_tipo(category: Optional[str] = None, type: Opti
 
     return {"products": products, "totalPages": total_pages}
 
+@router.get("/talles/{product_id}")
+async def obtener_talles_producto(product_id: str):
+    try:
+        product = products_collection.find_one({"_id": ObjectId(product_id)})
+        if not product:
+            raise HTTPException(status_code=404, detail="Producto no encontrado.")
+        
+        talles = product.get("size", [])
+        if not isinstance(talles, list):
+            talles = [talles] if talles else []
+
+        return {"product_id": str(product["_id"]), "talles": talles}
+    
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+

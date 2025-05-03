@@ -37,139 +37,6 @@
    Ajustes MODO OSCURO
    ======================== */
 
-/* General: el body, fondo global o contenedores grandes */
-body.dark-mode {
-    background-color: var(--dm-color-1);
-    color: var(--dm-color-6);
-  }
-  
-  /* HEADER */
-  body.dark-mode .header {
-    background-color: var(--dm-color-2);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
-  }
-  
-  body.dark-mode .header__nav-link {
-    color: var(--dm-color-6);
-  }
-  body.dark-mode .header__nav-link:hover {
-    color: var(--dm-color-principal);
-  }
-  
-  /* Barra de búsqueda */
-  body.dark-mode .header__search-input {
-    background-color: var(--dm-color-3);
-    border-color: var(--dm-color-4);
-    color: var(--dm-color-6);
-  }
-  body.dark-mode .header__search-input:focus {
-    border-color: var(--dm-color-principal);
-  }
-  
-  body.dark-mode .header__search-button {
-    background-color: var(--dm-color-principal);
-    color: var(--dm-color-7);
-  }
-  body.dark-mode .header__search-button:hover {
-    background-color: var(--dm-color-principal-dark);
-  }
-  
-  /* Botón de alternar modo (ya definido) */
-  body.dark-mode .btn--dark-mode {
-    color: var(--dm-color-6);
-  }
-  
-  /* CONTENEDOR PRINCIPAL DE PRODUCTOS */
-  body.dark-mode .products-container {
-    background-color: var(--dm-color-2);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-    color: var(--dm-color-6);
-  }
-  body.dark-mode .products-container h2 {
-    color: var(--dm-color-6);
-  }
-  
-  /* TABLA DE PRODUCTOS */
-  body.dark-mode .products-table {
-    background-color: var(--dm-color-2);
-    border-color: var (--dm-color-4);
-  }
-  
-  body.dark-mode .products-table th {
-    background-color: var(--dm-color-3);
-    color: var(--dm-color-6);
-    border-color: var (--dm-color-4);
-  }
-  
-  body.dark-mode .products-table td {
-    background-color: var(--dm-color-2);
-    color: var(--dm-color-6);
-    border-color: var(--dm-color-4);
-  }
-  
-  body.dark-mode .products-table tr {
-    background-color: var(--dm-color-2);
-    
-  }
-
-  body.dark-mode .products-table tr:hover {
-    background-color: var(--dm-color-3);
-  }
-  
-  /* Botones de acción en la tabla */
-  body.dark-mode .btn-edit {
-    background-color: var(--dm-color-principal);
-    color: var(--dm-color-7);
-  }
-  body.dark-mode .btn-edit:hover {
-    background-color: var(--dm-color-principal-dark);
-  }
-  body.dark-mode .btn-delete {
-    /* Si deseas ajustar el rojo en dark mode, podrías utilizar un tono ligeramente diferente;
-       de lo contrario, se conserva el color original */
-    background-color: #ef4444;
-    color: white;
-  }
-  body.dark-mode .btn-delete:hover {
-    background-color: #dc2626;
-  }
-
-  body.dark-mode label {
-    color: var(--dm-color-5)
-  }
-  
-  /* MODAL */
-  body.dark-mode .modal-content {
-    background-color: var(--dm-color-2);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-    color: var(--dm-color-6);
-  }
-  body.dark-mode .modal-content h2 {
-    color: var(--dm-color-6);
-  }
-  body.dark-mode .close {
-    color: var(--dm-color-5);
-  }
-  body.dark-mode .close:hover {
-    color: var(--dm-color-7);
-  }
-  
-  /* FORMULARIOS */
-  body.dark-mode .product-form input,
-  body.dark-mode .product-form select,
-  body.dark-mode .product-form textarea {
-    background-color: var(--dm-color-3);
-    border-color: var(--dm-color-4);
-    color: var(--dm-color-6);
-  }
-  body.dark-mode .product-form input:focus,
-  body.dark-mode .product-form select:focus,
-  body.dark-mode .product-form textarea:focus {
-    border-color: var(--dm-color-principal);
-    outline: none;
-  }
-  
-  
 
 /* HEADER GENERAL */
 .header {
@@ -184,11 +51,6 @@ body.dark-mode {
     padding: 0 2rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-  }
-  
-  body.dark-mode .header {
-    background-color: var(--dm-color-2);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
   }
   
   /* LOGO */
@@ -533,9 +395,8 @@ td .product-preview {
   }
   
   .size-button.selected {
-    background: var(--color-6);
+    background: var(--dm-color-principal-dark);
     color: white;
-    border-color: var(--color-7);
   }
 
 .form-actions {

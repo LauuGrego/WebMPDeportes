@@ -18,7 +18,7 @@ function addLoadMoreButton() {
     if (existingButton) return; // Evitar duplicar el botón
 
     const button = document.createElement('button');
-    button.textContent = "Ver más";
+    button.textContent = "Ver mas";
     button.classList.add('load-more-button');
     button.addEventListener('click', async () => {
         button.disabled = true; // Deshabilitar mientras se cargan productos
@@ -28,7 +28,7 @@ function addLoadMoreButton() {
         const searchQuery = searchInput ? searchInput.value.trim() : '';
         await loadProducts(searchQuery, currentPage);
         button.disabled = false; // Habilitar nuevamente
-        button.textContent = "Ver más";
+        button.textContent = "Ver mas";
     });
     catalogCards.insertAdjacentElement('afterend', button);
 }
