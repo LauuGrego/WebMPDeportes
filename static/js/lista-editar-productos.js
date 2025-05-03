@@ -42,7 +42,7 @@ async function fetchProducts(page = 1, append = false) {
     isLoading = true;
     showLoadingSpinner();
 
-    const response = await fetch(`https://https://https://https://https://https://webmpdeportes-production.up.railway.app/productos/listar?page=${page}&limit=${productsPerPage}`, {
+    const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/listar?page=${page}&limit=${productsPerPage}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
@@ -182,7 +182,7 @@ function preselectSizeButtons(selectedSizes) {
 // Función para abrir modal de edición
 async function openEditModal(productId) {
   try {
-    const response = await fetch(`https://https://https://https://https://https://webmpdeportes-production.up.railway.app/productos/obtener_por_id/${productId}`, {
+    const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/obtener_por_id/${productId}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
@@ -232,7 +232,7 @@ async function openEditModal(productId) {
 // Función para obtener y listar categorías
 async function populateCategorySelect(selectedCategoryId = null) {
   try {
-    const response = await fetch('https://https://https://https://https://https://webmpdeportes-production.up.railway.app/categorias/listar-public', {
+    const response = await fetch('https://webmpdeportes-production.up.railway.app/categorias/listar-public', {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
@@ -338,7 +338,7 @@ async function deleteProduct(productId) {
   if (!confirm("¿Está seguro que desea eliminar este producto?")) return;
 
   try {
-    const response = await fetch(`https://https://https://https://https://https://webmpdeportes-production.up.railway.app/productos/eliminar/${productId}`, {
+    const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/eliminar/${productId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
