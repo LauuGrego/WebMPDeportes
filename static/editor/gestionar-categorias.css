@@ -1,37 +1,45 @@
-:root {
-  /* Colores modo claro */
-  --color-1: #F8F5FC;              /* Fondo muy claro violeta */
-  --color-2: #F0E9FA;              /* Base claro */
-  --color-3: #E2D4F5;              /* Borde claro */
-  --color-4: #B399D4;              /* Violeta medio claro */
-  --color-5: #7F58AF;              /* Violeta principal (tu color original) */
-  --color-6: #5D3A8B;              /* Violeta oscuro */
-  --color-7: #3A2257;              /* Violeta muy oscuro */
-  --color-8: #1F0F3D;              /* Fondo oscuro */
-  --color-9: #0F0624;              /* Texto oscuro */
-  --color-10: #0A0418;             /* Fondo muy oscuro */
-  --color-11: #1E0F3B;             /* Alternativo oscuro */
-  --color-12: #331D5D;             /* Violeta/gris medio */
-  --color-13: #4A2D7A;             /* Violeta/gris */
-  --color-principal: #F39C12;      /* Naranja principal */
-  --color-principal-dark: #D35400; /* Naranja oscuro */
-  --color-principal-light: #F8C471; /* Naranja claro */
 
-  /* Modo oscuro */
-  --dm-color-1: #121026;           /* Fondo nocturno violeta */
-  --dm-color-2: #1A1735;           /* Base oscura */
-  --dm-color-3: #252147;           /* Borde oscuro */
-  --dm-color-4: #3E386F;           /* Violeta/gris oscuro */
-  --dm-color-5: #9B7CBC;           /* Violeta claro modo oscuro */
-  --dm-color-6: #C9B6E2;           /* Texto claro */
-  --dm-color-7: #ECE6F8;           /* Texto muy claro */
-  --dm-color-8: #FFA726;           /* Naranja vibrante modo oscuro */
-  --dm-color-9: #FB8C00;           /* Naranja fuerte */
-  --dm-color-10: #E65100;          /* Naranja oscuro */
-  --dm-color-principal: #7F58AF;   /* Violeta principal */
-  --dm-color-principal-dark: #5D3A8B; /* Violeta oscuro */
-  --dm-color-principal-light: #9B7CBC; /* Violeta claro */
-}
+:root {
+    /* Colores modo claro */
+    --color-1: #F8F5FC;              /* Fondo muy claro violeta */
+    --color-2: #F0E9FA;              /* Base claro */
+    --color-3: #E2D4F5;              /* Borde claro */
+    --color-4: #B399D4;              /* Violeta medio claro */
+    --color-5: #7F58AF;              /* Violeta principal (tu color original) */
+    --color-6: #5D3A8B;              /* Violeta oscuro */
+    --color-7: #3A2257;              /* Violeta muy oscuro */
+    --color-8: #1F0F3D;              /* Fondo oscuro */
+    --color-9: #0F0624;              /* Texto oscuro */
+    --color-10: #0A0418;             /* Fondo muy oscuro */
+    --color-11: #1E0F3B;             /* Alternativo oscuro */
+    --color-12: #331D5D;             /* Violeta/gris medio */
+    --color-13: #4A2D7A;             /* Violeta/gris */
+    --color-principal: #F39C12;      /* Naranja principal */
+    --color-principal-dark: #D35400; /* Naranja oscuro */
+    --color-principal-light: #F8C471; /* Naranja claro */
+  
+    /* Modo oscuro */
+    --dm-color-1: #0d1117;
+    --dm-color-2: #161b22;
+    --dm-color-3: #21262d;
+    --dm-color-4: #30363d;
+    --dm-color-5: #8b949e;
+    --dm-color-6: #c9d1d9;
+    --dm-color-7: #ecf2f8;
+    --dm-color-8: #58a6ff;
+    --dm-color-9: #1f6feb;
+    --dm-color-10: #0c2d6b;
+    --dm-color-principal: #3d7d8f;
+    --dm-color-principal-dark: #2c5a67;
+    --dm-color-principal-light: #6ba4b5;
+  }
+
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+  
 
   /* ========================
    Ajustes MODO OSCURO
@@ -92,13 +100,13 @@ body.dark-mode {
   /* TABLA DE PRODUCTOS */
   body.dark-mode .products-table {
     background-color: var(--dm-color-2);
-    border-color: var (--dm-color-4);
+    border-color: var(--dm-color-4);
   }
   
   body.dark-mode .products-table th {
     background-color: var(--dm-color-3);
-    color: var(--dm-color-6);
-    border-color: var (--dm-color-4);
+    color: var(--dm-color-7);
+    border-color: var(--dm-color-4);
   }
   
   body.dark-mode .products-table td {
@@ -107,11 +115,6 @@ body.dark-mode {
     border-color: var(--dm-color-4);
   }
   
-  body.dark-mode .products-table tr {
-    background-color: var(--dm-color-2);
-    
-  }
-
   body.dark-mode .products-table tr:hover {
     background-color: var(--dm-color-3);
   }
@@ -153,6 +156,15 @@ body.dark-mode {
   body.dark-mode .close:hover {
     color: var(--dm-color-7);
   }
+
+  body.dark-mode tr {
+    background-color: var(--dm-color-2);
+    color: var(--dm-color-6);
+  }
+
+  body.dark-mode td::before {
+    color: var(--dm-color-6);
+  }
   
   /* FORMULARIOS */
   body.dark-mode .product-form input,
@@ -169,6 +181,11 @@ body.dark-mode {
     outline: none;
   }
   
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    width: 100%;
+  }
   
 
 /* HEADER GENERAL */
@@ -288,7 +305,7 @@ body.dark-mode {
   }
   
   .btn--dark-mode:hover {
-    color: var (--color-principal);
+    color: var(--color-principal);
   }
 
 /* Contenedor principal de productos */
@@ -296,8 +313,8 @@ body.dark-mode {
     background-color: var(--color-1);
     border-radius: 20px;
     padding: 3rem;
-    width: 90%;
-    max-width: 1200px;
+    width: 95%; /* Reduce width for better fit */
+    max-width: 1100px; /* Limit maximum width */
     margin: 8rem auto;
     box-shadow: 0 8px 32px var(--color-principal);
     animation: fadeIn 0.5s ease;
@@ -361,11 +378,6 @@ body.dark-mode {
     background-color: var(--color-2);
 }
 
-td .product-preview {
-    height: 100px;
-    width: auto;
-}
-
 /* Botones de acción */
 .actions {
     display: flex;
@@ -376,7 +388,6 @@ td .product-preview {
 .btn-edit, .btn-delete {
     padding: 0.6rem;
     border: none;
-    margin: 7px 0;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -501,46 +512,35 @@ td .product-preview {
     min-height: 80px;
 }
 
-.sizes-section {
-    margin-bottom: 1.5rem;
-  }
-  
-  .sizes-section h4 {
-    margin-bottom: 0.5rem;
-    color: var(--color-violeta);
-    font-weight: 500;
-  }
-  
-  .sizes-grid {
+.sizes-grid {
     display: flex;
-    flex-wrap: wrap;
     gap: 0.5rem;
-  }
-  
-  .size-button {
-    padding: 0.5rem 0.8rem;
-    border: 1px solid var(--color-violeta);
-    background: white;
-    border-radius: 4px;
+    flex-wrap: wrap;
+}
+
+.size-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--color-2);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    min-width: 40px;
-    text-align: center;
-  }
-  
-  .size-button:hover {
-    background: var(--color-violeta-light);
-  }
-  
-  .size-button.selected {
-    background: var(--color-6);
-    color: white;
-    border-color: var(--color-7);
-  }
+    transition: background-color 0.3s ease;
+}
+
+.size-option:hover {
+    background-color: var(--color-3);
+}
+
+.size-label {
+    font-weight: 500;
+    color: var(--color-7);
+}
 
 .form-actions {
     text-align: center;
-    margin-top: 1.5rem;
+    margin: 1.5rem;
 }
 
 .submit-button {
@@ -576,132 +576,39 @@ td .product-preview {
     transform: translateY(-2px);
 }
 
-
-
-.image-upload-container {
-    border: 2px solid var(--color-3);
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-top: 0.5rem;
-}
-
-.upload-area {
-    border: 2px dashed var(--color-principal);
-    border-radius: 12px;
-    padding: 2rem;
-    text-align: center;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.upload-area:hover {
-    background-color: var(--color-2);
-    border-color: var(--color-principal-dark);
-}
-
-body.dark-mode .upload-area:hover {
-    background-color: var(--dm-color-3);
-    border-color: var(--dm-color-principal-dark);
-}
-
-.upload-icon {
-    font-size: 2.5rem;
-    color: var(--color-principal);
-    margin-bottom: 1rem;
-}
-
-.upload-label {
-    background-color: var(--color-principal);
-    color: white;
-    padding: 0.5rem 1.5rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.upload-label:hover {
-    background-color: var(--color-principal-dark);
-}
-
-.hidden {
-    display: none;
-}
-
-.image-preview {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.preview-image {
-    position: relative;
-    border-radius: 8px;
-    overflow: hidden;
-    aspect-ratio: 1/1;
-}
-
-.preview-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.remove-image {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: rgba(239, 68, 68, 0.9);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.remove-image:hover {
-    background: #dc2626;
-    transform: scale(1.1);
-}
-
-.image-preview img {
-    max-width: 100px;
-    max-height: 100px;
-    margin: 5px;
-    border-radius: 8px;
-    object-fit: cover;
-}
-
-.product-preview {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-
 /* ========================
    Media Queries
    ======================== */
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
+    
+    .products-container {
+        padding: 0.8rem;
+        margin: 5rem 0.25rem;
+        width: 80%;
+    }
+
+    .products-table th,
+    .products-table td {
+        padding: 0.8rem;
+        width: 100%;
+        min-width: 270px;
+    }
+
+    .btn-edit, .btn-delete {
+        width: 35px;
+        height: 35px;
+    }
+
     .header {
-        flex-direction: column;
-        height: auto;
-        padding: 1rem;
-        gap: 1rem;
-        justify-content: center;
+        height: 60px;
+        padding: 0 ;
+        width: 100%;
+        justify-content: space-between;
     }
 
     .header__logo-search {
-        justify-content: center;
-        margin-bottom: 1rem;
+        display: none;
     }
 
     .header__nav {
@@ -709,195 +616,165 @@ body.dark-mode .upload-area:hover {
     }
 
     .header__actions {
-        justify-content: center;
-        margin-left: 80px;
-        margin-bottom: 10px;
+        flex: 1;
+        justify-content: flex-end;
+        margin-right: 50px;
+    }
+
+    .btn--dark-mode {
+        margin-right: 0;
     }
 
     .products-container {
-        padding: 1rem;
-        margin: 6rem auto;
-        text-align: center;
+        padding: 0.8rem;
+        margin: 5rem 0.25rem;
+    }
+
+
+    .header__logo {
+        display: none; /* Mostrar el logo en dispositivos móviles */
+    }
+
+    .header__search-form {
+        width: 100%; /* Barra de búsqueda ocupa todo el ancho */
+        margin-top: 0;
+    }
+
+    .header__search-input {
+        width: 80%; /* Ajustar ancho para el botón */
+    }
+
+    #editModal.modal {
+        padding: 1rem; /* Reduce padding for smaller screens */
+    }
+
+    .modal-content {
+        margin: 10% auto; /* Adjust margin for better centering */
+        padding: 1.5rem; /* Reduce padding for compact layout */
+        border-radius: 12px; /* Slightly less rounded corners */
+        width: 85%; /* Use more screen width */
+        max-width: 400px; /* Limit maximum width */
+        gap: 1rem; /* Reduce gap between elements */
+    }
+
+    .modal-content h2 {
+        font-size: 1.5rem; /* Adjust font size for smaller screens */
+    }
+
+    .product-form .form-grid {
+        grid-template-columns: 1fr; /* Single column layout */
+        gap: 1rem; /* Maintain spacing between fields */
+    }
+
+    .form-actions {
+        margin-top: 1rem; /* Reduce top margin */
+    }
+
+    .submit-button {
+        padding: 0.8rem 1.5rem; /* Adjust padding for smaller buttons */
+        font-size: 1rem; /* Slightly smaller font size */
+    }
+
+    .modal-content .close {
+        top: 0.5rem; /* Adjust position for smaller screens */
+        right: 0.5rem;
+        font-size: 1.4rem; /* Slightly smaller close icon */
+    }
+
+    .btn--dark-mode {
+        margin-right: 0;
     }
 
     .table-responsive {
-        overflow-x: auto;
+        overflow-x: hidden; /* Elimina el scroll horizontal */
+        border-radius: 12px;
+        border: 2px solid var(--color-3);
     }
 
     .products-table {
         display: block;
         width: 100%;
-        min-width: 100px;
-        
     }
 
     .products-table thead {
-        display: none;
+        display: none; /* Oculta los encabezados */
     }
 
     .products-table tr {
-        display: flex;
-        flex-direction: column;
+        display: block;
         margin-bottom: 1rem;
         background-color: var(--color-2);
         border-radius: 12px;
-        padding: 0.8rem;
-        text-align: center;
-        width: 100%;
+        padding: 0;
+        width:290px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
 
     .products-table td {
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 0.4rem 0;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        gap: 1rem;
         border-bottom: 1px solid var(--color-3);
-        font-size: 0.9rem;
-        text-align: center;
     }
 
     .products-table td::before {
         content: attr(data-label);
         font-weight: 600;
         color: var(--color-8);
-        margin-bottom: 0.2rem;
-    }
-
-    .products-table td span {
-        text-align: center;
+        margin-right: 1rem;
     }
 
     .products-table td:last-child {
         border-bottom: none;
     }
 
-    .products-table td::before {
-        content: attr(data-label);
-        font-weight: 600;
-        color: var(--color-8);
-        flex: 1;
-        text-align: left;
-    }
-
-    .products-table td span {
-        flex: 2;
-        text-align: center;
-    }
-
-    .actions {
-        justify-content: center;
-    }
-
-    .header__search-form {
-        width: 100%;
-        margin: 0;
-    }
-
-    .header__search-input {
-        width: 80%;
-    }
-
-    .header__search-button {
-        width: 20%;
-    }
-
-    #editModal.modal {
-        padding: 1rem;
-    }
-
-    .modal-content {
-        margin: 10% auto;
-        padding: 1.5rem;
-        border-radius: 12px;
-        width: 90%;
-        max-width: 400px;
-        text-align: center;
-    }
-
-    .product-form .form-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
+    .btn-edit, .btn-delete {
+        width: 35px;
+        height: 35px;
     }
 
     .form-actions {
-        margin-top: 1rem;
-    }
-
-    .submit-button,
-    .close-button {
-        width: 100%;
-        margin: 0.5rem 0;
-    }
-}
-
-@media (max-width: 480px) {
-    .header {
-        height: auto;
-        padding: 0.5rem;
-    }
-
-    .header__logo {
-        display: none;
-    }
-
-    .header__actions {
-        justify-content: center;
-    }
-
-    .products-container {
-        padding: 0.5rem;
-        margin: 5rem auto;
         text-align: center;
     }
 
-    .products-table td {
-        padding: 0.5rem 0;
-        text-align: center;
+    .submit-button {
+        width: 100%; /* Full-width button */
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem; /* Slightly smaller font size */
     }
 
-    .btn-edit,
+
+    .btn-delete {
+        width: 35px;
+        height: 35px;
+        margin-right: 0.5rem; /* Mueve el botón ligeramente hacia la izquierda */
+    }
+
+    .btn-edit {
+        display: none; /* Oculta el botón de editar en móvil */
+    }
+
     .btn-delete {
         width: 35px;
         height: 35px;
     }
 
-    .modal-content {
-        padding: 1rem;
-        gap: 0.8rem;
-        text-align: center;
+    .table-responsive {
+        overflow-x: hidden;
+        border-radius: 12px;
+        border: 2px solid var(--color-3);
     }
 
-    .modal-content h2 {
-        font-size: 1.4rem;
+    .products-table {
+        display: block;
+        width: 100%;
     }
 
-    .product-form .form-grid {
-        gap: 0.8rem;
+    .products-table thead {
+        display: none; /* Hide table headers */
     }
 
-    .submit-button,
-    .close-button {
-        padding: 0.6rem;
-        font-size: 0.9rem;
-    }
+
+    
 }
-
-.load-more-button {
-    background-color: var(--color-principal);
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin: 1rem auto;
-    display: block;
-}
-
-.load-more-button:hover {
-    background-color: var(--color-principal-dark);
-    transform: translateY(-2px);
-}
-

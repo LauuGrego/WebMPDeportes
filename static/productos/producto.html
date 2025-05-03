@@ -5,62 +5,92 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Detalle del Producto</title>
   <link rel="stylesheet" href="producto.css" />
+  <link href="../../images/logo-encabezado.png" rel="icon" type="image/png" sizes="16x16">
   <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
+  <!-- Overlay para menú móvil -->
+  <div id="overlay" class="overlay"></div>
+
   <header class="header">
     <div class="header__logo-search">
+      <button class="header__menu-toggle" aria-label="Mostrar menú">
+        <i class="fas fa-bars"></i>
+      </button>
       <a href="#" class="header__logo-link">
-        <img src="./../../images/logo.png" alt="Logo Emprendimiento" class="header__logo-img" />
+        <img src="./../../images/logo-encabezado.png" alt="Logo Emprendimiento" class="header__logo-img" />
       </a>
     </div>
 
     <ul class="header__nav-list">
       <li><a href="../../index.html" class="header__nav-link">Inicio</a></li>
+      <li><a href="#contact" class="header__nav-link">Contacto</a></li>
     </ul>
+
   </header>
 
+  <!-- Menú lateral para mobile -->
+  <aside class="sidebar">
+    <nav class="mobile-nav">
+      <a href="#" class="mobile__logo-link">
+        <img src="./../../images/logo-encabezado.png" alt="Logo Emprendimiento" class="mobile__logo-img" />
+      </a>
+      <ul class="mobile__nav-list">
+        <li><a href="../../index.html" class="mobile__nav-link">Inicio</a></li>
+        <li><a href="#contact" class="mobile__nav-link">Contacto</a></li>
+      </ul>
+    </nav>
+  </aside>
+
   <main id="detalle-container" class="catalogo-detalle">
-    <div class="product-detail-container">
-      <button class="btn--primary back-button" onclick="window.history.back()">
-        <i class="fas fa-arrow-left"></i> Volver al Catálogo
-      </button>
-
-      <div class="product-detail-content">
-        <div class="product-image-container">
-          <img id="product-image" src="" alt="Imagen del producto" class="product-image">
-        </div>
-
-        <div class="product-info">
-          <h1 id="product-name" class="catalog__card-title">Cargando...</h1>
-
-          <div class="product-description catalog__card-description">
-            <h3 class="sidebar__title">Descripción</h3>
-            <p id="product-description">Cargando descripción...</p>
-          </div>
-          <!--<p id="product-price" class="product-price catalog__card-price"></p> -->
-            <p id="product-size" class="product-stock catalog__card-size"></p>
-          <p id="product-stock" class="product-stock catalog__card-stock"></p>
-
-          <div class="product-actions catalog__card-actions">
-            <button class="catalog__card-button whatsapp-button" id="whatsapp-button">
-              <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
-            </button>
-          </div>
-        </div>
-      </div>
+    <div id="producto-detalle" class="producto-detalle">
+      <!-- Product details will be dynamically loaded here -->
     </div>
   </main>
 
   <!-- FOOTER -->
   <footer id="contact" class="footer">
     <div class="footer__content">
+      <div class="footer__social">
+        <a href="https://www.instagram.com/marcapasosdeportes/" class="footer__social-link footer__social-link--instagram">
+          <img src="../../images/Instagram copy.png" alt="Redireccion a Instagram">
+        </a>
+        <a href="https://wa.me/3445417684" class="footer__social-link footer__social-link--whatsapp">
+          <img src="../../images/Whatsapp copy.png" alt="Redireccion a Whatsapp">
+        </a>
+      </div>
       <p class="footer__copy">©2025 Lautaro Gregoraschuk. Todos los derechos reservados.</p>
     </div>
   </footer>
 
+  <div id="loginModal" class="modal">
+    <div class="modal__overlay" id="modalOverlay"></div>
+    <div class="modal__content">
+      <button class="modal__close" id="closeModal" aria-label="Cerrar">&times;</button>
+      <div class="login-card">
+        <h1 class="login-title">Iniciar Sesión</h1>
+        <form class="login-form">
+          <div class="form-group">
+            <label for="modal-user">Usuario:</label>
+            <input type="text" id="modal-user" name="username" required>
+          </div>
+          <div class="form-group">
+            <label for="modal-password">Contraseña:</label>
+            <input type="password" id="modal-password" name="password" required>
+          </div>
+          <button type="submit" class="btn btn--primary login-btn">Ingresar</button>
+          <div class="login-links">
+          <!-- <a href="#" class="login-link">¿Olvidaste tu contraseña?</a> -->
+            <!-- <a href="#" class="login-link">Registrarse</a> -->
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/menu_lateral_mobile.js"></script>
   <script src="../js/detalles_producto.js"></script>
 </body>
 </html>

@@ -1,57 +1,166 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lista de Productos - Marca Pasos</title>
-  <!-- Font Awesome para íconos -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="icon" href="./../../images/logo-encabezado.png" type="image">
-  <!-- Animate.css para animaciones -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <!-- Estilos propios -->
-  <link rel="stylesheet" href="editar-productos-styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MP Deportes - Edición de Productos</title>
+    <link href="../../images/logo-{}" rel="icon" type="image/png" sizes="16x16">
+    <link rel="stylesheet" href="editar-productos-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <!-- HEADER -->
-  <header class="hero" role="banner">
-    <nav class="hero__nav " aria-label="Navegación Principal">
-      
-      <ul class="hero__nav-links">
-        <li class="hero__nav-item"><a href="./inicio.html" class="hero__nav-link">Inicio</a></li>
-        <li class="hero__nav-item"><a href="./agregar-product.html#main" class="hero__nav-link">Agregar Producto</a></li>
-        <li class="hero__nav-item"><a href="./agregar-category.html#main" class="hero__nav-link">Agregar Categoría</a></li>
-        <li class="hero__nav-item"><a href="./editar-categorias.html#main" class="hero__nav-link">Editar Categoría</a></li>
-        <li class="hero__nav-item"><a href="./../../index.html" class="hero__nav-link">Cerrar Sesión</a></li>
-      </ul>
-    </nav>
-    <div class="hero__logo">
-        <img src="./../../images/logo.png" alt="Logo Marca Pasos">
-      </div>
-    <!-- Barra de búsqueda con botón -->
-    <div class="hero__search ">
-      <input type="text" id="hero-search" class="hero__search-input" placeholder="Buscar productos..." aria-label="Buscar productos">
-      <button type="button" class="hero__search-button btn--primary" aria-label="Buscar">
-        <i class="fas fa-search" aria-hidden="true"></i> Buscar
-      </button>
-    </div>
-  </header>
+    <header class="header">
+        <div class="header__logo">
+            <a href="#" class="header__logo-link">
+                <img src="./../../images/logo-encabezado.png" alt="Logo Emprendimiento" class="header__logo-img" />
+            </a>
+        </div>
+            <div class="header__search">
+            <!-- Barra de búsqueda -->
+            <form class="header__search-form" onsubmit="event.preventDefault();">
+                <input type="text" class="header__search-input" placeholder="Buscar productos..." aria-label="Buscar productos">
+                <button type="button" class="header__search-button" aria-label="Buscar">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
 
-  <!-- CONTENEDOR PRINCIPAL -->
-  <main id="main" class="main" role="main">
-    <div class="container">
-      <h1 class="container__title">Lista de Productos</h1>
-      <ul class="product-list" id="product-list">
-        <!-- Los productos se cargarán dinámicamente aquí -->
-      </ul>
-      <button id="load-more-button" class="catalog__load-more-button" style="display: none;">Ver más</button>
-    </div>
-  </main>
+        <!-- Navegación principal dentro del header -->
+        <nav class="header__nav">
+            <ul class="header__nav-list">
+                <li><a href="../../index.html" class="header__nav-link">Inicio</a></li>
+                <li><a href="./agregar-product.html" class="header__nav-link">Agregar Producto</a></li>
+                <li><a href="./editar-productos.html" class="header__nav-link open-login-modal">Editar Productos</a></li>
+                <li><a href="./gestionar-categorias.html" class="header__nav-link open-login-modal">Gestionar Categorías</a></li>
+            </ul>
+        </nav>
+        
+    </header>
 
-  <!-- Se incluirán dinámicamente modales de edición -->
-  <script src="./../js/lista-editar-productos.js"></script>
-  <script src="./../js/barra-navegacion.js"></script>
-  <script src="./../js/barra-navegacion-edicion-productos.js"></script>
-  <script src="./../js/scroll-main.js"></script>
+    <div class="products-container">
+        <h2>Lista de Productos</h2>
+        
+        <div class="table-responsive">
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Tipo</th>
+                        <th>Stock</th>
+                        <th>Imagen</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination"></div> <!-- Contenedor para el botón "Ver más" -->
+    </div>
+
+    <!-- Modal de Edición -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h2>Editar Producto</h2>
+            <form id="editForm" class="product-form" data-product-id="">
+                <div class="form-grid">
+                    <!-- Nombre (ocupará toda la fila) -->
+                    <div class="form-group full-width">
+                      <label for="name">Nombre del producto</label>
+                      <input type="text" id="name" name="name" placeholder="Ej: Remera básica" required>
+                    </div>
+                  
+
+                    <!-- Fila con 3 columnas -->
+                    <div class="form-group category">
+                      <label for="category">Categoría</label>
+                      <select id="category" name="category" required>
+                        <option value="">Seleccionar...</option>
+                      </select>
+                    </div>
+                  
+
+                    <div class="form-group type">
+                      <label for="type">Tipo</label>
+                      <input type="text" id="type" name="type" placeholder="Ej: Camiseta, Zapatillas, Gorra..." required>
+                    </div>
+                  
+
+                    <div class="form-group stock">
+                      <label for="stock">Cantidad en stock</label>
+                      <input type="number" id="stock" name="stock" min="0" placeholder="Ej: 50" required>
+                    </div>
+
+                    <div class="form-group price">
+                        <label for="price">Precio del producto</label>
+                        <input type="number" id="price" name="price" min="0" step="0.01" placeholder="Ej: 1999,99" required>
+                    </div>
+            
+                    <div class="form-group full-width">
+                      <label for="description">Descripción</label>
+                      <textarea id="description" name="description" placeholder="Descripción del producto" required></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="productImage">Imagen del producto</label>
+                        <div class="image-upload-container">
+                            <div class="upload-area" onclick="document.getElementById('productImageInput').click()">
+                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <p>Arrastra y suelta una imagen aquí o haz clic para seleccionar</p>
+                            </div>
+                            <input type="file" id="productImageInput" class="hidden" accept="image/*" multiple>
+                            <div class="image-preview" id="imagePreview"></div>
+                        </div>
+                    </div>
+            
+                    <div class="form-group full-width">
+                      <label>Talles disponibles</label>
+                      
+                      <!-- Talles numéricos -->
+                      <div class="sizes-section">
+                        <h4>Talles Numéricos</h4>
+                        <div class="sizes-grid" id="numeric-sizes">
+                          <!-- Se generarán automáticamente -->
+                        </div>
+                      </div>
+                    
+                      <!-- Talles de letras -->
+                      <div class="sizes-section">
+                        <h4>Talles de Letras</h4>
+                        <div class="sizes-grid" id="letter-sizes">
+                          <!-- Se generarán automáticamente -->
+                        </div>
+                      </div>
+                    
+                      <!-- Campo oculto para almacenar los talles seleccionados -->
+                      <input type="hidden" id="selected-sizes" name="size">
+                    </div>
+                  </div>
+                <div class="form-actions">
+                    <button type="submit" class="submit-button">
+                        <i class="fas fa-save"></i> Guardar Cambios
+                    </button>
+                    <button type="button" class="close-button" onclick="closeEditModal()">
+                        <i class="fas fa-times"></i> Cerrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="./../js/lista-editar-productos.js"></script>
+    <script src="./../js/barra-navegacion.js"></script>
+    <script src="./../js/barra-navegacion-edicion-productos.js"></script>
+    <script src="./../js/scroll-main.js"></script>
+    <script>
+        function toggleMenu() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const overlay = document.querySelector('.menu-overlay');
+            mobileMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+    </script>
 </body>
 </html>

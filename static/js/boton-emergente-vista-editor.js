@@ -1,71 +1,55 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // Selecciona los elementos necesarios
-    const openLoginBtn = document.getElementById("open-login");
-    const closeLoginBtn = document.getElementById("close-login");
-    const closeLoginBtnX = document.querySelector(".modal__close--login");
-    const loginModal = document.getElementById("login-modal");
-    const loginForm = document.querySelector("#login-modal form");
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('login-modal');
+    const btnClose = document.getElementById('close-login');
+    const btnOpen = document.getElementById('open-login');
+    const loginForm = document.querySelector('.modal__form');
 
-    // Verifica que los elementos existan antes de agregar los event listeners
-    if (openLoginBtn) {
-        openLoginBtn.addEventListener("click", () => {
-            loginModal.style.display = "flex";
-        });
-    }
+    btnOpen.addEventListener('click', () => {
+        modal.classList.add('show');
+    });
 
-    if (closeLoginBtn) {
-        closeLoginBtn.addEventListener("click", () => {
-            loginModal.style.display = "none";
-        });
-    }
+    btnClose.addEventListener('click', () => {
+        modal.classList.remove('show');
+    });
 
-    if (closeLoginBtnX) {
-        closeLoginBtnX.addEventListener("click", () => {
-            loginModal.style.display = "none";
-        });
-    }
-
-    window.addEventListener("click", (e) => {
-        if (e.target === loginModal) {
-            loginModal.style.display = "none";
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('show');
         }
     });
 
-    if (loginForm) {
-        loginForm.addEventListener("submit", async (event) => {
-            event.preventDefault();
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
 
-            const formData = new URLSearchParams();
-            formData.append("username", loginForm.username.value);
-            formData.append("password", loginForm.password.value);
+        const submitButton = loginForm.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Cargando...';
 
-            try {
-                const response = await fetch("http://127.0.0.1:8000/usuarios/login", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                    body: formData,
-                });
+        try {
+            const response = await fetch('webmpdeportes-production.up.railway.app/usuarios/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ username, password })
+            });
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.detail || "Error en el inicio de sesión");
-                }
-
-                const data = await response.json();
-                localStorage.setItem("access_token", data.access_token);
-
-                // Cierra el modal
-                loginModal.style.display = "none";
-
-                // Redirige al editor
-                window.location.href = "/static/editor/inicio.html";
-
-            } catch (error) {
-                alert(error.message);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error en el inicio de sesión');
             }
-        });
-    }
-});
 
+            const data = await response.json();
+            localStorage.setItem('authToken', data.access_token);
+            alert('Inicio de sesión exitoso');
+            modal.classList.remove('show');
+            window.location.href = 'static/editor/agregar-product.html';
+        } catch (error) {
+            console.error('Error:', error);
+            alert(error.message || 'Credenciales incorrectas o error en el servidor');
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Iniciar sesión';
+        }
+    });
+});

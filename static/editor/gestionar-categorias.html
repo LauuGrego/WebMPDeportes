@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gestión de Categorías</title>
+    <link href="../../images/logo-encabezado.png" rel="icon" type="image/png" sizes="16x16">
+    <link rel="stylesheet" href="gestionar-categorias.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header__logo-search">
+          <a href="#" class="header__logo-link">
+            <img src="./../../images/logo-encabezado.png" alt="Logo Emprendimiento" class="header__logo-img" />
+          </a>
+        </div>
+        <!-- Navegación principal dentro del header -->
+        <nav class="header__nav">
+          <ul class="header__nav-list">
+            <li><a href="../../index.html" class="header__nav-link">Inicio</a></li>
+            <li><a href="./agregar-product.html" class="header__nav-link">Agregar Producto</a></li>
+            <li><a href="./editar-productos.html" class="header__nav-link open-login-modal">Editar Productos</a></li>
+            <li><a href="./gestionar-categorias.html" class="header__nav-link">Gestión de Categorías</a></li>
+          </ul>
+        </nav>
+      </header>
+
+    <div class="products-container">
+        <h2>Gestión de Categorías</h2>
+
+        <!-- Formulario para agregar nueva categoría -->
+        <form id="categoryForm" class="product-form">
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="categoryName">Nombre de la categoría</label>
+                    <input type="text" id="categoryName" name="categoryName" placeholder="Ej: Deportivo" required>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="submit-button">
+                    <i class="fas fa-plus"></i> Agregar Categoría
+                </button>
+            </div>
+        </form>
+
+        <!-- Listado de categorías existentes -->
+        <div class="table-responsive">
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="categoryList">
+                    <!-- Las categorías se cargarán dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="../js/gestion_categorias.js"></script>
+</body>
+</html>

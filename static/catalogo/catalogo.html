@@ -1,112 +1,100 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no">
-  <title>Catálogo - Marca Pasos</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="./../../images/logo-encabezado.png" type="image">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MP Deportes - Catálogo</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="../../images/logo-encabezado.png" rel="icon" type="image/png" sizes="16x16">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <header class="header">
-    <nav class="header__nav animate__animated animate__fadeInDown">
-      <div class="header__top">
-        <div class="header__logo animate__animated animate__backInLeft">
-          <img src="./../../images/logo.png" alt="Marca Pasos">
-        </div>
-        <div class="header__links">
-          <a href="../../index.html">Inicio</a>
-          <a id="open-login" href="javascript:void(0);">Vista Editor</a>
-        </div>
-        <div class="header__search">
-          <input type="text" placeholder="Buscar productos..." class="header__search-input">
-          <button class="btn--primary">
-            <i class="fas fa-search"></i> Buscar
-          </button>
-        </div>
-      </div>
-    </nav>
-  </header>
 
-<!-- Botón de menú móvil -->
-<div class="mobile-filters-btn">
-  <i class="fas fa-filter"></i>
-  <span>Filtros</span>
+<header class="header">
+  <div class="header__logo-search">
+    <button class="header__menu-toggle" aria-label="Mostrar menú">
+      <i class="fas fa-bars"></i>
+    </button>
+    <a href="#" class="header__logo-link">
+      <img src="./../../images/logo-encabezado.png" alt="Logo Emprendimiento" class="header__logo-img" />
+    </a>
+    <div class="header__search">
+      <input type="text" class="header__search-input" placeholder="Buscar productos...">
+      <button class="btn btn--ghost header__search-btn" aria-label="Buscar">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+  </div>
+  <nav class="header__nav">
+    <ul class="header__nav-list">
+      <li><a href="../../index.html" class="header__nav-link">Inicio</a></li>
+      <li><a href="#contact" class="header__nav-link">Contacto</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="container">
+  <aside class="sidebar">
+    <nav class="mobile-nav">
+      <ul>
+        <li><a href="../../index.html" class="mobile-nav-link">Inicio</a></li>
+        <li><a href="#contact" class="mobile-nav-link">Contacto</a></li>
+      </ul>
+    </nav>
+    <h2 class="sidebar__title">Categorías</h2>
+    <ul class="sidebar__list" id="sidebarCategories">
+      <!-- Categories will be dynamically loaded here -->
+    </ul>
+  </aside>
+
+  <main class="catalog">
+    <div class="catalog__cards" id="catalogCards">
+      <p>Cargando productos...</p> <!-- Placeholder for loading or error messages -->
+    </div>
+  </main>
 </div>
 
-<!-- Overlay para móvil -->
-<div class="mobile-filters-overlay"></div>
-
-  <div class="layout">
-    <!-- Menú Lateral -->
-    <aside class="sidebar">
-      <!-- Añade esta sección para los links móviles -->
-      <section class="sidebar__section mobile-nav">
-        <div class="header__links mobile-links">
-          <a href="../../index.html">Inicio</a>
-        </div>
-      </section>
-    
-      <!-- Secciones existentes -->
-      <section class="sidebar__section">
-        <h3 class="sidebar__title">Categorías</h3>
-        <div id="categories-buttons" class="sidebar__buttons scrollable-buttons"></div>
-      </section>
-      <section class="sidebar__section">
-        <h3 class="sidebar__title">Tipos</h3>
-        <div id="types-buttons" class="sidebar__buttons scrollable-buttons"></div>
-      </section>
-    </aside>
-
-    <main class="layout__main">
-      <section id="catalog" class="catalog">
-        <div class="catalog__grid">
-          <!-- Las tarjetas se insertarán dinámicamente aquí -->
-        </div>
-        <button id="load-more-button" class="catalog__load-more-button" style="display: none;">Ver más</button>
-      </section>
-    </main>
+<footer id="contact" class="footer">
+  <div class="footer__content">
+    <div class="footer__social">
+      <a href="https://www.instagram.com/marcapasosdeportes/" class="footer__social-link footer__social-link--instagram">
+        <img src="../../images/Instagram copy.png" alt="Redireccion a Instagram">
+      </a>
+      <a href="https://wa.me/3445417684" class="footer__social-link footer__social-link--whatsapp">
+        <img src="../../images/Whatsapp copy.png" alt="Redireccion a Whatsapp">
+      </a>
+    </div>
+    <p class="footer__copy">©2025 Lautaro Gregoraschuk. Todos los derechos reservados.</p>
   </div>
+</footer>
 
-  <!-- Modal Login -->
-  <div id="login-modal" class="modal modal--login">
-    <div class="modal__content modal__content--login animate__animated animate__zoomIn">
-      <span id="close-login" class="modal__close modal__close--login" tabindex="0">&times;</span>
-      <h2 class="modal__title modal__title--login">Iniciar Sesión</h2>
-      <form class="modal__form modal__form--login">
-        <label for="username" class="modal__label modal__label--login">Usuario:</label>
-        <input type="text" id="username" placeholder="Ingresa tu usuario" class="modal__input modal__input--login">
-        <label for="password" class="modal__label modal__label--login">Contraseña:</label>
-        <input type="password" id="password" placeholder="Ingresa tu contraseña" class="modal__input modal__input--login">
-        <button type="submit" class="modal__submit-btn modal__submit-btn--login animate__animated animate__pulse animate__infinite">Ingresar</button>
+<div id="loginModal" class="modal">
+  <div class="modal__overlay" id="modalOverlay"></div>
+  <div class="modal__content">
+    <button class="modal__close" id="closeModal" aria-label="Cerrar">&times;</button>
+    <div class="login-card">
+      <h1 class="login-title">Iniciar Sesión</h1>
+      <form id="loginForm" class="login-form">
+        <div class="form-group">
+          <label for="username">Usuario:</label>
+          <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Contraseña:</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn--primary login-btn">Ingresar</button>
       </form>
     </div>
   </div>
+</div>
 
-  <!-- Modal Detalles Producto -->
-  <div id="product-details-modal" class="modal modal--product">
-    <div class="modal__content modal__content--product">
-      <span id="close-product-modal" class="modal__close modal__close--product">&times;</span>
-      <div class="modal__image">
-        <!-- Imagen del producto se insertará dinámicamente -->
-      </div>
-      <div class="modal__info">
-        <!-- Información del producto se insertará dinámicamente -->
-      </div>
-    </div>
-  </div>
+<script src="./../js/obtener-categorias.js"></script>
+<script src="./../js/obtener-productos.js"></script>
+<script src="./../js/barra-navegacion.js"></script>
+<script src="./../js/menu_lateral_mobile.js"> </script>
 
-  <footer class="footer animate__animated animate__fadeInUp">
-    <p class="footer__text">&copy; 2025 Lautaro Gregoraschuk. Todos los derechos reservados.</p>
-  </footer>
-
-  <script src="./../js/botones-categorias.js"></script>
-  <script src="./../js/boton-emergente-vista-editor-catalogo.js"></script>
-  <script src="./../js/obtener-productos.js"></script>
-  <script src="./../js/barra-navegacion.js"></script>
-  <script src="./../js/botones-tipos.js"></script>
-  <script src="./../js/menu_lateral_mobile.js"> </script>
 </body>
 </html>

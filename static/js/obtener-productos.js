@@ -1,129 +1,120 @@
-// URL del backend
-const API_URL = "http://127.0.0.1:8000/productos/listar";
+let currentPage = 1;
+const productsPerPage = 10;
+let isLoading = false;
+let hasMoreProducts = true;
 
-let currentPage = 1; // Track the current page
-const productsPerPage = 10; // Number of products per page
+const debounce = (func, delay) => {
+  let debounceTimeout;
+  return (...args) => {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => func(...args), delay);
+  };
+};
 
-// Función para obtener productos del backend
-async function fetchProducts(searchQuery = "", page = 1) {
-  try {
-    let url = `${API_URL}?page=${page}&limit=${productsPerPage}`;
-    if (searchQuery) {
-      url += `&name=${encodeURIComponent(searchQuery)}`;
+// Función para agregar el botón "Ver más"
+function addLoadMoreButton() {
+    const catalogCards = document.getElementById('catalogCards');
+    const existingButton = document.querySelector('.load-more-button');
+    if (existingButton) return; // Evitar duplicar el botón
+
+    const button = document.createElement('button');
+    button.textContent = "Ver más";
+    button.classList.add('load-more-button');
+    button.addEventListener('click', async () => {
+        button.disabled = true; // Deshabilitar mientras se cargan productos
+        button.textContent = "Cargando...";
+        currentPage++;
+        const searchInput = document.querySelector('.header__search-input');
+        const searchQuery = searchInput ? searchInput.value.trim() : '';
+        await loadProducts(searchQuery, currentPage);
+        button.disabled = false; // Habilitar nuevamente
+        button.textContent = "Ver más";
+    });
+    catalogCards.insertAdjacentElement('afterend', button);
+}
+
+// Modificar loadProducts para manejar el botón "Ver más"
+async function loadProducts(searchQuery = '', page = 1) {
+    if (isLoading || !hasMoreProducts) return;
+    isLoading = true;
+
+    try {
+        const url = new URL('webmpdeportes-production.up.railway.app/productos/listar');
+        url.searchParams.append('page', page);
+        url.searchParams.append('limit', productsPerPage);
+        if (searchQuery) url.searchParams.append('search', searchQuery);
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            if (response.status === 400) {
+                console.error('Bad Request: Check query parameters.');
+                document.getElementById('catalogCards').innerHTML = '<p>Error: Solicitud incorrecta. Verifique los parámetros de búsqueda.</p>';
+            }
+            throw new Error('Error al cargar los productos');
+        }
+
+        const { products, totalPages } = await response.json();
+
+        if (page >= totalPages) {
+            hasMoreProducts = false;
+            document.querySelector('.load-more-button')?.remove();
+        } else if (page === 1) {
+            addLoadMoreButton();
+        }
+
+        const catalogCards = document.getElementById('catalogCards');
+        if (page === 1) catalogCards.innerHTML = '';
+
+        if (products.length === 0 && page === 1) {
+            catalogCards.innerHTML = '<p>No se encontraron productos.</p>';
+            return;
+        }
+
+        products.forEach(product => {
+            const productImage = product.image_path || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
+
+            const productCard = `
+              <div class="card">
+                <img src="${productImage}" alt="${product.name}" class="card__image" />
+                <div class="card__info">
+                  <h2 class="card__title">${product.name}</h2>
+                  <p class="card__description">${product.description}</p>
+                  <div class="card__footer">
+                    
+                    <div class="card__buttons">
+                      <button class="ver-detalles-btn" data-product-id="${product.id}">Ver detalles</button>
+                      <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="card__whatsapp" target="_blank" aria-label="Consultar por WhatsApp">
+                        <i class="fab fa-whatsapp"></i> Consultar
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>`;
+            catalogCards.insertAdjacentHTML('beforeend', productCard);
+        });
+
+        // Add event listener for "Ver Detalles" buttons
+        document.querySelectorAll('.ver-detalles-btn').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const productId = event.target.dataset.productId;
+                window.location.href = `../productos/producto.html?id=${productId}`;
+            });
+        });
+    } catch (error) {
+        console.error('Error al cargar los productos:', error);
+    } finally {
+        isLoading = false;
     }
-
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Error al obtener los productos");
-    }
-
-    const products = await response.json();
-    displayProducts(products, page);
-  } catch (error) {
-    console.error(error);
-  }
 }
 
-// Función para ver detalles del producto (redirige a nueva página)
-function viewDetails(productId) {
-  // Guardar el ID del producto en localStorage para usarlo en la página de detalles
-  localStorage.setItem('selectedProductId', productId);
-  
-  // Redirigir a la página de detalles
-  window.location.href = './../productos/producto.html';
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.querySelector('.header__search-input');
+    loadProducts();
 
-// Función para mostrar productos en el catálogo
-function displayProducts(products, page) {
-  const productContainer = document.querySelector(".catalog__grid");
-  const loadMoreButton = document.getElementById("load-more-button");
-
-  if (page === 1) {
-    productContainer.innerHTML = ""; // Clear previous products only on the first page
-  }
-
-  if (products.length === 0 && page === 1) {
-    productContainer.innerHTML = "<p>No se encontraron productos.</p>";
-    loadMoreButton.style.display = "none"; // Hide the button if no products
-    return;
-  }
-
-  products.forEach(product => {
-    const productCard = document.createElement("div");
-    productCard.classList.add("catalog__card");
-
-    // Use Cloudinary image URL or fallback to a default image
-    const productImage = product.image_url || '/static/images/default-product.png';
-
-    productCard.innerHTML = `
-      <div class="catalog__card-image">
-        <img src="${productImage}" alt="${product.name}">
-      </div>
-      <div class="catalog__card-details">
-        <h3 class="catalog__card-title">${product.name}</h3>
-        <p class="catalog__card-description">${product.description || "Descripción no disponible"}</p>
-        <div class="catalog__card-actions">
-          <button class="catalog__card-button" onclick="redirectToWhatsApp('${product.name}')">
-            <i class="fab fa-whatsapp"></i> Consultar
-          </button>
-          <button class="catalog__details-button" onclick="viewDetails('${product.id}')">
-            Ver detalles
-          </button>
-        </div>
-      </div>
-    `;
-
-    productContainer.appendChild(productCard);
-  });
-
-  // Show or hide the "Ver más" button based on the number of products returned
-  if (products.length < productsPerPage) {
-    loadMoreButton.style.display = "none";
-  } else {
-    loadMoreButton.style.display = "block";
-  }
-}
-
-// Función para redirigir a WhatsApp con un mensaje predefinido
-async function redirectToWhatsApp(productName) {
-  try {
-    const encodedProductName = encodeURIComponent(productName);
-    const response = await fetch(`http://127.0.0.1:8000/productos/whatsapp_redirect?product_name=${encodedProductName}`);
-    if (!response.ok) {
-      throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
-    }
-    const data = await response.json();
-    window.open(data.url, "_blank");
-  } catch (error) {
-    console.error("Error en la redirección a WhatsApp:", error);
-  }
-}
-
-function getImageFormat(imageUrl) {
-  const img = new Image();
-  img.src = imageUrl;
-  if (img.width > img.height) {
-    return "horizontal";
-  } else if (img.width < img.height) {
-    return "vertical";
-  } else {
-    return "square";
-  }
-}
-
-// Funcionalidad para cerrar el modal
-document.addEventListener("click", function (event) {
-  const modal = document.getElementById("product-details-modal");
-  if (event.target.id === "close-product-modal" || event.target === modal) {
-    modal.style.display = "none"; // Ocultar el modal
-  }
+    searchInput.addEventListener('input', debounce(() => {
+        const searchQuery = searchInput.value.trim();
+        currentPage = 1; // Reset current page when a new search is performed
+        hasMoreProducts = true; // Reset hasMoreProducts when a new search is performed
+        loadProducts(searchQuery, currentPage);
+    }, 300)); // 300ms debounce delay
 });
-
-// Event listener for the "Ver más" button
-document.getElementById("load-more-button").addEventListener("click", () => {
-  currentPage++;
-  fetchProducts("", currentPage);
-});
-
-// Cargar productos al inicio
-fetchProducts();

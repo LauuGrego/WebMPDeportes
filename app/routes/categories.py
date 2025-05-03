@@ -24,15 +24,16 @@ async def create_category(category: CategoryCreate, admin: User = Depends(admin_
     return new_category
 
 @router.get("/listar")
-async def list_categories(admin: User = Depends(admin_only) ):
-    
+async def list_categories(admin: User = Depends(admin_only)):
     categories = list(categories_collection.find({}, {"_id": 0, "name": 1}))
-    return categories
+    unique_categories = {category["name"] for category in categories}  # Ensure uniqueness
+    return [{"name": name} for name in unique_categories]
 
 @router.get("/listar-public")
 async def list_categories():
     categories = list(categories_collection.find({}, {"_id": 0, "name": 1}))
-    return categories
+    unique_categories = {category["name"] for category in categories}  # Ensure uniqueness
+    return [{"name": name} for name in unique_categories]
 
 @router.delete("/eliminar/{category_name}")
 async def delete_category_by_name(category_name: str, admin: User = Depends(admin_only)):

@@ -1,89 +1,141 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agregar Producto - Marca Pasos</title>
-  <link rel="stylesheet" href="agregar-product-styles.css">
-  <link rel="icon" href="./../../images/logo-encabezado.png" type="image">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Proxima+Nova:wght@400;700&display=swap">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>MP Deportes - Carga de Productos</title>
+        <link href="../../images/logo-encabezado.png" rel="icon" type="image/png" sizes="16x16">
+        <link rel="stylesheet" href="agregar-product-styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+      </head>
 <body>
-  <!-- HEADER -->
-  <header class="header" role="banner">
-    <nav class="header__nav" aria-label="Navegación Principal">
-      <ul class="header__nav-links">
-        <li class="header__nav-item">
-          <a href="./inicio.html" class="header__nav-link btn-header">Inicio</a>
-        </li>
-        <li class="header__nav-item">
-          <a href="./agregar-category.html#main" class="header__nav-link btn-header">Agregar Categoría</a>
-        </li>
-        <li class="header__nav-item">
-          <a href="./editar-categorias.html#main" class="header__nav-link btn-header">Editar Categoría</a>
-        </li>
-        <li class="header__nav-item">
-          <a href="./editar-productos.html#main" class="header__nav-link btn-header">Editar Producto</a>
-        </li>
-        <li class="header__nav-item">
-          <a href="./../../index.html" class="header__nav-link btn-header">Cerrar Sesión</a>
-        </li>
-      </ul>
-    </nav>
-    <div class="header__logo">
-      <img src="./../../images/logo.png" alt="Logo Marca Pasos">
-    </div>
-  </header>
+    <header class="header">
+      <div class="hamburger-menu" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+        <div class="header__logo-search">
+          <a href="#" class="header__logo-link">
+            <img src="./../../images/logo-encabezado.png" alt="Logo Emprendimiento" class="header__logo-img" />
+          </a>
+        </div>
+        <!-- Navegación principal dentro del header -->
+        <nav class="header__nav">
+          <ul class="header__nav-list">
+            <li><a href="../../index.html" class="header__nav-link">Inicio</a></li>
+            <li><a href="./agregar-product.html" class="header__nav-link">Agregar Producto</a></li>
+            <li><a href="./editar-productos.html" class="header__nav-link open-login-modal">Editar Productos</a></li>
+            <li><a href="./gestionar-categorias.html" class="header__nav-link open-login-modal">Gestionar Categorías</a></li>
+          </ul>
+        </nav>
+      </header>
 
-  <!-- MAIN -->
-  <main id="main" class="main" role="main">
-    <section id="add-product" class="add-product">
-      <h2 class="add-product__title">Agregar Producto</h2>
-      <form id="add-product-form" class="add-product__form" novalidate>
-        <div class="add-product__group">
-          <label for="product-name" class="add-product__label">Nombre del Producto:</label>
-          <input type="text" id="product-name" name="name" class="add-product__input" placeholder="Nike Air Max 223" required>
+      <aside class="mobile-menu">
+        <ul class="mobile-nav-list">
+          <li><a href="../../index.html" class="mobile-nav-link">Inicio</a></li>
+          <li><a href="../editor/agregar_producto.html" class="mobile-nav-link">Agregar Producto</a></li>
+          <li><a href="../editor/editar_producto.html" class="mobile-nav-link open-login-modal">Editar Productos</a></li>
+          <li><a href="../editor/gestion_categorias.html" class="mobile-nav-link open-login-modal">Gestionar Categorías</a></li>
+        </ul>
+      </aside>
+
+      <div class="menu-overlay" onclick="toggleMenu()"></div>
+
+  <div class="form-container">
+    <h2>Carga de Producto</h2>
+    <form id="productForm" class="product-form">
+      <div class="form-grid">
+        <!-- Nombre (ocupará toda la fila) -->
+        <div class="form-group full-width name">
+          <label for="name">Nombre del producto</label>
+          <input type="text" id="name" name="name" placeholder="Ej: Remera básica" required>
         </div>
-        <div class="add-product__group">
-          <label for="product-type" class="add-product__label">Tipo de Producto:</label>
-          <input type="text" id="product-type" name="type" class="add-product__input" placeholder="Zapatillas" required>
-        </div>
-        <div class="add-product__group">
-          <label for="product-size" class="add-product__label">Talle:</label>
-          <div id="product-size" class="size-selection">
-            <div class="size-options" id="numeric-sizes"></div>
-            <div class="size-options" id="letter-sizes"></div>
+      
+           <!-- Sección de carga de imágenes añadida -->
+        <div class="form-group full-width">
+          <label for="image-upload">Imágenes del producto</label>
+          <div class="image-upload-container">
+            <div class="upload-area" id="drop-zone">
+              <i class="fas fa-cloud-upload-alt upload-icon"></i>
+              <p>Arrastra y suelta imágenes aquí o</p>
+              <label for="image-upload" class="upload-label">Selecciona archivos</label>
+              <input type="file" id="image-upload" name="images" accept="image/*" multiple 
+                     class="hidden" onchange="handleFileSelect(event)">
+            </div>
+            <div class="image-preview" id="image-preview"></div>
           </div>
-          <input type="hidden" id="selected-sizes" name="sizes" value="">
         </div>
-        <div class="add-product__group">
-          <label for="product-description" class="add-product__label">Descripción:</label>
-          <textarea id="product-description" name="description" class="add-product__textarea" placeholder="Ingresa la descripción del producto" rows="8" required></textarea>
-        </div>
-        <div class="add-product__group">
-          <label for="product-stock" class="add-product__label">Stock:</label>
-          <input type="number" id="product-stock" name="stock" class="add-product__input" placeholder="00" required>
-        </div>
-        <div class="add-product__group">
-          <label for="product-image" class="add-product__label">Cargar Imagen:</label>
-          <input type="file" id="product-image" name="image_file" class="add-product__file-input" accept="image/*" required>
-        </div>
-        <div class="add-product__group">
-          <label for="product-category" class="add-product__label">Categoría:</label>
-          <select id="product-category" name="category_name" class="add-product__select" required>
-            <!-- Se cargarán dinámicamente -->
+
+        <!-- Fila con 3 columnas -->
+        <div class="form-group category">
+          <label for="category">Categoría</label>
+          <select id="category" name="category" required>
+            <option value="">Seleccionar...</option>
           </select>
         </div>
-        <button type="submit" class="btn--primary add-product__submit">Agregar Producto</button>
-      </form>
-    </section>
-  </main>
+      
+        <div class="form-group type">
+          <label for="type">Tipo</label>
+          <input type="text" id="type" name="type" placeholder="Ej: Camiseta, Zapatillas, Gorra..." required>
+        </div>
+      
+        <div class="form-group stock">
+          <label for="stock">Cantidad en stock</label>
+          <input type="number" id="stock" name="stock" min="0" placeholder="Ej: 50" required>
+        </div>
 
-  <!-- SCRIPTS -->
+        <div class="form-group full-width">
+          <label for="price">Precio del producto</label>
+          <input type="number" id="price" name="price" min="0" step="0.01" placeholder="Ej: 1999,99" required>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="description">Descripción</label>
+          <textarea id="description" name="description" placeholder="Descripción del producto" required></textarea>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Talles disponibles</label>
+          
+          <!-- Talles numéricos -->
+          <div class="sizes-section">
+            <h4>Talles Numéricos</h4>
+            <div class="sizes-grid" id="numeric-sizes">
+              <!-- Se generarán automáticamente -->
+            </div>
+          </div>
+        
+          <!-- Talles de letras -->
+          <div class="sizes-section">
+            <h4>Talles de Letras</h4>
+            <div class="sizes-grid" id="letter-sizes">
+              <!-- Se generarán automáticamente -->
+            </div>
+          </div>
+        
+          <!-- Campo oculto para almacenar los talles seleccionados -->
+          <input type="hidden" id="selected-sizes" name="size">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="submit-button">
+          <i class="fas fa-upload"></i> Cargar Producto
+        </button>
+      </div>
+    </form>
+  </div>
+
   <script src="./../js/talles_productos.js"></script>
   <script src="./../js/cargar-producto.js"></script>
-  <script src="./../js/obtener-categorias.js"></script>
   <script src="./../js/scroll-main.js"></script>
+<script>
+  function toggleMenu() {
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const menuOverlay = document.querySelector('.menu-overlay');
+    mobileMenu.classList.toggle('active');
+    menuOverlay.classList.toggle('active');
+  }
+</script>
 </body>
 </html>
