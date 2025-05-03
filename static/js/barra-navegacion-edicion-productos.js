@@ -47,8 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
   async function searchProducts() {
     const query = searchInput.value.trim();
     let url = query === ""
-      ? "webmpdeportes-production.up.railway.app/productos/listar"
-      : `webmpdeportes-production.up.railway.app/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`;
+      ? "https://webmpdeportes-production.up.railway.app/productos/listar"
+      : `https://webmpdeportes-production.up.railway.app/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`;
 
     try {
       const response = await fetch(url);
