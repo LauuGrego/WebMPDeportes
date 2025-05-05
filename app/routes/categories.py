@@ -31,9 +31,9 @@ async def list_categories(admin: User = Depends(admin_only)):
 
 @router.get("/listar-public")
 async def list_categories():
-    categories = list(categories_collection.find({}, {"_id": 0, "name": 1}))
-    unique_categories = {category["name"] for category in categories}  # Ensure uniqueness
-    return [{"name": name} for name in unique_categories]
+    categories = list(categories_collection.find({}, {"_id": 1, "name": 1}))
+    return [{"_id": str(cat["_id"]), "name": cat["name"]} for cat in categories]
+
 
 @router.delete("/eliminar/{category_name}")
 async def delete_category_by_name(category_name: str, admin: User = Depends(admin_only)):

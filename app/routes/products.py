@@ -47,11 +47,13 @@ async def get_product(product_id: str):
     return JSONResponse(content=product)
 
 # Agregar productos
+from typing import List, Optional
+
 @router.post("/agregar", response_model=Product)
 async def create_product(
     name: Optional[str] = Form(None),
     type: Optional[str] = Form(None),
-    size: Optional[str] = Form(None),
+    size: Optional[List[str]] = Form(None),  # Cambié a List[str]
     description: Optional[str] = Form(None),
     stock: Optional[int] = Form(None),
     category: Optional[str] = Form(None),  # Receive category ID from the frontend
@@ -68,7 +70,7 @@ async def create_product(
         if type:
             product_dict["type"] = type.strip().title()
         if size:
-            product_dict["size"] = [s.strip().title() for s in size.split(",") if s.strip()]
+            product_dict["size"] = [s.strip().title() for s in size if s.strip()]  # Direct list usage
         if description:
             product_dict["description"] = description.strip()
         if stock is not None:
@@ -102,6 +104,7 @@ async def create_product(
 
     except Exception as e:
         raise HTTPException(status_code=422, detail=str(e))
+
 
 # Actualizar producto
 @router.put("/actualizar/{product_id}", response_model=Product)
