@@ -288,40 +288,25 @@ async function saveProductChanges(event) {
     }
   }
 
-  // 2) Construye el payload JSON
-  const payload = {
-    name:        form.elements.name.value,
-    type:        form.elements.type.value,
-    stock:       Number(form.elements.stock.value),
-    price:       parseFloat(
-                   form.elements.price.value
-                     .replace(/\./g,'')
-                     .replace(',','.')
-                 ).toFixed(2),
-    description: form.elements.description.value,
-    category_id: form.elements.category.value || null,
-    size:        document
-                   .getElementById('selected-sizes')
-                   .value
-                   .split(',')
-                   .filter(s => s)   // descarta entradas vacías
-  };
-  if (imageUrl) payload.image_url = imageUrl;
+  const formData = new FormData();
+  formData.append("name",        form.elements.name.value);
+  formData.append("type",        form.elements.type.value);
+  formData.append("stock",       form.elements.stock.value);
+  formData.append("price",       form.elements.price.value);
+  formData.append("description", form.elements.description.value);
+  formData.append("category_id", form.elements.category.value);
+  formData.append("size",        document.getElementById('selected-sizes').value);
+  if (imageUrl) formData.append("image_url", imageUrl);
 
-  // DEBUG: comprueba en consola qué vas a enviar
-  console.log("PUT /productos/actualizar/", productId, payload);
-
-  // 3) Haz el PUT con JSON puro
   try {
     const resp = await fetch(
       `https://webmpdeportes-production.up.railway.app/productos/actualizar/${productId}`,
       {
         method:  'PUT',
         headers: {
-          'Content-Type':  'application/json',
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`
         },
-        body: JSON.stringify(payload)
+        body: formData
       }
     );
     if (!resp.ok) {
