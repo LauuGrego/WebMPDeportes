@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!response.ok) throw new Error("Error al obtener los detalles del producto.");
     const product = await response.json();
 
-    const productImage = product.image_path || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
+    const productImage = product.image_url || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
 
     const productHTML = `
       <img src="${productImage}" alt="${product.name}" class="producto-imagen" />

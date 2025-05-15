@@ -71,7 +71,7 @@ async function loadProducts(searchQuery = '', page = 1) {
         }
 
         products.forEach(product => {
-            const productImage = product.image_path || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
+            const productImage = product.image_url || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
 
             const productCard = `
               <div class="card">

@@ -28,7 +28,7 @@ class ProductCreate(ProductBase):
 class Product(ProductBase):
     id: str  
     category_id: str
-
+    image_url: Optional[str] = None  # Asegura que image_url es string
 
     class Config:
         from_attributes = True

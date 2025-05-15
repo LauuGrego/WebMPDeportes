@@ -3,24 +3,24 @@ document.addEventListener('DOMContentLoaded', function() {
   const numericSizesContainer = document.getElementById('numeric-sizes');
   const letterSizesContainer = document.getElementById('letter-sizes');
   
-  // Generar talles numéricos del 1 al 8
+  // Generar talles numéricos del 1 al 8 (como reales)
   for (let size = 1; size <= 8; size++) {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'size-button';
-    btn.dataset.size = size;
-    btn.textContent = size;
+    btn.dataset.size = size.toFixed(1); // Guardar como real
+    btn.textContent = size; // Mostrar como entero
     numericSizesContainer.appendChild(btn);
   }
 
-  // Generar talles numéricos del 18 al 47 en incrementos de 0.5
+  // Generar talles numéricos del 18 al 47 en incrementos de 0.5 (como reales)
   for (let size = 18; size <= 47; size += 0.5) {
     const display = Number.isInteger(size) ? size : size.toFixed(1);
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'size-button';
-    btn.dataset.size = display;
-    btn.textContent = display;
+    btn.dataset.size = size.toFixed(1); // Guardar como real
+    btn.textContent = display; // Mostrar como entero o decimal
     numericSizesContainer.appendChild(btn);
   }
 

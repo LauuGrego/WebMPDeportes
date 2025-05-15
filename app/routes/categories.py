@@ -30,7 +30,7 @@ async def list_categories(admin: User = Depends(admin_only)):
     return [{"name": name} for name in unique_categories]
 
 @router.get("/listar-public")
-async def list_categories():
+async def list_categories_public():
     categories = list(categories_collection.find({}, {"_id": 1, "name": 1}))
     return [{"_id": str(cat["_id"]), "name": cat["name"]} for cat in categories]
 

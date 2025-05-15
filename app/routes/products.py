@@ -28,6 +28,14 @@ def get_product_by_id(product_id: str):
         product["id"] = str(product["_id"])
         del product["_id"]
         product.pop("image", None)
+        # Siempre asigna image_url = image_path (link de Cloudinary)
+        image_path = product.get("image_path")
+        if image_path:
+            product["image_url"] = image_path
+        else:
+            product["image_url"] = "https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg"
+        # Elimina image_path del dict para evitar confusión
+        product.pop("image_path", None)
     return product
 
 def shuffle_products(products: List[dict]) -> List[dict]:
@@ -70,7 +78,15 @@ async def create_product(
         if type:
             product_dict["type"] = type.strip().title()
         if size:
-            product_dict["size"] = [s.strip().title() for s in size if s.strip()]  # Direct list usage
+            # Fuerza talles numéricos a reales (ej: "40" -> "40.0")
+            def to_real(s):
+                try:
+                    # Si es número (entero o decimal), lo convierte a real string
+                    num = float(s)
+                    return f"{num:.1f}"
+                except Exception:
+                    return s.strip().title()
+            product_dict["size"] = [to_real(s) for s in size if s.strip()]
         if description:
             product_dict["description"] = description.strip()
         if stock is not None:
@@ -84,10 +100,11 @@ async def create_product(
             product_dict["price"] = round(float(price), 2)
 
         if image_url:
-            product_dict["image_path"] = image_url  # Save the image URL
+            product_dict["image_path"] = image_url  # Guarda el link de Cloudinary en image_path
         else:
-            # Default image if none is provided
             product_dict["image_path"] = "https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg"
+        # Siempre elimina image_url del dict, solo se guarda image_path
+        product_dict.pop("image_url", None)
 
         # Validate required fields
         required_fields = ["name", "type", "size", "description", "stock", "category_id", "price"]
@@ -100,7 +117,7 @@ async def create_product(
         product_dict["_id"] = str(result.inserted_id)
         product_dict["id"] = product_dict.pop("_id")
 
-        return product_dict
+        return get_product_by_id(product_dict["id"])
 
     except Exception as e:
         raise HTTPException(status_code=422, detail=str(e))
@@ -146,7 +163,9 @@ async def modify_product(
         update_data["price"] = round(float(price), 2)
 
     if image_url:
-        update_data["image_path"] = image_url  # Update the image URL
+        update_data["image_path"] = image_url  # Actualiza image_path con el link de Cloudinary
+    # Siempre elimina image_url del update_data
+    update_data.pop("image_url", None)
 
     products_collection.update_one({"_id": ObjectId(product_id)}, {"$set": update_data})
 
@@ -183,10 +202,13 @@ async def search_products(name: Optional[str] = None, type: Optional[str] = None
     for product in products:
         product["_id"] = str(product["_id"])
         product["id"] = product.pop("_id")
-        if "image_path" in product and product["image_path"]:
-            product["image_path"] = f"/static/{product['image_path']}"  # Correctly prefix with /static/
+        # Siempre image_url = image_path
+        image_path = product.get("image_path")
+        if image_path:
+            product["image_url"] = image_path
         else:
-            product["image_path"] = "/static/images/default-product.jpg"
+            product["image_url"] = "https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg"
+        product.pop("image_path", None)
         product["price"] = float(product["price"]) if "price" in product and isinstance(product["price"], (int, float)) else None
 
     return products
@@ -197,8 +219,8 @@ async def get_product_image(product_id: str):
     product = products_collection.find_one({"_id": ObjectId(product_id)})
     if not product:
         raise HTTPException(status_code=404, detail="Producto no encontrado.")
-    
-    image_url = product.get("image_path", "https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg")
+    # Siempre image_url = image_path
+    image_url = product.get("image_path") or "https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg"
     return JSONResponse(content={"image_url": image_url})
 
 # Eliminar productos
@@ -230,17 +252,20 @@ async def list_products(search: Optional[str] = None, page: int = 1, limit: int 
     for product in products:
         product["id"] = str(product["_id"])
         del product["_id"]
-        if "image_path" not in product or not product["image_path"]:
-            product["image_path"] = "https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg"
-        
+        # Siempre image_url = image_path
+        image_path = product.get("image_path")
+        if image_path:
+            product["image_url"] = image_path
+        else:
+            product["image_url"] = "https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg"
+        if "image_path" in product:
+            del product["image_path"]
         if "price" in product and isinstance(product["price"], (int, float)):
             product["price"] = "{:,.2f}".format(product["price"]).replace(",", "X").replace(".", ",").replace("X", ".")
-        
         product["description"] = product.get("description", "")
         product["stock"] = product.get("stock", 0)
         product["type"] = product.get("type", "")
         product["size"] = product.get("size", [])
-        
         category = categories_collection.find_one({"_id": ObjectId(product["category_id"])})
         product["category_name"] = category["name"] if category else "Sin categoría"
 
@@ -258,10 +283,12 @@ async def get_product_details(product_id: str):
     product = get_product_by_id(product_id)
     if not product:
         raise HTTPException(status_code=404, detail="Producto no encontrado.")
-    if "image_path" in product and product["image_path"]:
-        product["image"] = f"/static/{product['image_path']}"  # Directly prefix with /static/
-    else:
-        product["image"] = "/static/images/default-product.jpg"
+    # Siempre image_url = image_path
+    image_url = product.get("image_url")
+    if not image_url:
+        image_url = "https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg"
+    product["image_url"] = image_url
+    product.pop("image_path", None)
     if "price" in product and isinstance(product["price"], (int, float)):
         product["price"] = "{:,.2f}".format(product["price"]).replace(",", "X").replace(".", ",").replace("X", ".")
     return product
@@ -296,8 +323,13 @@ async def buscar_por_categoria_o_tipo(category: Optional[str] = None, type: Opti
     for product in products:
         product["_id"] = str(product["_id"])
         product["id"] = product.pop("_id")
-        if "image_path" not in product or not product["image_path"]:
-            product["image_path"] = "https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg"
+        # Siempre image_url = image_path
+        image_path = product.get("image_path")
+        if image_path:
+            product["image_url"] = image_path
+        else:
+            product["image_url"] = "https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg"
+        product.pop("image_path", None)
         product["price"] = float(product["price"]) if "price" in product else None
 
     return {"products": products, "totalPages": total_pages}
@@ -317,5 +349,42 @@ async def obtener_talles_producto(product_id: str):
     
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.post("/convertir_talles_a_reales", tags=["Admin"])
+async def convertir_talles_a_reales():
+    """
+    Convierte todos los talles numéricos (strings que representan enteros) de todos los productos
+    a reales (como string, ej: "18" -> "18.0"). No modifica talles que ya son decimales o letras.
+    """
+    productos = products_collection.find({})
+    total_actualizados = 0
+
+    for producto in productos:
+        talles = producto.get("size", [])
+        if not isinstance(talles, list):
+            talles = [talles] if talles else []
+        nuevos_talles = []
+        cambio = False
+        for talle in talles:
+            try:
+                # Solo procesa si es string y representa un entero puro (ej: "18")
+                if isinstance(talle, str) and talle.isdigit():
+                    nuevo_talle = f"{int(talle)}.0"
+                    if nuevo_talle != talle:
+                        cambio = True
+                    nuevos_talles.append(nuevo_talle)
+                else:
+                    nuevos_talles.append(talle)
+            except Exception:
+                nuevos_talles.append(talle)
+        if cambio:
+            products_collection.update_one(
+                {"_id": producto["_id"]},
+                {"$set": {"size": nuevos_talles}}
+            )
+            total_actualizados += 1
+
+    return {"message": f"Talles convertidos a reales en {total_actualizados} productos."}
 
 

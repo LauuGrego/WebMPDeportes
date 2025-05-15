@@ -59,7 +59,8 @@ function renderProducts(products, append = false) {
   if (!append) tbody.innerHTML = "";
 
   const rows = products.map(product => {
-    const imageUrl = product.image_path || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
+    // Siempre usar la URL Cloudinary por defecto si no hay imagen
+    const imageUrl = product.image_url || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
     return `
       <tr>
         <td>${product.name}</td>
@@ -118,6 +119,26 @@ function initializeSizeButtons() {
   });
 }
 
+// Manejo de selección/deselección de talles
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('size-button')) {
+    e.preventDefault();
+    const size = e.target.dataset.size;
+    const input = document.getElementById('selected-sizes');
+    let selected = input.value ? input.value.split(',').map(s => s.trim()).filter(Boolean) : [];
+    if (e.target.classList.contains('selected')) {
+      // Deseleccionar
+      e.target.classList.remove('selected');
+      selected = selected.filter(s => s !== size);
+    } else {
+      // Seleccionar
+      e.target.classList.add('selected');
+      if (!selected.includes(size)) selected.push(size);
+    }
+    input.value = selected.join(',');
+  }
+});
+
 // Función para preseleccionar talles al editar
 function preselectSizeButtons(selectedSizes) {
   if (!selectedSizes) return;
@@ -170,20 +191,6 @@ async function openEditModal(productId) {
     form.elements.price.value = product.price;
     form.elements.description.value = product.description;
 
-    // Categoría
-    await populateCategorySelect(product.category_id);
-
-    // Imagen
-    const imagePreview = document.getElementById('imagePreview');
-    imagePreview.innerHTML = "";
-    if (product.image_path) {
-      const img = document.createElement('img');
-      img.src = product.image_path;
-      img.alt = "Imagen actual del producto";
-      img.classList.add('preview-image');
-      imagePreview.appendChild(img);
-    }
-
     // Inicializar botones de talles
     initializeSizeButtons();
 
@@ -191,22 +198,32 @@ async function openEditModal(productId) {
     if (product.size) {
       // Normalizar los talles (manejar tanto arrays como strings separados por comas)
       const sizesArray = Array.isArray(product.size) 
-        ? product.size.map(s => s.toString().trim().toUpperCase())
-        : product.size.split(',').map(s => s.trim().toUpperCase());
-      
-      // Seleccionar los botones correspondientes
+        ? product.size.map(s => s.toString().trim())
+        : product.size.split(',').map(s => s.trim());
+      let selectedSizes = [];
       document.querySelectorAll('.size-button').forEach(button => {
-        const buttonSize = button.dataset.size.toString().trim().toUpperCase();
-        if (sizesArray.includes(buttonSize)) {
+        const buttonSize = button.dataset.size.toString().trim();
+        // Comparar ignorando mayúsculas/minúsculas
+        if (sizesArray.map(s => s.toUpperCase()).includes(buttonSize.toUpperCase())) {
           button.classList.add('selected');
-          
-          // Actualizar campo oculto de talles seleccionados
-          const input = document.getElementById('selected-sizes');
-          input.value = input.value 
-            ? `${input.value},${button.dataset.size}`
-            : button.dataset.size;
+          selectedSizes.push(button.dataset.size);
         }
       });
+      document.getElementById('selected-sizes').value = selectedSizes.join(',');
+    }
+
+    // Categoría: cargar y seleccionar la actual
+    await populateCategorySelect(product.category_id);
+
+    // Imagen
+    const imagePreview = document.getElementById('imagePreview');
+    imagePreview.innerHTML = "";
+    if (product.image_url) {
+      const img = document.createElement('img');
+      img.src = product.image_url;
+      img.alt = "Imagen actual del producto";
+      img.classList.add('preview-image');
+      imagePreview.appendChild(img);
     }
 
     form.dataset.productId = productId;
@@ -217,7 +234,6 @@ async function openEditModal(productId) {
     alert('Error al cargar los datos del producto');
   }
 }
-
 
 // Función para obtener y listar categorías
 async function populateCategorySelect(selectedCategoryId = null) {
@@ -234,11 +250,12 @@ async function populateCategorySelect(selectedCategoryId = null) {
     categorySelect.innerHTML = '<option value="">Seleccionar...</option>';
 
     categories.forEach(category => {
+      // El backend devuelve "_id", no "id"
       const option = document.createElement('option');
-      option.value = category.id;
+      option.value = category._id || category.id;
       option.textContent = category.name;
 
-      if (selectedCategoryId && category.id === selectedCategoryId) {
+      if (selectedCategoryId && (category._id === selectedCategoryId || category.id === selectedCategoryId)) {
         option.selected = true;
       }
 
@@ -294,6 +311,7 @@ async function saveProductChanges(event) {
   formData.append("stock",       form.elements.stock.value);
   formData.append("price",       form.elements.price.value);
   formData.append("description", form.elements.description.value);
+  // Cambia a "category_id" para coincidir con el backend
   formData.append("category_id", form.elements.category.value);
   formData.append("size",        document.getElementById('selected-sizes').value);
   if (imageUrl) formData.append("image_url", imageUrl);
@@ -322,7 +340,11 @@ async function saveProductChanges(event) {
   }
   catch(err) {
     console.error("Error al actualizar:", err);
-    alert(`No se pudo actualizar el producto:\n${err.message}`);
+    if (err instanceof TypeError && err.message.includes('Failed to fetch')) {
+      alert('No se pudo conectar con el servidor. Verifique su conexión o que el backend esté en funcionamiento.');
+    } else {
+      alert(`No se pudo actualizar el producto:\n${err.message}`);
+    }
   }
 }
 
