@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
       try {
         // Construct the URL properly
-        const baseUrl = "https://webmpdeportes-production.up.railway.app/productos/buscar_por_categoria_o_tipo";
+        const baseUrl = "http://127.0.0.1:8000/productos/buscar_por_categoria_o_tipo";
         const url = params ? `${baseUrl}?${params}&page=${page}&limit=${productsPerPage}` : `${baseUrl}?page=${page}&limit=${productsPerPage}`;
   
         const response = await fetch(url);
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   
     try {
-      const categoriesResponse = await fetch("https://webmpdeportes-production.up.railway.app/categorias/listar-public");
+      const categoriesResponse = await fetch("http://127.0.0.1:8000/categorias/listar-public");
       if (!categoriesResponse.ok) {
         throw new Error(`Error fetching categories: ${categoriesResponse.statusText}`);
       }
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         sidebarCategories.appendChild(li);
       });
   
-      const typesResponse = await fetch("https://webmpdeportes-production.up.railway.app/productos/listar/tipos");
+      const typesResponse = await fetch("http://127.0.0.1:8000/productos/listar/tipos");
       if (!typesResponse.ok) {
         throw new Error(`Error fetching product types: ${typesResponse.statusText}`);
       }
