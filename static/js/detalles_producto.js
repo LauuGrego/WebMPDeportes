@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    const response = await fetch(`http://127.0.0.1:8000/productos/detalle/${productId}`);
+    const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/detalle/${productId}`);
     if (!response.ok) throw new Error("Error al obtener los detalles del producto.");
     const product = await response.json();
 

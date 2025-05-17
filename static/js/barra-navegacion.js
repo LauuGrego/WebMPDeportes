@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
   async function searchProducts() {
     const query = searchInput.value.trim();
     let url = query === "" 
-      ? "http://127.0.0.1:8000/productos/listar" 
-      : `http://127.0.0.1:8000/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`;
+      ? "https://webmpdeportes-production.up.railway.app/productos/listar" 
+      : `https://webmpdeportes-production.up.railway.app/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`;
 
     try {
       const response = await fetch(url);
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Función para redirigir a WhatsApp con un mensaje predefinido
   async function redirectToWhatsApp(productName) {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
+      const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
       if (!response.ok) {
         throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
       }

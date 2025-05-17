@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const categorySelect = document.getElementById("category");
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/categorias/listar-public");
+        const response = await fetch("https://webmpdeportes-production.up.railway.app/categorias/listar-public");
         const categories = await response.json();
 
         categories.forEach(category => {
@@ -81,7 +81,7 @@ document.getElementById("productForm").addEventListener("submit", async (event) 
             console.log(`${key}: ${value}`);
         }
 
-        const response = await fetch("http://127.0.0.1:8000/productos/agregar", {
+        const response = await fetch("https://webmpdeportes-production.up.railway.app/productos/agregar", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${authToken}`
