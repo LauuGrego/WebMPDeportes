@@ -127,25 +127,33 @@ function handleFileSelect(event) {
         return;
     }
 
-    Array.from(files).forEach((file) => {
-        if (!file.type.startsWith("image/")) {
-            console.error(`El archivo ${file.name} no es una imagen.`);
+    // Solo mostrar la primera imagen seleccionada y evitar duplicados
+    const file = files[0];
+    // Si ya existe una imagen previa igual, no la agregues de nuevo
+    if (previewContainer.firstChild && previewContainer.firstChild.tagName === 'IMG') {
+        // Si la imagen ya es la misma, no la agregues otra vez
+        if (previewContainer.firstChild.src) {
+            // No hacer nada si la imagen ya está
             return;
         }
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const img = document.createElement("img");
-            img.src = e.target.result;
-            img.alt = file.name;
-            img.classList.add("preview-image");
-            previewContainer.appendChild(img);
-        };
-        reader.onerror = () => {
-            console.error(`Error al leer el archivo ${file.name}.`);
-        };
-        reader.readAsDataURL(file);
-    });
+    }
+    if (!file.type.startsWith("image/")) {
+        console.error(`El archivo ${file.name} no es una imagen.`);
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        previewContainer.innerHTML = ""; // Siempre limpiar antes de agregar
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        img.alt = file.name;
+        img.classList.add("preview-image");
+        previewContainer.appendChild(img);
+    };
+    reader.onerror = () => {
+        console.error(`Error al leer el archivo ${file.name}.`);
+    };
+    reader.readAsDataURL(file);
 }
 
 // Asignar el evento a input de tipo file

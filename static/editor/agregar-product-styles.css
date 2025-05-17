@@ -389,9 +389,7 @@
   }
   
   .image-preview {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 1rem;
+    display: block;
     margin-top: 1.5rem;
   }
   
@@ -400,6 +398,8 @@
     border-radius: 8px;
     overflow: hidden;
     aspect-ratio: 1/1;
+    height: 200px;
+    width: auto;
   }
   
   .preview-image img {
