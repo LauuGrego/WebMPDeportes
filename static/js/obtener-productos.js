@@ -1,5 +1,5 @@
 let currentPage = 1;
-const productsPerPage = 10;
+const productsPerPage = 12; // Asegura que siempre sea 12
 let isLoading = false;
 let hasMoreProducts = true;
 
@@ -11,29 +11,34 @@ const debounce = (func, delay) => {
   };
 };
 
-// Función para agregar el botón "Ver más"
 function addLoadMoreButton() {
     const catalogCards = document.getElementById('catalogCards');
-    const existingButton = document.querySelector('.load-more-button');
-    if (existingButton) return; // Evitar duplicar el botón
+    let existingButton = document.querySelector('.load-more-button');
+    if (existingButton) existingButton.remove(); // Siempre lo agregamos al final
 
     const button = document.createElement('button');
-    button.textContent = "Ver mas";
-    button.classList.add('load-more-button');
+    button.textContent = "Ver más";
+    button.classList.add('load-more-button', 'catalog__card-button');
+    button.style.margin = "2rem auto";
+    button.style.display = "block";
     button.addEventListener('click', async () => {
-        button.disabled = true; // Deshabilitar mientras se cargan productos
+        button.disabled = true;
         button.textContent = "Cargando...";
         currentPage++;
         const searchInput = document.querySelector('.header__search-input');
         const searchQuery = searchInput ? searchInput.value.trim() : '';
         await loadProducts(searchQuery, currentPage);
-        button.disabled = false; // Habilitar nuevamente
-        button.textContent = "Ver mas";
+        button.disabled = false;
+        button.textContent = "Ver más";
     });
-    catalogCards.insertAdjacentElement('afterend', button);
+    catalogCards.parentNode.insertBefore(button, catalogCards.nextSibling);
 }
 
-// Modificar loadProducts para manejar el botón "Ver más"
+function removeLoadMoreButton() {
+    const existingButton = document.querySelector('.load-more-button');
+    if (existingButton) existingButton.remove();
+}
+
 async function loadProducts(searchQuery = '', page = 1) {
     if (isLoading || !hasMoreProducts) return;
     isLoading = true;
@@ -55,53 +60,63 @@ async function loadProducts(searchQuery = '', page = 1) {
 
         const { products, totalPages } = await response.json();
 
-        if (page >= totalPages) {
-            hasMoreProducts = false;
-            document.querySelector('.load-more-button')?.remove();
-        } else if (page === 1) {
-            addLoadMoreButton();
+        const catalogCards = document.getElementById('catalogCards');
+        if (page === 1) {
+            catalogCards.innerHTML = '';
+            hasMoreProducts = true;
+            removeLoadMoreButton();
         }
 
-        const catalogCards = document.getElementById('catalogCards');
-        if (page === 1) catalogCards.innerHTML = '';
-
-        if (products.length === 0 && page === 1) {
-            catalogCards.innerHTML = '<p>No se encontraron productos.</p>';
+        if (!products || products.length === 0) {
+            if (page === 1) catalogCards.innerHTML = '<p>No se encontraron productos.</p>';
+            removeLoadMoreButton();
             return;
         }
 
-        products.forEach(product => {
+        products.slice(0, productsPerPage).forEach(product => {
             const productImage = product.image_url || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
-
+            const formattedPrice = product.price
+                ? `$${product.price.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                : "Consultar";
             const productCard = `
-              <div class="card">
-                <img src="${productImage}" alt="${product.name}" class="card__image" />
-                <div class="card__info">
-                  <h2 class="card__title">${product.name}</h2>
-                  <p class="card__description">${product.description}</p>
-                  <div class="card__footer">
-                    
-                    <div class="card__buttons">
-                      <button class="ver-detalles-btn" data-product-id="${product.id}">Ver detalles</button>
-                      <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="card__whatsapp" target="_blank" aria-label="Consultar por WhatsApp">
-                        <i class="fab fa-whatsapp"></i> Consultar
-                      </a>
-                    </div>
+              <div class="catalog__card">
+                <div class="catalog__card-image">
+                  <img src="${productImage}" alt="${product.name}">
+                </div>
+                <div class="catalog__card-details">
+                  <h3 class="catalog__card-title">${product.name}</h3>
+                  <p class="catalog__card-price">${formattedPrice}</p>
+                  <div class="catalog__card-actions">
+                    <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
+                      <i class="fab fa-whatsapp"></i> Consultar
+                    </a>
+                    <button class="catalog__details-button" data-product-id="${product.id}">
+                      Ver detalles
+                    </button>
                   </div>
                 </div>
               </div>`;
             catalogCards.insertAdjacentHTML('beforeend', productCard);
         });
 
-        // Add event listener for "Ver Detalles" buttons
-        document.querySelectorAll('.ver-detalles-btn').forEach(button => {
+        document.querySelectorAll('.catalog__details-button').forEach(button => {
             button.addEventListener('click', (event) => {
                 const productId = event.target.dataset.productId;
                 window.location.href = `../productos/producto.html?id=${productId}`;
             });
         });
+
+        // El botón "Ver más" siempre debe estar después de los productos
+        if (page < totalPages && products.length === productsPerPage) {
+            addLoadMoreButton();
+            hasMoreProducts = true;
+        } else {
+            removeLoadMoreButton();
+            hasMoreProducts = false;
+        }
     } catch (error) {
         console.error('Error al cargar los productos:', error);
+        removeLoadMoreButton();
     } finally {
         isLoading = false;
     }
@@ -109,12 +124,17 @@ async function loadProducts(searchQuery = '', page = 1) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.querySelector('.header__search-input');
-    loadProducts();
+
+    function reloadProducts() {
+        const searchQuery = searchInput.value.trim();
+        currentPage = 1;
+        hasMoreProducts = true;
+        loadProducts(searchQuery, currentPage);
+    }
 
     searchInput.addEventListener('input', debounce(() => {
-        const searchQuery = searchInput.value.trim();
-        currentPage = 1; // Reset current page when a new search is performed
-        hasMoreProducts = true; // Reset hasMoreProducts when a new search is performed
-        loadProducts(searchQuery, currentPage);
-    }, 300)); // 300ms debounce delay
+        reloadProducts();
+    }, 300));
+
+    loadProducts();
 });

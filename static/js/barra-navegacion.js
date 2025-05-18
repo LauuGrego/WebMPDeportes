@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const searchInput = document.querySelector(".header__search-input");
-  const searchButton = document.querySelector(".btn--primary");
+  const searchButton = document.querySelector(".btn--ghost.header__search-btn");
   const productContainer = document.querySelector(".catalog__grid");
 
   if (!searchInput || !searchButton || !productContainer) {
@@ -11,18 +11,18 @@ document.addEventListener("DOMContentLoaded", function () {
   async function searchProducts() {
     const query = searchInput.value.trim();
     let url = query === "" 
-      ? "https://webmpdeportes-production.up.railway.app/productos/listar" 
-      : `https://webmpdeportes-production.up.railway.app/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`;
+      ? "https://webmpdeportes-production.up.railway.app/productos/listar?page=1&limit=12"
+      : `https://webmpdeportes-production.up.railway.app/productos/listar?search=${encodeURIComponent(query)}&page=1&limit=12`;
 
     try {
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Error al obtener los productos: ${response.statusText}`);
       }
-      
-      let products = await response.json();
+      let data = await response.json();
+      // Si la respuesta es { products: [...] }
+      let products = Array.isArray(data) ? data : data.products;
       displayProducts(products);
-      // productContainer.scrollIntoView({ behavior: "smooth" }); // Removed auto-scroll
     } catch (error) {
       console.error("Error en la búsqueda:", error);
       productContainer.innerHTML = "<p>Error al cargar los productos.</p>";
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function displayProducts(products) {
     productContainer.innerHTML = ""; // Limpiar productos previos
 
-    if (!products || products.length === 0) {
+    if (!products || !Array.isArray(products) || products.length === 0) {
       productContainer.innerHTML = "<p>No se encontraron productos.</p>";
       return;
     }
@@ -41,19 +41,23 @@ document.addEventListener("DOMContentLoaded", function () {
       const productCard = document.createElement("div");
       productCard.classList.add("catalog__card");
 
+      const productImage = product.image_url || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
+      const formattedPrice = product.price
+        ? `$${product.price.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+        : "Consultar";
+
       productCard.innerHTML = `
         <div class="catalog__card-image">
-          <img src="/products_image/${product.name.replace(/\s+/g, "_")}.jpg" alt="${product.name}">
+          <img src="${productImage}" alt="${product.name}">
         </div>
         <div class="catalog__card-details">
           <h3 class="catalog__card-title">${product.name}</h3>
-          <p class="catalog__card-description">${product.description || "Descripción no disponible"}</p>
-          <p class="catalog__card-stock">Stock: ${product.stock}</p>
+          <p class="catalog__card-price">${formattedPrice}</p>
           <div class="catalog__card-actions">
-            <button class="catalog__card-button" onclick="redirectToWhatsApp('${product.name}')">
+            <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
               <i class="fab fa-whatsapp"></i> Consultar
-            </button>
-            <button class="catalog__details-button" onclick="viewDetails('${product.id}')">
+            </a>
+            <button class="catalog__details-button" onclick="window.location.href='../productos/producto.html?id=${product.id}'">
               Ver detalles
             </button>
           </div>
@@ -62,26 +66,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       productContainer.appendChild(productCard);
     });
-  }
-
-  // Función para redirigir a WhatsApp con un mensaje predefinido
-  async function redirectToWhatsApp(productName) {
-    try {
-      const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/whatsapp_redirect?product_name=${encodeURIComponent(productName)}`);
-      if (!response.ok) {
-        throw new Error(`Error al redirigir a WhatsApp: ${response.statusText}`);
-      }
-      const data = await response.json();
-      window.open(data.url, "_blank");
-    } catch (error) {
-      console.error("Error en la redirección a WhatsApp:", error);
-    }
-  }
-
-  // Nueva función para manejar el botón "Ver detalles"
-  function viewDetails(productId) {
-    console.log(`Ver detalles del producto con ID: ${productId}`);
-    // Aquí puedes redirigir a una página de detalles o mostrar un modal
   }
 
   // Eventos de búsqueda
@@ -94,25 +78,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Cargar productos iniciales al entrar en la página
   searchProducts();
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  // Verifica que los elementos del DOM existan antes de interactuar con ellos
-  const navToggle = document.querySelector(".nav-toggle");
-  const navMenu = document.querySelector(".nav-menu");
-
-  if (!navToggle) {
-    console.error("Elemento con la clase '.nav-toggle' no encontrado. Verifica el HTML.");
-    return;
-  }
-
-  if (!navMenu) {
-    console.error("Elemento con la clase '.nav-menu' no encontrado. Verifica el HTML.");
-    return;
-  }
-
-  // Agregar evento para alternar la visibilidad del menú
-  navToggle.addEventListener("click", () => {
-    navMenu.classList.toggle("is-active");
-  });
 });

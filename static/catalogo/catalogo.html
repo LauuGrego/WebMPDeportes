@@ -43,15 +43,18 @@
         <li><a href="#contact" class="mobile-nav-link">Contacto</a></li>
       </ul>
     </nav>
-    <h2 class="sidebar__title">Categorías</h2>
+    <h2 class="sidebar__title">Categorias</h2>
     <ul class="sidebar__list" id="sidebarCategories">
       <!-- Categories will be dynamically loaded here -->
     </ul>
   </aside>
 
   <main class="catalog">
-    <div class="catalog__cards" id="catalogCards">
-      <p>Cargando productos...</p> <!-- Placeholder for loading or error messages -->
+    <div class="catalog__header">
+      <!-- Eliminado el título y los selects de filtros -->
+    </div>
+    <div class="catalog__grid" id="catalogCards">
+      <!-- Las tarjetas de productos se cargarán aquí -->
     </div>
   </main>
 </div>
@@ -94,7 +97,7 @@
 <script src="./../js/obtener-categorias.js"></script>
 <script src="./../js/obtener-productos.js"></script>
 <script src="./../js/barra-navegacion.js"></script>
-<script src="./../js/menu_lateral_mobile.js"> </script>
+<script src="./../js/menu_lateral_mobile.js"></script>
 
 </body>
 </html>

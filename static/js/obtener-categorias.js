@@ -4,131 +4,190 @@ document.addEventListener("DOMContentLoaded", async () => {
     const loadingSpinner = document.createElement("div");
     loadingSpinner.className = "loading-spinner";
     loadingSpinner.innerHTML = `<div class="spinner"></div>`;
-    catalogCards.insertAdjacentElement("afterend", loadingSpinner); // Place spinner after catalog cards
-  
+    catalogCards.insertAdjacentElement("afterend", loadingSpinner);
+
     let currentPage = 1;
-    const productsPerPage = 10;
+    const productsPerPage = 4 * getColumnsCount(); // 4 filas por página
     let isLoading = false;
     let hasMoreProducts = true;
-  
+
+    function getColumnsCount() {
+      // Detecta el número de columnas del grid según el ancho de pantalla
+      if (window.innerWidth <= 600) return 2; // 2 columnas en mobile
+      if (window.innerWidth <= 900) return 2;
+      return 3; // O ajusta según tu grid
+    }
+
+    window.addEventListener('resize', () => {
+      // Si cambia el tamaño de pantalla, recarga la paginación para mantener 4 filas
+      // Solo si hay productos cargados
+      if (catalogCards.children.length > 0) {
+        currentPage = 1;
+        hasMoreProducts = true;
+        catalogCards.innerHTML = "";
+        loadProductsWithPagination(lastParams, currentPage);
+      }
+    });
+
+    let lastParams = "";
+
+    // Elimina la paginación por scroll
+    // window.addEventListener("scroll", ...) -- ELIMINADO
+
+    // Botón "Ver más" para paginación manual
+    function addLoadMoreButton(params) {
+      let existingButton = document.querySelector('.load-more-button');
+      if (existingButton) existingButton.remove();
+
+      const button = document.createElement('button');
+      button.textContent = "Ver más";
+      button.classList.add('load-more-button', 'catalog__card-button');
+      button.style.margin = "2rem auto";
+      button.style.display = "block";
+      button.addEventListener('click', async () => {
+        button.disabled = true;
+        button.textContent = "Cargando...";
+        currentPage++;
+        await loadProductsWithPagination(params, currentPage);
+        button.disabled = false;
+        button.textContent = "Ver más";
+      });
+      catalogCards.parentNode.insertBefore(button, catalogCards.nextSibling);
+    }
+
+    function removeLoadMoreButton() {
+      const existingButton = document.querySelector('.load-more-button');
+      if (existingButton) existingButton.remove();
+    }
+
     async function loadProductsWithPagination(params = "", page = 1) {
       if (isLoading || !hasMoreProducts) return;
       isLoading = true;
-      loadingSpinner.style.display = "flex"; // Show spinner
-  
+      loadingSpinner.style.display = "flex";
+
       try {
-        // Construct the URL properly
-        const baseUrl = "https://webmpdeportes-production.up.railway.app/productos/buscar_por_categoria_o_tipo";
-        const url = params ? `${baseUrl}?${params}&page=${page}&limit=${productsPerPage}` : `${baseUrl}?page=${page}&limit=${productsPerPage}`;
-  
+        let url;
+        const columns = getColumnsCount();
+        const pageSize = 4 * columns; // 4 filas por carga
+        if (params) {
+          url = `https://webmpdeportes-production.up.railway.app/productos/buscar_por_categoria_o_tipo?${params}&page=${page}&limit=${pageSize}`;
+        } else {
+          url = `https://webmpdeportes-production.up.railway.app/productos/listar?page=${page}&limit=${pageSize}`;
+        }
+
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error(`Error fetching products: ${response.statusText}`);
         }
-        const { products, totalPages } = await response.json();
-  
-        if (page >= totalPages) {
-          hasMoreProducts = false;
+        const data = await response.json();
+        const products = data.products || [];
+        const totalPages = data.totalPages || 1;
+
+        if (page === 1) {
+          catalogCards.innerHTML = "";
+          hasMoreProducts = true;
+          removeLoadMoreButton();
         }
-  
+
+        if (products.length === 0 && page === 1) {
+          catalogCards.innerHTML = "<p>No se encontraron productos.</p>";
+          removeLoadMoreButton();
+          return;
+        }
+
         products.forEach(product => {
-          const imagePath = product.image_path || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
-          const formattedPrice = product.price 
-            ? product.price.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) 
-            : "N/A";
-          const card = `
-            <div class="card">
-              <img src="${imagePath}" alt="${product.name}" class="card__image">
-              <div class="card__info">
-                <h3 class="card__title">${product.name}</h3>
-                <p class="card__description">${product.description}</p>
-                <div class="card__footer">
-                  <div class="card__buttons">
-                    <button class="ver-detalles-btn" data-product-id="${product.id}">Ver Detalles</button>
-                    <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="card__whatsapp">WhatsApp</a>
-                  </div>
+          const productImage = product.image_url || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
+          const formattedPrice = product.price
+              ? `$${product.price.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+              : "Consultar";
+          const productCard = `
+            <div class="catalog__card">
+              <div class="catalog__card-image">
+                <img src="${productImage}" alt="${product.name}">
+              </div>
+              <div class="catalog__card-details">
+                <h3 class="catalog__card-title">${product.name}</h3>
+                <p class="catalog__card-price">${formattedPrice}</p>
+                <div class="catalog__card-actions">
+                  <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Consultar
+                  </a>
+                  <button class="catalog__details-button" data-product-id="${product.id}">
+                    Ver detalles
+                  </button>
                 </div>
               </div>
             </div>`;
-          catalogCards.insertAdjacentHTML('beforeend', card);
+          catalogCards.insertAdjacentHTML('beforeend', productCard);
         });
-  
-        // Add event listener for "Ver Detalles" buttons
-        document.querySelectorAll('.ver-detalles-btn').forEach(button => {
+
+        document.querySelectorAll('.catalog__details-button').forEach(button => {
           button.addEventListener('click', (event) => {
             const productId = event.target.dataset.productId;
-            window.location.href = `../detalle/detalle.html?id=${productId}`;
+            window.location.href = `../productos/producto.html?id=${productId}`;
           });
         });
+
+        if (page < totalPages && products.length === pageSize) {
+          addLoadMoreButton(params);
+          hasMoreProducts = true;
+        } else {
+          removeLoadMoreButton();
+          hasMoreProducts = false;
+        }
       } catch (error) {
         console.error("Error loading products:", error);
+        removeLoadMoreButton();
       } finally {
         isLoading = false;
-        loadingSpinner.style.display = "none"; // Hide spinner
+        loadingSpinner.style.display = "none";
       }
     }
-  
+
     let debounceTimeout;
     const debounce = (func, delay) => {
       clearTimeout(debounceTimeout);
       debounceTimeout = setTimeout(func, delay);
     };
-  
+
     const searchInput = document.querySelector('.header__search-input');
     searchInput.addEventListener('input', () => {
       debounce(() => {
         const searchQuery = searchInput.value.trim();
         currentPage = 1;
         hasMoreProducts = true;
-        catalogCards.innerHTML = ""; // Clear catalog for new search
+        catalogCards.innerHTML = "";
         const params = new URLSearchParams();
         if (searchQuery) params.append("search", searchQuery);
         loadProductsWithPagination(params.toString(), currentPage);
-      }, 300); // 300ms debounce delay
+      }, 300);
     });
-  
-    window.addEventListener("scroll", () => {
-      const scrollThreshold = document.documentElement.scrollHeight - window.innerHeight - 100;
-      if (window.scrollY >= scrollThreshold && !isLoading) {
-        currentPage++;
-        const params = new URLSearchParams();
-        const activeCategory = document.querySelector(".sidebar__link[data-category].active");
-        const activeType = document.querySelector(".sidebar__link[data-type].active");
-        const searchQuery = searchInput.value.trim();
-  
-        if (activeCategory) params.append("category", activeCategory.dataset.category);
-        if (activeType) params.append("type", activeType.dataset.type);
-        if (searchQuery) params.append("search", searchQuery);
-  
-        loadProductsWithPagination(params.toString(), currentPage);
-      }
-    });
-  
+
     try {
       const categoriesResponse = await fetch("https://webmpdeportes-production.up.railway.app/categorias/listar-public");
       if (!categoriesResponse.ok) {
         throw new Error(`Error fetching categories: ${categoriesResponse.statusText}`);
       }
       const categories = await categoriesResponse.json();
-  
-      sidebarCategories.innerHTML = ""; 
+
+      sidebarCategories.innerHTML = "";
       categories.forEach(category => {
         const li = document.createElement("li");
         li.innerHTML = `<a href="#" class="sidebar__link" data-category="${category.name}">${category.name}</a>`;
         sidebarCategories.appendChild(li);
       });
-  
+
       const typesResponse = await fetch("https://webmpdeportes-production.up.railway.app/productos/listar/tipos");
       if (!typesResponse.ok) {
         throw new Error(`Error fetching product types: ${typesResponse.statusText}`);
       }
       const types = await typesResponse.json();
-  
+
       const typesTitle = document.createElement("h2");
       typesTitle.classList.add("sidebar__title");
       typesTitle.textContent = "Tipos de Productos";
       sidebarCategories.parentElement.appendChild(typesTitle);
-  
+
       const typesList = document.createElement("ul");
       typesList.classList.add("sidebar__list");
       types.forEach(type => {
@@ -137,25 +196,24 @@ document.addEventListener("DOMContentLoaded", async () => {
         typesList.appendChild(li);
       });
       sidebarCategories.parentElement.appendChild(typesList);
-  
+
       document.querySelectorAll(".sidebar__link").forEach(link => {
         link.addEventListener("click", async (event) => {
           event.preventDefault();
           const overlay = document.getElementById("overlay");
           const sidebar = document.querySelector(".sidebar");
-          overlay.classList.remove("active"); // Hide overlay
-          sidebar.classList.remove("active"); // Close sidebar
-  
-          // Load results based on the link's data attributes
+          overlay.classList.remove("active");
+          sidebar.classList.remove("active");
+
           const category = link.dataset.category;
           const type = link.dataset.type;
-  
+
           const params = new URLSearchParams();
           if (category) params.append("category", category);
           if (type) params.append("type", type);
-  
+
           try {
-              catalogCards.innerHTML = ""; // Clear catalog for new results
+              catalogCards.innerHTML = "";
               currentPage = 1;
               hasMoreProducts = true;
               await loadProductsWithPagination(params.toString(), currentPage);
@@ -167,16 +225,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
       console.error("Error loading sidebar data:", error);
     }
-  
+
     loadProductsWithPagination();
-  
+
     document.querySelectorAll(".mobile-nav-link").forEach(link => {
       link.addEventListener("click", () => {
         const overlay = document.getElementById("overlay");
         const sidebar = document.querySelector(".sidebar");
-        overlay.classList.remove("active"); // Hide overlay
-        sidebar.classList.remove("active"); // Close sidebar
+        overlay.classList.remove("active");
+        sidebar.classList.remove("active");
       });
     });
-  });
-  
+});
