@@ -7,9 +7,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     catalogCards.insertAdjacentElement("afterend", loadingSpinner);
 
     let currentPage = 1;
-    const productsPerPage = 4 * getColumnsCount(); // 4 filas por página
+    let productsPerPage = 4 * getColumnsCount(); // 4 filas por página, recalculable
     let isLoading = false;
     let hasMoreProducts = true;
+    let lastColumnsCount = getColumnsCount();
 
     function getColumnsCount() {
       // Detecta el número de columnas del grid según el ancho de pantalla
@@ -18,10 +19,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       return 3; // O ajusta según tu grid
     }
 
+    function updateProductsPerPage() {
+      productsPerPage = 4 * getColumnsCount();
+    }
+
     window.addEventListener('resize', () => {
-      // Si cambia el tamaño de pantalla, recarga la paginación para mantener 4 filas
-      // Solo si hay productos cargados
-      if (catalogCards.children.length > 0) {
+      // Solo recarga si cambia el número de columnas (evita recarga en scroll mobile)
+      const newColumnsCount = getColumnsCount();
+      if (newColumnsCount !== lastColumnsCount && catalogCards.children.length > 0) {
+        lastColumnsCount = newColumnsCount;
+        updateProductsPerPage();
         currentPage = 1;
         hasMoreProducts = true;
         catalogCards.innerHTML = "";
@@ -66,9 +73,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       loadingSpinner.style.display = "flex";
 
       try {
+        updateProductsPerPage();
         let url;
-        const columns = getColumnsCount();
-        const pageSize = 4 * columns; // 4 filas por carga
+        const pageSize = productsPerPage; // 4 filas por carga, recalculado
         if (params) {
           url = `https://webmpdeportes-production.up.railway.app/productos/buscar_por_categoria_o_tipo?${params}&page=${page}&limit=${pageSize}`;
         } else {
@@ -153,6 +160,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const searchInput = document.querySelector('.header__search-input');
     searchInput.addEventListener('input', () => {
       debounce(() => {
+        updateProductsPerPage();
         const searchQuery = searchInput.value.trim();
         currentPage = 1;
         hasMoreProducts = true;
@@ -214,6 +222,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
           try {
               catalogCards.innerHTML = "";
+              updateProductsPerPage();
               currentPage = 1;
               hasMoreProducts = true;
               await loadProductsWithPagination(params.toString(), currentPage);

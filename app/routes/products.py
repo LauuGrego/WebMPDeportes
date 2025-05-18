@@ -351,10 +351,10 @@ async def obtener_talles_producto(product_id: str):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.post("/convertir_talles_a_reales", tags=["Admin"])
+@router.put("/convertir_talles_a_reales", tags=["Admin"])
 async def convertir_talles_a_reales():
     """
-    Convierte todos los talles numéricos (strings que representan enteros) de todos los productos
+    Convierte todos los Stalles numéricos (strings que representan enteros) de todos los productos
     a reales (como string, ej: "18" -> "18.0"). No modifica talles que ya son decimales o letras.
     """
     productos = products_collection.find({})
