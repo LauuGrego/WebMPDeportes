@@ -1,5 +1,5 @@
 let currentPage = 1;
-const productsPerPage = 12; // Asegura que siempre sea 12
+const productsPerPage = 20; // 5 filas x 4 columnas
 let isLoading = false;
 let hasMoreProducts = true;
 
@@ -43,6 +43,14 @@ async function loadProducts(searchQuery = '', page = 1) {
     if (isLoading || !hasMoreProducts) return;
     isLoading = true;
 
+    const catalogCards = document.getElementById('catalogCards');
+    // Aviso centrado
+    if (page === 1) {
+        catalogCards.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:180px;"><p style="font-size:1.2rem;">Cargando productos...</p></div>';
+    } else {
+        catalogCards.insertAdjacentHTML('beforeend', '<div id="loading-msg" style="display:flex;justify-content:center;align-items:center;height:180px;"><p style="font-size:1.2rem;">Cargando productos...</p></div>');
+    }
+
     try {
         const url = new URL('https://webmpdeportes-production.up.railway.app/productos/listar');
         url.searchParams.append('page', page);
@@ -60,7 +68,6 @@ async function loadProducts(searchQuery = '', page = 1) {
 
         const { products, totalPages } = await response.json();
 
-        const catalogCards = document.getElementById('catalogCards');
         if (page === 1) {
             catalogCards.innerHTML = '';
             hasMoreProducts = true;
@@ -72,6 +79,10 @@ async function loadProducts(searchQuery = '', page = 1) {
             removeLoadMoreButton();
             return;
         }
+
+        // Quitar aviso de cargando antes de insertar productos
+        const loadingMsg = document.getElementById('loading-msg');
+        if (loadingMsg) loadingMsg.remove();
 
         products.slice(0, productsPerPage).forEach(product => {
             const productImage = product.image_url || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
@@ -87,12 +98,12 @@ async function loadProducts(searchQuery = '', page = 1) {
                   <h3 class="catalog__card-title">${product.name}</h3>
                   <p class="catalog__card-price">${formattedPrice}</p>
                   <div class="catalog__card-actions">
-                    <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
-                      <i class="fab fa-whatsapp"></i> Consultar
-                    </a>
                     <button class="catalog__details-button" data-product-id="${product.id}">
                       Ver detalles
                     </button>
+                    <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
+                      <i class="fab fa-whatsapp"></i> Consultar
+                    </a>
                   </div>
                 </div>
               </div>`;
@@ -121,11 +132,15 @@ async function loadProducts(searchQuery = '', page = 1) {
         removeLoadMoreButton();
     } finally {
         isLoading = false;
+        // Quitar aviso de cargando si quedó
+        const loadingMsg = document.getElementById('loading-msg');
+        if (loadingMsg) loadingMsg.remove();
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.querySelector('.header__search-input');
+    const searchButton = document.querySelector('.btn--ghost.header__search-btn');
 
     function reloadProducts() {
         const searchQuery = searchInput.value.trim();
@@ -134,10 +149,20 @@ document.addEventListener('DOMContentLoaded', () => {
         loadProducts(searchQuery, currentPage);
     }
 
-    searchInput.addEventListener('input', debounce(() => {
-        reloadProducts();
-    }, 300));
+    // Solo buscar cuando se presiona el botón o Enter
+    if (searchButton) {
+      searchButton.addEventListener('click', reloadProducts);
+    }
+    if (searchInput) {
+      searchInput.addEventListener('keypress', (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          reloadProducts();
+        }
+      });
+    }
 
+    // Cargar productos generales al iniciar la página
     loadProducts();
 
     // Restaurar scroll si existe

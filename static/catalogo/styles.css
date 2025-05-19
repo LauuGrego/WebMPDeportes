@@ -414,7 +414,7 @@ body {
 /* Sidebar ocupa todo el alto entre header y footer */
 .sidebar {
   width: 250px;
-  min-width: 200px;
+  min-width: 100px;
   background-color: var(--color-2);
   padding: 1rem;
   transition: left 0.3s ease;
@@ -485,6 +485,7 @@ body {
   background-color: var(--color-1);
   text-align: center;
   min-height: calc(100vh - 80px);
+  margin-right: 20px;
 }
 
 .catalog__title {
@@ -497,8 +498,8 @@ body {
 /* Catalog grid */
 .catalog__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas por fila en desktop */
+  gap: 1rem;
   padding: 2rem 0;
 }
 
@@ -584,7 +585,8 @@ body {
   margin: auto;
   display: flex;
   gap: 0.5rem;
-  align-items: center;
+  align-items: stretch;
+  flex-direction: column; /* Siempre en columna */
 }
 .catalog__card-button,
 .catalog__details-button {
@@ -651,10 +653,15 @@ body {
     flex-wrap: wrap;
     gap: 0.7rem;
   }
+  .catalog__grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablets */
+    gap: 0.7rem;
+    padding: 0.7rem 0;
+  }
 }
 @media (max-width: 600px) {
   .catalog__grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas en móviles */
     gap: 0.7rem;
     padding: 0.7rem 0;
   }

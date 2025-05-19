@@ -54,12 +54,12 @@ document.addEventListener("DOMContentLoaded", function () {
           <h3 class="catalog__card-title">${product.name}</h3>
           <p class="catalog__card-price">${formattedPrice}</p>
           <div class="catalog__card-actions">
-            <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
-              <i class="fab fa-whatsapp"></i> Consultar
-            </a>
             <button class="catalog__details-button" onclick="window.location.href='../productos/producto.html?id=${product.id}'">
               Ver detalles
             </button>
+            <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
+              <i class="fab fa-whatsapp"></i> Consultar
+            </a>
           </div>
         </div>
       `;

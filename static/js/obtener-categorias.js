@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     catalogCards.insertAdjacentElement("afterend", loadingSpinner);
 
     let currentPage = 1;
-    let productsPerPage = 4 * getColumnsCount(); // 4 filas por página, recalculable
+    let productsPerPage = 5 * getColumnsCount(); // 5 filas por página
     let isLoading = false;
     let hasMoreProducts = true;
     let lastColumnsCount = getColumnsCount();
@@ -16,11 +16,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Detecta el número de columnas del grid según el ancho de pantalla
       if (window.innerWidth <= 600) return 2; // 2 columnas en mobile
       if (window.innerWidth <= 900) return 2;
-      return 3; // O ajusta según tu grid
+      return 4; // 4 columnas en desktop (ajustado para que coincida con el CSS)
     }
 
     function updateProductsPerPage() {
-      productsPerPage = 4 * getColumnsCount();
+      productsPerPage = 5 * getColumnsCount();
     }
 
     window.addEventListener('resize', () => {
@@ -71,11 +71,22 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (isLoading || !hasMoreProducts) return;
       isLoading = true;
       loadingSpinner.style.display = "flex";
+      if (page === 1) {
+        // Mostrar solo el aviso, sin productos previos
+        catalogCards.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:180px;"><p style="font-size:1.2rem;">Cargando productos...</p></div>';
+      } else {
+        // Para paginación, muestra aviso dentro del botón
+        const loadMoreBtn = document.querySelector('.load-more-button');
+        if (loadMoreBtn) {
+          loadMoreBtn.disabled = true;
+          loadMoreBtn.innerHTML = '<span style="display:flex;align-items:center;justify-content:center;"><span class="spinner" style="margin-right:8px;width:18px;height:18px;border:2px solid #fff;border-top:2px solid #f39c12;border-radius:50%;display:inline-block;animation:spin 0.8s linear infinite;"></span>Cargando productos...</span>';
+        }
+      }
 
       try {
         updateProductsPerPage();
         let url;
-        const pageSize = productsPerPage; // 4 filas por carga, recalculado
+        const pageSize = productsPerPage;
         if (params) {
           url = `https://webmpdeportes-production.up.railway.app/productos/buscar_por_categoria_o_tipo?${params}&page=${page}&limit=${pageSize}`;
         } else {
@@ -91,6 +102,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const totalPages = data.totalPages || 1;
 
         if (page === 1) {
+          // Limpiar productos previos solo al inicio
           catalogCards.innerHTML = "";
           hasMoreProducts = true;
           removeLoadMoreButton();
@@ -116,12 +128,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <h3 class="catalog__card-title">${product.name}</h3>
                 <p class="catalog__card-price">${formattedPrice}</p>
                 <div class="catalog__card-actions">
-                  <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
-                    <i class="fab fa-whatsapp"></i> Consultar
-                  </a>
                   <button class="catalog__details-button" data-product-id="${product.id}">
                     Ver detalles
                   </button>
+                  <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Consultar
+                  </a>
                 </div>
               </div>
             </div>`;
@@ -150,6 +162,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       } finally {
         isLoading = false;
         loadingSpinner.style.display = "none";
+        // Restaurar el texto del botón si existe
+        const loadMoreBtn = document.querySelector('.load-more-button');
+        if (loadMoreBtn) {
+          loadMoreBtn.disabled = false;
+          loadMoreBtn.textContent = "Ver más";
+        }
       }
     }
 
@@ -159,9 +177,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       debounceTimeout = setTimeout(func, delay);
     };
 
+    // Cambia el evento de búsqueda para que solo busque cuando se presiona el botón de buscar
     const searchInput = document.querySelector('.header__search-input');
-    searchInput.addEventListener('input', () => {
-      debounce(() => {
+    const searchButton = document.querySelector('.btn--ghost.header__search-btn');
+    if (searchButton) {
+      searchButton.addEventListener('click', () => {
         // Guardar scroll antes de buscar
         sessionStorage.setItem('catalogScroll', window.scrollY);
         updateProductsPerPage();
@@ -172,8 +192,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         const params = new URLSearchParams();
         if (searchQuery) params.append("search", searchQuery);
         loadProductsWithPagination(params.toString(), currentPage);
-      }, 300);
-    });
+      });
+    }
+
+    // Permite buscar con Enter
+    if (searchInput) {
+      searchInput.addEventListener('keypress', (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          if (searchButton) searchButton.click();
+        }
+      });
+    }
 
     try {
       const categoriesResponse = await fetch("https://webmpdeportes-production.up.railway.app/categorias/listar-public");
@@ -242,8 +272,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error("Error loading sidebar data:", error);
     }
 
-    loadProductsWithPagination();
-
     // Restaurar scroll si existe
     const savedScroll = sessionStorage.getItem('catalogScroll');
     if (savedScroll !== null) {
@@ -262,3 +290,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     });
 });
+
+/* Agrega animación spinner si no existe en tu CSS */
+if (!document.getElementById('pagination-spinner-style')) {
+  const style = document.createElement('style');
+  style.id = 'pagination-spinner-style';
+  style.innerHTML = `
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  `;
+  document.head.appendChild(style);
+}
