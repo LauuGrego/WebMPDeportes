@@ -101,6 +101,8 @@ async function loadProducts(searchQuery = '', page = 1) {
 
         document.querySelectorAll('.catalog__details-button').forEach(button => {
             button.addEventListener('click', (event) => {
+                // Guardar scroll antes de ir a detalles
+                sessionStorage.setItem('catalogScroll', window.scrollY);
                 const productId = event.target.dataset.productId;
                 window.location.href = `../productos/producto.html?id=${productId}`;
             });
@@ -137,4 +139,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 300));
 
     loadProducts();
+
+    // Restaurar scroll si existe
+    const savedScroll = sessionStorage.getItem('catalogScroll');
+    if (savedScroll !== null) {
+        setTimeout(() => {
+            window.scrollTo(0, parseInt(savedScroll, 10));
+            sessionStorage.removeItem('catalogScroll');
+        }, 50);
+    }
 });

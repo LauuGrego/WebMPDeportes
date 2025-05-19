@@ -130,6 +130,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         document.querySelectorAll('.catalog__details-button').forEach(button => {
           button.addEventListener('click', (event) => {
+            // Guardar scroll antes de ir a detalles
+            sessionStorage.setItem('catalogScroll', window.scrollY);
             const productId = event.target.dataset.productId;
             window.location.href = `../productos/producto.html?id=${productId}`;
           });
@@ -160,6 +162,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const searchInput = document.querySelector('.header__search-input');
     searchInput.addEventListener('input', () => {
       debounce(() => {
+        // Guardar scroll antes de buscar
+        sessionStorage.setItem('catalogScroll', window.scrollY);
         updateProductsPerPage();
         const searchQuery = searchInput.value.trim();
         currentPage = 1;
@@ -213,6 +217,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           overlay.classList.remove("active");
           sidebar.classList.remove("active");
 
+          // Guardar scroll antes de filtrar
+          sessionStorage.setItem('catalogScroll', window.scrollY);
+
           const category = link.dataset.category;
           const type = link.dataset.type;
 
@@ -236,6 +243,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     loadProductsWithPagination();
+
+    // Restaurar scroll si existe
+    const savedScroll = sessionStorage.getItem('catalogScroll');
+    if (savedScroll !== null) {
+      setTimeout(() => {
+        window.scrollTo(0, parseInt(savedScroll, 10));
+        sessionStorage.removeItem('catalogScroll');
+      }, 50);
+    }
 
     document.querySelectorAll(".mobile-nav-link").forEach(link => {
       link.addEventListener("click", () => {

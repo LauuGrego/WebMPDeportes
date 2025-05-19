@@ -17,6 +17,16 @@
   src: url(./../../fonts/Transcity.otf) format('opentype');
 }
 
+@font-face {
+  font-family: 'Poppins Black';
+  src: url(./../../fonts/Poppins-Black.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url(./../../fonts/Poppins-Regular.ttf) format('truetype');
+}
+
 /***********************************************/
 /* 2. Variables y modo oscuro                  */
 /***********************************************/
@@ -232,6 +242,7 @@ body {
   transition: background 0.15s, color 0.15s;
   font-size: 1rem;
   display: inline-block;
+  font-family: 'Poppins';
 }
 .header__nav-link:hover,
 .header__nav-link.active {
@@ -559,7 +570,7 @@ body {
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0 0 0.5rem 0;
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-family: 'Poppins', sans-serif;
   color: #222;
 }
 .catalog__card-price {
@@ -567,6 +578,7 @@ body {
   font-weight: 500;
   color: var(--dm-color-principal);
   margin-bottom: 0.7rem;
+  font-family: 'Poppins', sans-serif;
 }
 .catalog__card-actions {
   margin: auto;
@@ -662,9 +674,10 @@ body {
   min-height: 110%;
 }
 .sidebar__title {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: 0.7rem;
+  font-family: 'Poppins Black', sans-serif;
 }
 .sidebar__list {
   list-style: none;
@@ -677,6 +690,7 @@ body {
   border-radius: 5px;
   color: #222;
   text-decoration: none;
+  font-family: 'poppins', sans-serif;
   transition: background 0.13s;
 }
 .sidebar__link:hover,
