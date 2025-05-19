@@ -68,6 +68,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function displayProducts(products) {
+    // Elimina cualquier aviso de "Cargando productos..." antes de mostrar productos
+    if (productContainer.innerHTML.includes("Cargando productos")) {
+      productContainer.innerHTML = "";
+    }
     if (!products || !Array.isArray(products) || products.length === 0) {
       if (productContainer.innerHTML === "") {
         productContainer.innerHTML = "<p>No se encontraron productos.</p>";
@@ -112,6 +116,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   searchInput.addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
+      // Elimina el aviso de cargando productos al presionar Enter
+      productContainer.innerHTML = "";
       searchProducts(true);
     }
   });
