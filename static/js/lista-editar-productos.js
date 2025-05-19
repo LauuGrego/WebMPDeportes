@@ -2,6 +2,7 @@
 let currentPage = 1;
 const productsPerPage = 10;
 let isLoading = false;
+let currentSearchTerm = ""; // Guarda el término de búsqueda actual
 
 // Función para agregar botón "Ver más"
 function addLoadMoreButton() {
@@ -15,7 +16,12 @@ function addLoadMoreButton() {
       button.disabled = true;
       button.textContent = "Cargando...";
       currentPage++;
-      await fetchProducts(currentPage, true);
+      // Si hay búsqueda, seguir buscando productos relacionados
+      if (currentSearchTerm) {
+        await searchProducts(currentSearchTerm, true);
+      } else {
+        await fetchProducts(currentPage, true);
+      }
       button.disabled = false;
       button.textContent = "Ver más";
     }
@@ -29,6 +35,12 @@ async function fetchProducts(page = 1, append = false) {
     if (isLoading) return;
     isLoading = true;
 
+    // Mostrar aviso de cargando productos solo si no es append
+    if (!append) {
+      const tbody = document.querySelector('.products-table tbody');
+      tbody.innerHTML = `<tr><td colspan="6">Cargando productos...</td></tr>`;
+    }
+
     const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/listar?page=${page}&limit=${productsPerPage}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -41,6 +53,42 @@ async function fetchProducts(page = 1, append = false) {
     renderProducts(products, append);
 
     if (page < totalPages) {
+      addLoadMoreButton();
+    } else {
+      document.querySelector('.pagination').innerHTML = "";
+    }
+
+    isLoading = false;
+  } catch (error) {
+    console.error('Error:', error);
+    isLoading = false;
+  }
+}
+
+// Función para buscar productos (con paginación y aviso de carga)
+async function searchProducts(searchTerm, append = false) {
+  try {
+    if (isLoading) return;
+    isLoading = true;
+    currentSearchTerm = searchTerm;
+
+    // Mostrar aviso de cargando productos solo si no es append
+    if (!append) {
+      const tbody = document.querySelector('.products-table tbody');
+      tbody.innerHTML = `<tr><td colspan="6">Cargando productos...</td></tr>`;
+      currentPage = 1;
+    }
+
+    const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/listar?search=${encodeURIComponent(searchTerm)}&page=${currentPage}&limit=${productsPerPage}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      }
+    });
+    if (!response.ok) throw new Error('Error al buscar productos');
+    const { products, totalPages } = await response.json();
+    renderProducts(products, append);
+
+    if (currentPage < totalPages) {
       addLoadMoreButton();
     } else {
       document.querySelector('.pagination').innerHTML = "";
@@ -398,32 +446,19 @@ const UPLOAD_PRESET = "marcapasos_images";
 
 // Inicialización al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
-
   // Inicializar botones de talles
   initializeSizeButtons();
-  
+
+  // Mostrar aviso de cargando productos al entrar
+  const tbody = document.querySelector('.products-table tbody');
+  tbody.innerHTML = `<tr><td colspan="6">Cargando productos...</td></tr>`;
+
   // Cargar productos
   fetchProducts(currentPage);
-  
+
   // Configurar formulario
   document.getElementById('editForm').addEventListener('submit', saveProductChanges);
 });
-
-// Función para buscar productos
-async function searchProducts(searchTerm) {
-  try {
-    const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/listar?search=${encodeURIComponent(searchTerm)}&limit=${productsPerPage}`, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-      }
-    });
-    if (!response.ok) throw new Error('Error al buscar productos');
-    const { products } = await response.json();
-    renderProducts(products);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
 
 // Función debounce para búsqueda
 function debounce(func, wait) {
@@ -437,5 +472,11 @@ function debounce(func, wait) {
 // Evento de búsqueda
 document.querySelector('.header__search-input').addEventListener('input', debounce(function(event) {
   const searchTerm = event.target.value.trim();
-  searchTerm === "" ? fetchProducts() : searchProducts(searchTerm);
+  currentPage = 1;
+  currentSearchTerm = searchTerm;
+  if (searchTerm === "") {
+    fetchProducts();
+  } else {
+    searchProducts(searchTerm);
+  }
 }, 300));

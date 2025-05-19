@@ -46,6 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Función principal para buscar productos
   async function searchProducts() {
     const query = searchInput.value.trim();
+    // Mostrar aviso de carga
+    productList.innerHTML = "<li>Cargando productos...</li>";
     let url = query === ""
       ? "https://webmpdeportes-production.up.railway.app/productos/listar"
       : `https://webmpdeportes-production.up.railway.app/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`;
@@ -55,12 +57,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok) {
         throw new Error(`Error al obtener los productos: ${response.statusText}`);
       }
-
-      const products = await response.json();
+      // Si es listar, obtener products del objeto, si es buscar, es un array
+      let data = await response.json();
+      let products = Array.isArray(data) ? data : data.products;
       displayProducts(products);
     } catch (error) {
       console.error("Error en la búsqueda:", error);
-      productContainer.innerHTML = "<p>Error al cargar los productos.</p>";
+      productList.innerHTML = "<li>Error al cargar los productos.</li>";
     }
   }
 
@@ -71,4 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
       searchProducts();
     }
   });
+
+  // Cargar productos iniciales al entrar en la página
+  searchProducts();
 });

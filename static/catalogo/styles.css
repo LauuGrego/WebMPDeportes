@@ -190,7 +190,7 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.03);
 }
 .header__search-input:focus {
-  border: 1.5px solid #c8f7d8;
+  border: 1.5px solid var(--color-4);
   background: #fff;
 }
 
@@ -610,7 +610,7 @@ body {
   background: #1ebe57;
 }
 .catalog__details-button {
-  background: #f5f5f5;
+  background: #c4c4c430;
   color: #222;
 }
 .catalog__details-button:hover {
