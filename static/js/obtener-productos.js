@@ -2,6 +2,7 @@ let currentPage = 1;
 const productsPerPage = 12; // Asegura que siempre sea 12
 let isLoading = false;
 let hasMoreProducts = true;
+let loadedProductIds = new Set(); // <-- Añadido para evitar duplicados
 
 const debounce = (func, delay) => {
   let debounceTimeout;
@@ -65,6 +66,7 @@ async function loadProducts(searchQuery = '', page = 1) {
             catalogCards.innerHTML = '';
             hasMoreProducts = true;
             removeLoadMoreButton();
+            loadedProductIds.clear(); // Limpiar IDs cargados en nueva búsqueda
         }
 
         if (!products || products.length === 0) {
@@ -74,6 +76,8 @@ async function loadProducts(searchQuery = '', page = 1) {
         }
 
         products.slice(0, productsPerPage).forEach(product => {
+            if (loadedProductIds.has(product.id)) return; // Evita duplicados
+            loadedProductIds.add(product.id);
             const productImage = product.image_url || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
             const formattedPrice = product.price
                 ? `$${product.price.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
@@ -87,12 +91,12 @@ async function loadProducts(searchQuery = '', page = 1) {
                   <h3 class="catalog__card-title">${product.name}</h3>
                   <p class="catalog__card-price">${formattedPrice}</p>
                   <div class="catalog__card-actions">
-                    <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
-                      <i class="fab fa-whatsapp"></i> Consultar
-                    </a>
                     <button class="catalog__details-button" data-product-id="${product.id}">
                       Ver detalles
                     </button>
+                    <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
+                      <i class="fab fa-whatsapp"></i> Consultar
+                    </a>
                   </div>
                 </div>
               </div>`;
@@ -131,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const searchQuery = searchInput.value.trim();
         currentPage = 1;
         hasMoreProducts = true;
+        loadedProductIds.clear(); // Limpiar IDs cargados en nueva búsqueda
         loadProducts(searchQuery, currentPage);
     }
 

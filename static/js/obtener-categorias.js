@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let isLoading = false;
     let hasMoreProducts = true;
     let lastColumnsCount = getColumnsCount();
+    let loadedProductIds = new Set(); // <-- Añadido para evitar duplicados
 
     function getColumnsCount() {
       // Detecta el número de columnas del grid según el ancho de pantalla
@@ -74,6 +75,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (page === 1) {
         // Mostrar solo el aviso, sin productos previos
         catalogCards.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:180px;"><p style="font-size:1.2rem;">Cargando productos...</p></div>';
+        loadedProductIds.clear(); // Limpiar IDs cargados en nueva búsqueda/filtro
       } else {
         // Para paginación, muestra aviso dentro del botón
         const loadMoreBtn = document.querySelector('.load-more-button');
@@ -115,6 +117,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         products.forEach(product => {
+          if (loadedProductIds.has(product.id)) return; // Evita duplicados
+          loadedProductIds.add(product.id);
           const productImage = product.image_url || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
           const formattedPrice = product.price
               ? `$${product.price.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
@@ -190,8 +194,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         hasMoreProducts = true;
         catalogCards.innerHTML = "";
         const params = new URLSearchParams();
-        if (searchQuery) params.append("search", searchQuery);
+        if (searchQuery) params.append("name", searchQuery); // <-- Cambiado de "search" a "name"
         loadProductsWithPagination(params.toString(), currentPage);
+        loadedProductIds.clear(); // Limpiar IDs cargados en nueva búsqueda
       });
     }
 
@@ -247,6 +252,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           overlay.classList.remove("active");
           sidebar.classList.remove("active");
 
+          // Hacer scroll al principio de la página
+          window.scrollTo(0, 0);
+
           // Guardar scroll antes de filtrar
           sessionStorage.setItem('catalogScroll', window.scrollY);
 
@@ -262,6 +270,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               updateProductsPerPage();
               currentPage = 1;
               hasMoreProducts = true;
+              loadedProductIds.clear(); // Limpiar IDs cargados en nuevo filtro
               await loadProductsWithPagination(params.toString(), currentPage);
           } catch (error) {
               console.error("Error loading products:", error);

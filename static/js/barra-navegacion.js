@@ -24,10 +24,11 @@ document.addEventListener("DOMContentLoaded", function () {
   async function searchProducts(reset = true) {
     if (reset) {
       currentPage = 1;
-      loadedProductIds.clear();
+      loadedProductIds = new Set(); // Reinicia el Set para evitar duplicados en la primera búsqueda
       currentQuery = searchInput.value.trim();
       productContainer.innerHTML = "";
       isLastPage = false;
+      window.scrollTo(0, 0); // Ir al principio de la página al buscar
     }
     // Mostrar aviso de cargando productos
     productContainer.innerHTML = "<p>Cargando productos...</p>";
@@ -79,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
     products.forEach(product => {
+      if (loadedProductIds.has(product.id)) return; // Evita duplicados
       loadedProductIds.add(product.id);
       const productCard = document.createElement("div");
       productCard.classList.add("catalog__card");
@@ -112,12 +114,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Eventos de búsqueda
   searchButton.addEventListener("click", function () {
+    // loadedProductIds.clear(); // Ya se limpia dentro de searchProducts(true)
     searchProducts(true);
   });
   searchInput.addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
-      // Elimina el aviso de cargando productos al presionar Enter
       productContainer.innerHTML = "";
+      // loadedProductIds.clear(); // Ya se limpia dentro de searchProducts(true)
       searchProducts(true);
     }
   });
