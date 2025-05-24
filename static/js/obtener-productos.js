@@ -1,5 +1,5 @@
 let currentPage = 1;
-const productsPerPage = 12; // Asegura que siempre sea 12
+const productsPerPage = 20; // Cambiado de 12 a 20
 let isLoading = false;
 let hasMoreProducts = true;
 let loadedProductIds = new Set(); // <-- Añadido para evitar duplicados
@@ -45,9 +45,9 @@ async function loadProducts(searchQuery = '', page = 1) {
     isLoading = true;
 
     try {
-        const url = new URL('https://webmpdeportes-production.up.railway.app/productos/listar');
+        const url = new URL('http://127.0.0.1:8000/productos/listar');
         url.searchParams.append('page', page);
-        url.searchParams.append('limit', productsPerPage);
+        url.searchParams.append('limit', productsPerPage); // Usa el nuevo valor 20
         if (searchQuery) url.searchParams.append('search', searchQuery);
 
         const response = await fetch(url);

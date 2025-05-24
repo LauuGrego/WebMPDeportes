@@ -49,8 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Mostrar aviso de carga
     productList.innerHTML = "<li>Cargando productos...</li>";
     let url = query === ""
-      ? "https://webmpdeportes-production.up.railway.app/productos/listar"
-      : `https://webmpdeportes-production.up.railway.app/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`;
+      ? "http://127.0.0.1:8000/productos/listar"
+      : `http://127.0.0.1:8000/productos/buscar?name=${encodeURIComponent(query)}&type=${encodeURIComponent(query)}`;
 
     try {
       const response = await fetch(url);

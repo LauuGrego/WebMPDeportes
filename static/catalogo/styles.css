@@ -206,6 +206,7 @@ body {
   justify-content: center;
   color: #888;
   font-size: 1.1rem;
+  left: 302px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   cursor: pointer;
   transition: background 0.13s;

@@ -90,9 +90,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         let url;
         const pageSize = productsPerPage;
         if (params) {
-          url = `https://webmpdeportes-production.up.railway.app/productos/buscar_por_categoria_o_tipo?${params}&page=${page}&limit=${pageSize}`;
+          url = `http://127.0.0.1:8000/productos/buscar_por_categoria_o_tipo?${params}&page=${page}&limit=${pageSize}`;
         } else {
-          url = `https://webmpdeportes-production.up.railway.app/productos/listar?page=${page}&limit=${pageSize}`;
+          url = `http://127.0.0.1:8000/productos/listar?page=${page}&limit=${pageSize}`;
         }
 
         const response = await fetch(url);
@@ -175,28 +175,27 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
-    let debounceTimeout;
-    const debounce = (func, delay) => {
-      clearTimeout(debounceTimeout);
-      debounceTimeout = setTimeout(func, delay);
-    };
-
     // Cambia el evento de búsqueda para que solo busque cuando se presiona el botón de buscar
     const searchInput = document.querySelector('.header__search-input');
     const searchButton = document.querySelector('.btn--ghost.header__search-btn');
     if (searchButton) {
-      searchButton.addEventListener('click', () => {
-        // Guardar scroll antes de buscar
+      searchButton.addEventListener('click', async () => {
         sessionStorage.setItem('catalogScroll', window.scrollY);
         updateProductsPerPage();
         const searchQuery = searchInput.value.trim();
         currentPage = 1;
         hasMoreProducts = true;
         catalogCards.innerHTML = "";
-        const params = new URLSearchParams();
-        if (searchQuery) params.append("name", searchQuery); // <-- Cambiado de "search" a "name"
-        loadProductsWithPagination(params.toString(), currentPage);
-        loadedProductIds.clear(); // Limpiar IDs cargados en nueva búsqueda
+        loadedProductIds.clear();
+
+        if (searchQuery) {
+          // Buscar por texto: usar /productos/buscar
+          const url = `http://127.0.0.1:8000/productos/buscar?name=${encodeURIComponent(searchQuery)}&page=${currentPage}&limit=${productsPerPage}`;
+          await loadProductsWithDirectUrl(url, currentPage);
+        } else {
+          // Sin texto: listar todos
+          await loadProductsWithPagination("", currentPage);
+        }
       });
     }
 
@@ -210,8 +209,94 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
+    // Nueva función para búsqueda directa por texto
+    async function loadProductsWithDirectUrl(url, page = 1) {
+      if (isLoading || !hasMoreProducts) return;
+      isLoading = true;
+      loadingSpinner.style.display = "flex";
+      if (page === 1) {
+        catalogCards.innerHTML = '<p class="loading-message">Cargando productos...</p>';
+        loadedProductIds.clear();
+      }
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Error fetching products: ${response.statusText}`);
+        const data = await response.json();
+        const products = Array.isArray(data) ? data : (data.products || []);
+        const totalPages = data.totalPages || 1;
+
+        if (page === 1) {
+          catalogCards.innerHTML = "";
+          hasMoreProducts = true;
+          removeLoadMoreButton();
+        }
+
+        if (products.length === 0 && page === 1) {
+          catalogCards.innerHTML = "<p>No se encontraron productos.</p>";
+          removeLoadMoreButton();
+          return;
+        }
+
+        products.forEach(product => {
+          if (loadedProductIds.has(product.id)) return;
+          loadedProductIds.add(product.id);
+          const productImage = product.image_url || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
+          const formattedPrice = product.price
+              ? `$${product.price.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+              : "Consultar";
+          const productCard = `
+            <div class="catalog__card">
+              <div class="catalog__card-image">
+                <img src="${productImage}" alt="${product.name}">
+              </div>
+              <div class="catalog__card-details">
+                <h3 class="catalog__card-title">${product.name}</h3>
+                <p class="catalog__card-price">${formattedPrice}</p>
+                <div class="catalog__card-actions">
+                  <button class="catalog__details-button" data-product-id="${product.id}">
+                    Ver detalles
+                  </button>
+                  <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Consultar
+                  </a>
+                </div>
+              </div>
+            </div>`;
+          catalogCards.insertAdjacentHTML('beforeend', productCard);
+        });
+
+        document.querySelectorAll('.catalog__details-button').forEach(button => {
+          button.addEventListener('click', (event) => {
+            // Guardar scroll antes de ir a detalles
+            sessionStorage.setItem('catalogScroll', window.scrollY);
+            const productId = event.target.dataset.productId;
+            window.location.href = `../productos/producto.html?id=${productId}`;
+          });
+        });
+
+        if (page < totalPages && products.length === pageSize) {
+          addLoadMoreButton(params);
+          hasMoreProducts = true;
+        } else {
+          removeLoadMoreButton();
+          hasMoreProducts = false;
+        }
+      } catch (error) {
+        console.error("Error loading products:", error);
+        removeLoadMoreButton();
+      } finally {
+        isLoading = false;
+        loadingSpinner.style.display = "none";
+        const loadMoreBtn = document.querySelector('.load-more-button');
+        if (loadMoreBtn) {
+          loadMoreBtn.disabled = false;
+          loadMoreBtn.textContent = "Ver más";
+        }
+      }
+    }
+
     try {
-      const categoriesResponse = await fetch("https://webmpdeportes-production.up.railway.app/categorias/listar-public");
+      const categoriesResponse = await fetch("http://127.0.0.1:8000/categorias/listar-public");
       if (!categoriesResponse.ok) {
         throw new Error(`Error fetching categories: ${categoriesResponse.statusText}`);
       }
@@ -224,7 +309,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         sidebarCategories.appendChild(li);
       });
 
-      const typesResponse = await fetch("https://webmpdeportes-production.up.railway.app/productos/listar/tipos");
+      const typesResponse = await fetch("http://127.0.0.1:8000/productos/listar/tipos");
       if (!typesResponse.ok) {
         throw new Error(`Error fetching product types: ${typesResponse.statusText}`);
       }

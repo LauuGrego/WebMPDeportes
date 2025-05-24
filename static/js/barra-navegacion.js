@@ -9,12 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let loadedProductIds = new Set();
   let isLastPage = false;
 
-  // No crear el botón "Ver más"
-  // ...existing code...
-
-  // IMPORTANTE: No agregar ningún event listener de scroll ni IntersectionObserver.
-  // Solo el botón "Ver más" carga productos adicionales.
-  // (En este caso, no se crea el botón, así que solo se cargan productos al buscar o al cargar la página)
 
   if (!searchInput || !searchButton || !productContainer) {
     console.error("Elementos del DOM no encontrados. Verifica las clases en el HTML.");
@@ -37,9 +31,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const limit = 20;
     // Si la barra de búsqueda está vacía, listar productos normalmente
     if (!currentQuery) {
-      url = `https://webmpdeportes-production.up.railway.app/productos/listar?page=${currentPage}&limit=${limit}`;
+      url = `http://127.0.0.1:8000/productos/listar?page=${currentPage}&limit=${limit}`;
     } else {
-      url = `https://webmpdeportes-production.up.railway.app/productos/buscar?name=${encodeURIComponent(currentQuery)}&page=${currentPage}&limit=${limit}`;
+      url = `http://127.0.0.1:8000/productos/buscar?name=${encodeURIComponent(currentQuery)}&page=${currentPage}&limit=${limit}`;
     }
 
     try {
@@ -112,19 +106,17 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Elimina la carga inicial automática de productos aquí
+  // searchProducts(true);
+
   // Eventos de búsqueda
   searchButton.addEventListener("click", function () {
-    // loadedProductIds.clear(); // Ya se limpia dentro de searchProducts(true)
     searchProducts(true);
   });
   searchInput.addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
       productContainer.innerHTML = "";
-      // loadedProductIds.clear(); // Ya se limpia dentro de searchProducts(true)
       searchProducts(true);
     }
   });
-
-  // Cargar productos iniciales al entrar en la página
-  searchProducts(true);
 });
