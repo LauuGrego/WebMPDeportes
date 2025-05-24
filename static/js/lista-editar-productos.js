@@ -3,6 +3,7 @@ let currentPage = 1;
 const productsPerPage = 10;
 let isLoading = false;
 let currentSearchTerm = ""; // Guarda el término de búsqueda actual
+let lastScrollY = 0; // Guardar posición de scroll antes de abrir el modal
 
 // Función para agregar botón "Ver más"
 function addLoadMoreButton() {
@@ -215,6 +216,8 @@ function preselectSizeButtons(selectedSizes) {
 
 async function openEditModal(productId) {
   try {
+    // Guardar la posición de scroll antes de abrir el modal
+    lastScrollY = window.scrollY || window.pageYOffset;
     const response = await fetch(`https://webmpdeportes.onrender.com/productos/obtener_por_id/${productId}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -383,8 +386,14 @@ async function saveProductChanges(event) {
     alert('✅ Producto actualizado con éxito');
     closeEditModal();
 
-    // Refresca la lista (siempre desde la página 1, o la que toque)
-    await fetchProducts(1);
+    // Volver a mostrar la búsqueda anterior (si había) y scrollear a la posición previa
+    if (currentSearchTerm && currentSearchTerm.trim() !== "") {
+      await searchProducts(currentSearchTerm, false);
+    } else {
+      await fetchProducts(currentPage, false);
+    }
+    // Restaurar scroll a la posición previa
+    window.scrollTo({ top: lastScrollY, behavior: 'smooth' });
   }
   catch(err) {
     console.error("Error al actualizar:", err);
@@ -395,7 +404,6 @@ async function saveProductChanges(event) {
     }
   }
 }
-
 
 // Eliminar producto
 async function deleteProduct(productId) {
@@ -411,7 +419,16 @@ async function deleteProduct(productId) {
     if (!response.ok) throw new Error('Error al eliminar producto');
     
     alert('Producto eliminado con éxito');
-    fetchProducts();
+    // Eliminar la fila del producto de la tabla sin refrescar la página
+    const tbody = document.querySelector('.products-table tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const rowToDelete = rows.find(row => {
+      const deleteBtn = row.querySelector('.btn-delete');
+      return deleteBtn && deleteBtn.getAttribute('onclick') === `deleteProduct('${productId}')`;
+    });
+    if (rowToDelete) {
+      rowToDelete.remove();
+    }
   } catch (error) {
     console.error('Error:', error);
   }
@@ -469,9 +486,11 @@ function debounce(func, wait) {
   };
 }
 
-// Evento de búsqueda
-document.querySelector('.header__search-input').addEventListener('input', debounce(function(event) {
-  const searchTerm = event.target.value.trim();
+// Evento de búsqueda (input)
+const searchInput = document.querySelector('.header__search-input');
+const searchButton = document.querySelector('.header__search-button');
+const searchHandler = debounce(function(event) {
+  const searchTerm = searchInput.value.trim();
   currentPage = 1;
   currentSearchTerm = searchTerm;
   if (searchTerm === "") {
@@ -479,4 +498,20 @@ document.querySelector('.header__search-input').addEventListener('input', deboun
   } else {
     searchProducts(searchTerm);
   }
-}, 300));
+}, 300);
+
+searchInput.addEventListener('input', searchHandler);
+
+// Permitir buscar con Enter
+searchInput.addEventListener('keypress', function(event) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    searchHandler();
+  }
+});
+
+// Permitir buscar con el botón
+searchButton.addEventListener('click', function(event) {
+  event.preventDefault();
+  searchHandler();
+});
