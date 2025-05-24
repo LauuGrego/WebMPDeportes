@@ -602,6 +602,7 @@ body {
 .catalog__card-button {
   background: #25d366;
   color: #fff;
+  font-family: 'poppins';
   display: flex;
   align-items: center;
   gap: 0.5em;
