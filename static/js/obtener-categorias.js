@@ -90,9 +90,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         let url;
         const pageSize = productsPerPage;
         if (params) {
-          url = `https://webmpdeportes-production.up.railway.app/productos/buscar_por_categoria_o_tipo?${params}&page=${page}&limit=${pageSize}`;
+          url = `https://webmpdeportes.onrender.com/productos/buscar_por_categoria_o_tipo?${params}&page=${page}&limit=${pageSize}`;
         } else {
-          url = `https://webmpdeportes-production.up.railway.app/productos/listar?page=${page}&limit=${pageSize}`;
+          url = `https://webmpdeportes.onrender.com/productos/listar?page=${page}&limit=${pageSize}`;
         }
 
         const response = await fetch(url);
@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (searchQuery) {
           // Buscar por texto: usar /productos/buscar
-          const url = `https://webmpdeportes-production.up.railway.app/productos/buscar?name=${encodeURIComponent(searchQuery)}&page=${currentPage}&limit=${productsPerPage}`;
+          const url = `https://webmpdeportes.onrender.com/productos/buscar?name=${encodeURIComponent(searchQuery)}&page=${currentPage}&limit=${productsPerPage}`;
           await loadProductsWithDirectUrl(url, currentPage);
         } else {
           // Sin texto: listar todos
@@ -296,7 +296,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-      const categoriesResponse = await fetch("https://webmpdeportes-production.up.railway.app/categorias/listar-public");
+      const categoriesResponse = await fetch("https://webmpdeportes.onrender.com/categorias/listar-public");
       if (!categoriesResponse.ok) {
         throw new Error(`Error fetching categories: ${categoriesResponse.statusText}`);
       }
@@ -309,7 +309,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         sidebarCategories.appendChild(li);
       });
 
-      const typesResponse = await fetch("https://webmpdeportes-production.up.railway.app/productos/listar/tipos");
+      const typesResponse = await fetch("https://webmpdeportes.onrender.com/productos/listar/tipos");
       if (!typesResponse.ok) {
         throw new Error(`Error fetching product types: ${typesResponse.statusText}`);
       }

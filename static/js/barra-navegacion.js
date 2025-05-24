@@ -31,9 +31,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const limit = 20;
     // Si la barra de búsqueda está vacía, listar productos normalmente
     if (!currentQuery) {
-      url = `https://webmpdeportes-production.up.railway.app/productos/listar?page=${currentPage}&limit=${limit}`;
+      url = `https://webmpdeportes.onrender.com/productos/listar?page=${currentPage}&limit=${limit}`;
     } else {
-      url = `https://webmpdeportes-production.up.railway.app/productos/buscar?name=${encodeURIComponent(currentQuery)}&page=${currentPage}&limit=${limit}`;
+      url = `https://webmpdeportes.onrender.com/productos/buscar?name=${encodeURIComponent(currentQuery)}&page=${currentPage}&limit=${limit}`;
     }
 
     try {

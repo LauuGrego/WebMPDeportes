@@ -41,7 +41,7 @@ async function fetchProducts(page = 1, append = false) {
       tbody.innerHTML = `<tr><td colspan="6">Cargando productos...</td></tr>`;
     }
 
-    const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/listar?page=${page}&limit=${productsPerPage}`, {
+    const response = await fetch(`https://webmpdeportes.onrender.com/productos/listar?page=${page}&limit=${productsPerPage}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
@@ -79,7 +79,7 @@ async function searchProducts(searchTerm, append = false) {
       currentPage = 1;
     }
 
-    const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/listar?search=${encodeURIComponent(searchTerm)}&page=${currentPage}&limit=${productsPerPage}`, {
+    const response = await fetch(`https://webmpdeportes.onrender.com/productos/listar?search=${encodeURIComponent(searchTerm)}&page=${currentPage}&limit=${productsPerPage}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
@@ -215,7 +215,7 @@ function preselectSizeButtons(selectedSizes) {
 
 async function openEditModal(productId) {
   try {
-    const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/obtener_por_id/${productId}`, {
+    const response = await fetch(`https://webmpdeportes.onrender.com/productos/obtener_por_id/${productId}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
@@ -286,7 +286,7 @@ async function openEditModal(productId) {
 // Función para obtener y listar categorías
 async function populateCategorySelect(selectedCategoryId = null) {
   try {
-    const response = await fetch('https://webmpdeportes-production.up.railway.app/categorias/listar-public', {
+    const response = await fetch('https://webmpdeportes.onrender.com/categorias/listar-public', {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       }
@@ -366,7 +366,7 @@ async function saveProductChanges(event) {
 
   try {
     const resp = await fetch(
-      `https://webmpdeportes-production.up.railway.app/productos/actualizar/${productId}`,
+      `https://webmpdeportes.onrender.com/productos/actualizar/${productId}`,
       {
         method:  'PUT',
         headers: {
@@ -402,7 +402,7 @@ async function deleteProduct(productId) {
   if (!confirm("¿Está seguro que desea eliminar este producto?")) return;
 
   try {
-    const response = await fetch(`https://webmpdeportes-production.up.railway.app/productos/eliminar/${productId}`, {
+    const response = await fetch(`https://webmpdeportes.onrender.com/productos/eliminar/${productId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
