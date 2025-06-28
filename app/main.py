@@ -25,7 +25,6 @@ app.add_middleware(
     allow_headers=["*"],  # Permite todos los encabezados
 )
 
-
 #statics
 #app.mount()
 
