@@ -175,6 +175,26 @@ html, body {
     color: var(--color-naranja);
 }
 
+/* Cart link styling */
+.cart-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.cart-count {
+    background: var(--color-naranja);
+    color: white;
+    border-radius: 50%;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    min-width: 1.5rem;
+    text-align: center;
+    display: none;
+}
+
 /* =========================
    SECCIÓN: SOBRE NOSOTROS
    ========================= */

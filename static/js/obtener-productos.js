@@ -94,6 +94,9 @@ async function loadProducts(searchQuery = '', page = 1) {
                     <button class="catalog__details-button" data-product-id="${product.id}">
                       Ver detalles
                     </button>
+                    <button class="add-to-cart-btn" data-product-id="${product.id}">
+                      <i class="fas fa-cart-plus"></i> Agregar
+                    </button>
                     <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
                       <i class="fab fa-whatsapp"></i> Consultar
                     </a>
@@ -153,4 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
             sessionStorage.removeItem('catalogScroll');
         }, 50);
     }
+    
+    // Update cart count
+    updateCartCountDisplay();
 });
