@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const sizeButtons = sizesArray.map(s => {
       const num = Number(s);
       const label = !isNaN(num) ? (num % 1 === 0 ? num.toFixed(0) : num.toFixed(1)) : s;
-      return `<button class="talle-btn" type="button">${label}</button>`;
+      return `<button class="talle-btn" type="button" data-size="${s}">${label}</button>`;
     }).join(" ");
 
     const productHTML = `
@@ -46,6 +46,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           <div class="producto-size">Talles Disponibles: ${sizeButtons}</div>
           <p class="producto-descripcion">${product.description}</p>
           <div class="producto-acciones">
+            <button class="boton-agregar-carrito" id="addToCartBtn">
+              <i class="fas fa-cart-plus"></i> Agregar al Carrito
+            </button>
             <a href="https://wa.me/3445417684?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="boton-whatsapp" target="_blank">
               <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
             </a>
@@ -55,6 +58,36 @@ document.addEventListener("DOMContentLoaded", async () => {
       </div>
     `;
     detalleContainer.innerHTML = productHTML;
+
+    // Handle size selection
+    let selectedSize = null;
+    document.querySelectorAll('.talle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.talle-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedSize = btn.dataset.size;
+      });
+    });
+
+    // Handle add to cart
+    const addToCartBtn = document.getElementById('addToCartBtn');
+    if (addToCartBtn) {
+      addToCartBtn.addEventListener('click', async () => {
+        if (!selectedSize && sizesArray.length > 0) {
+          showToast('Por favor selecciona un talle', 'warning');
+          return;
+        }
+        
+        const success = await addProductToCart(product.id, selectedSize, 1);
+        if (success) {
+          // Visual feedback
+          addToCartBtn.innerHTML = '<i class="fas fa-check"></i> Agregado';
+          setTimeout(() => {
+            addToCartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Agregar al Carrito';
+          }, 2000);
+        }
+      });
+    }
 
     // Manejar volver para restaurar scroll
     const volverBtn = document.getElementById('volverCatalogoBtn');
@@ -71,4 +104,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Error al cargar los detalles del producto:", error);
     detalleContainer.innerHTML = "<p class='error-mensaje'>Error al cargar los detalles del producto.</p>";
   }
+  
+  // Update cart count display
+  updateCartCountDisplay();
 });
