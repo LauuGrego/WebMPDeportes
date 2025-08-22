@@ -152,6 +152,7 @@ a {
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
   padding: 0 0.7rem;
   margin-left: 0;
+  align-items: center;
 }
 
 .header__nav-link {
@@ -172,9 +173,33 @@ a {
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
-.header__actions {
+.header__cart-link {
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--color-principal);
+  color: #fff !important;
+  font-weight: bold;
+  border-radius: 2rem;
+  padding: 0.5rem 1.1rem;
+  transition: background 0.15s, color 0.15s;
+}
+.header__cart-link:hover {
+  background: var(--color-principal-dark);
+  color: #fff !important;
+}
+
+#cart-count {
+  background: #fff;
+  color: var(--color-principal-dark);
+  border-radius: 50%;
+  padding: 0 0.5em;
+  font-size: 0.95em;
+  margin-left: 0.1em;
+  min-width: 1.5em;
+  text-align: center;
+  font-weight: bold;
+  display: inline-block;
 }
 
 /* ========================
@@ -351,6 +376,26 @@ a {
 }
 .boton-volver:hover {
   background: var(--color-3);
+  color: #fff;
+}
+
+/* Botón agregar al carrito */
+.add-to-cart-btn {
+  background: var(--color-principal);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  transition: background 0.15s, color 0.15s;
+}
+.add-to-cart-btn:hover {
+  background: var(--color-principal-dark);
   color: #fff;
 }
 

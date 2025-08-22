@@ -23,10 +23,15 @@
         <img src="./../../images/logo-encabezado.png" alt="Logo Emprendimiento" class="header__logo-img" />
       </a>
     </div>
-
     <ul class="header__nav-list">
       <li><a href="../../index.html" class="header__nav-link">Inicio</a></li>
       <li><a href="#contact" class="header__nav-link">Contacto</a></li>
+      <li>
+        <a href="../../cart/cart.html" class="header__nav-link header__cart-link" aria-label="Ver carrito" style="display: flex; align-items: center;">
+          <i class="fas fa-shopping-cart" style="font-size: 1.2rem; margin-right: 0.3rem;"></i>
+          <span id="cart-count" style="font-weight: bold;">0</span>
+        </a>
+      </li>
     </ul>
 
   </header>
@@ -92,5 +97,27 @@
 
   <script src="../js/menu_lateral_mobile.js"></script>
   <script src="../js/detalles_producto.js"></script>
+  <script>
+    // Actualizar el contador del carrito desde localStorage (si existe)
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      document.getElementById('cart-count').textContent = cart.length;
+    }
+    updateCartCount();
+    window.addEventListener('storage', updateCartCount);
+
+    // Delegación para agregar al carrito (si tienes botón en el detalle)
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('add-to-cart-btn')) {
+        const productId = e.target.getAttribute('data-product-id');
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (!cart.includes(productId)) cart.push(productId);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+        e.target.textContent = "Agregado!";
+        setTimeout(() => { e.target.innerHTML = '<i class="fas fa-cart-plus"></i> Agregar al carrito'; }, 1000);
+      }
+    });
+  </script>
 </body>
 </html>

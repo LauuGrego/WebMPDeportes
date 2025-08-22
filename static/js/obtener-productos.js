@@ -40,6 +40,34 @@ function removeLoadMoreButton() {
     if (existingButton) existingButton.remove();
 }
 
+function getCart() {
+    return JSON.parse(localStorage.getItem('cart')) || [];
+}
+
+function setCart(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function isInCart(productId) {
+    const cart = getCart();
+    return cart.some(item => item.id == productId);
+}
+
+function updateCartCount() {
+    const cart = getCart();
+    const cartCount = document.getElementById('cart-count');
+    if (cartCount) cartCount.textContent = cart.length;
+}
+
+function addToCart(product) {
+    let cart = getCart();
+    if (!cart.some(item => item.id == product.id)) {
+        cart.push({ id: product.id, name: product.name, price: product.price || 0, image: product.image_url, quantity: 1 });
+        setCart(cart);
+        updateCartCount();
+    }
+}
+
 async function loadProducts(searchQuery = '', page = 1) {
     if (isLoading || !hasMoreProducts) return;
     isLoading = true;
@@ -82,6 +110,7 @@ async function loadProducts(searchQuery = '', page = 1) {
             const formattedPrice = product.price
                 ? `$${product.price.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
                 : "Consultar";
+            const inCart = isInCart(product.id);
             const productCard = `
               <div class="catalog__card">
                 <div class="catalog__card-image">
@@ -93,6 +122,9 @@ async function loadProducts(searchQuery = '', page = 1) {
                   <div class="catalog__card-actions">
                     <button class="catalog__details-button" data-product-id="${product.id}">
                       Ver detalles
+                    </button>
+                    <button class="add-to-cart-btn${inCart ? ' in-cart' : ''}" data-product-id="${product.id}" ${inCart ? 'disabled' : ''}>
+                      <i class="fas fa-cart-plus"></i> ${inCart ? 'En el carrito' : 'Agregar al carrito'}
                     </button>
                     <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
                       <i class="fab fa-whatsapp"></i> Consultar
@@ -111,6 +143,22 @@ async function loadProducts(searchQuery = '', page = 1) {
                 window.location.href = `../productos/producto.html?id=${productId}`;
             });
         });
+
+        // Vincular lógica de agregar al carrito
+        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                const productId = this.getAttribute('data-product-id');
+                // Buscar datos del producto en products
+                const product = products.find(p => p.id == productId);
+                if (!product) return;
+                addToCart(product);
+                this.classList.add('in-cart');
+                this.disabled = true;
+                this.innerHTML = '<i class="fas fa-cart-plus"></i> En el carrito';
+            });
+        });
+
+        updateCartCount();
 
         // El botón "Ver más" siempre debe estar después de los productos
         if (page < totalPages && products.length === productsPerPage) {
@@ -153,4 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
             sessionStorage.removeItem('catalogScroll');
         }, 50);
     }
+
+    updateCartCount();
+    window.addEventListener('storage', updateCartCount);
 });

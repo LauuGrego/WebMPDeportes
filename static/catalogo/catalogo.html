@@ -29,6 +29,12 @@
     <ul class="header__nav-list">
       <li><a href="../../index.html" class="header__nav-link">Inicio</a></li>
       <li><a href="#contact" class="header__nav-link">Contacto</a></li>
+      <li>
+        <a href="../../cart/cart.html" class="header__nav-link header__cart-link" aria-label="Ver carrito">
+          <i class="fas fa-shopping-cart"></i>
+          <span id="cart-count">0</span>
+        </a>
+      </li>
     </ul>
   </nav>
 </header>
@@ -55,6 +61,16 @@
     </div>
     <div class="catalog__grid" id="catalogCards">
       <!-- Las tarjetas de productos se cargarán aquí -->
+      <!-- Ejemplo de tarjeta con botón agregar al carrito:
+      <div class="catalog__card">
+        ...existing product info...
+        <div class="catalog__card-actions">
+          <button class="add-to-cart-btn" data-product-id="PRODUCT_ID">
+            <i class="fas fa-cart-plus"></i> Agregar al carrito
+          </button>
+           Otros botones si existen -->
+        </div>
+      </div>
     </div>
   </main>
 </div>
@@ -98,6 +114,5 @@
 <script src="./../js/obtener-productos.js"></script>
 <script src="./../js/barra-navegacion.js"></script>
 <script src="./../js/menu_lateral_mobile.js"></script>
-
 </body>
 </html>
