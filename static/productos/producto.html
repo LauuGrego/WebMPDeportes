@@ -51,7 +51,7 @@
 
   <main id="detalle-container" class="catalogo-detalle">
     <div id="producto-detalle" class="producto-detalle">
-      <!-- Product details will be dynamically loaded here -->
+  <!-- Los detalles del producto se cargan dinámicamente con un solo botón "Agregar al carrito" -->
     </div>
   </main>
 
@@ -97,31 +97,6 @@
 
   <script src="../js/menu_lateral_mobile.js"></script>
   <script src="../js/detalles_producto.js"></script>
-<<<<<<< HEAD
-  <script>
-    // Actualizar el contador del carrito desde localStorage (si existe)
-    function updateCartCount() {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      document.getElementById('cart-count').textContent = cart.length;
-    }
-    updateCartCount();
-    window.addEventListener('storage', updateCartCount);
-
-    // Delegación para agregar al carrito (si tienes botón en el detalle)
-    document.addEventListener('click', function(e) {
-      if (e.target.classList.contains('add-to-cart-btn')) {
-        const productId = e.target.getAttribute('data-product-id');
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        if (!cart.includes(productId)) cart.push(productId);
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
-        e.target.textContent = "Agregado!";
-        setTimeout(() => { e.target.innerHTML = '<i class="fas fa-cart-plus"></i> Agregar al carrito'; }, 1000);
-      }
-    });
-  </script>
-=======
   <script src="../js/add-to-cart.js"></script>
->>>>>>> 25107a2c84db92099d97ac1bf1c311fecc32e61c
 </body>
 </html>

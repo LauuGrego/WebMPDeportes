@@ -120,17 +120,12 @@ async function loadProducts(searchQuery = '', page = 1) {
                   <h3 class="catalog__card-title">${product.name}</h3>
                   <p class="catalog__card-price">${formattedPrice}</p>
                   <div class="catalog__card-actions">
-                    <button class="catalog__details-button" data-product-id="${product.id}">
-                      Ver detalles
-                    </button>
-<<<<<<< HEAD
-                    <button class="add-to-cart-btn${inCart ? ' in-cart' : ''}" data-product-id="${product.id}" ${inCart ? 'disabled' : ''}>
-                      <i class="fas fa-cart-plus"></i> ${inCart ? 'En el carrito' : 'Agregar al carrito'}
-=======
-                    <button class="add-to-cart-btn" data-product-id="${product.id}">
-                      <i class="fas fa-cart-plus"></i> Agregar
->>>>>>> 25107a2c84db92099d97ac1bf1c311fecc32e61c
-                    </button>
+                                        <button class="catalog__details-button" data-product-id="${product.id}">
+                                            Ver detalles
+                                        </button>
+                                        <button class="add-to-cart-btn${inCart ? ' in-cart' : ''}" data-product-id="${product.id}" ${inCart ? 'disabled' : ''}>
+                                            <i class="fas fa-cart-plus"></i> ${inCart ? 'En el carrito' : 'Agregar al carrito'}
+                                        </button>
                     <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
                       <i class="fab fa-whatsapp"></i> Consultar
                     </a>
@@ -151,15 +146,15 @@ async function loadProducts(searchQuery = '', page = 1) {
 
         // Vincular lógica de agregar al carrito
         document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-            btn.addEventListener('click', function (e) {
+            btn.addEventListener('click', async function (e) {
                 const productId = this.getAttribute('data-product-id');
-                // Buscar datos del producto en products
-                const product = products.find(p => p.id == productId);
-                if (!product) return;
-                addToCart(product);
-                this.classList.add('in-cart');
-                this.disabled = true;
-                this.innerHTML = '<i class="fas fa-cart-plus"></i> En el carrito';
+                // Usar la función global y forzar cantidad 1
+                const success = await addProductToCart(productId, null, 1);
+                if (success) {
+                    this.classList.add('in-cart');
+                    this.disabled = true;
+                    this.innerHTML = '<i class=\"fas fa-cart-plus\"></i> En el carrito';
+                }
             });
         });
 

@@ -50,29 +50,26 @@ async function addProductToCart(productId, selectedSize = null, quantity = 1) {
         const product = await response.json();
         
         // Add to local cart
-        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        const existingItemIndex = cart.findIndex(item => 
-            item.id === product.id && item.selectedSize === selectedSize
-        );
-
-        if (existingItemIndex > -1) {
-            cart[existingItemIndex].quantity += quantity;
-        } else {
-            cart.push({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                image_url: product.image_url || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg',
-                quantity: quantity,
-                selectedSize: selectedSize,
-                addedAt: new Date().toISOString()
-            });
-        }
-
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCountDisplay();
-        showToast('Producto agregado al carrito', 'success');
-        
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const exists = cart.some(item => item.id === product.id && item.selectedSize === selectedSize);
+            if (!exists) {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image_url: product.image_url || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg',
+                    quantity: 1,
+                    selectedSize: selectedSize,
+                    addedAt: new Date().toISOString()
+                });
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCountDisplay();
+                showToast('Producto agregado al carrito', 'success');
+                return true;
+            } else {
+                showToast('Este producto ya está en el carrito', 'warning');
+                return false;
+            }
         return true;
     } catch (error) {
         console.error('Error adding to cart:', error);

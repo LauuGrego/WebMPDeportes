@@ -76,9 +76,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('quantity-input')) {
             const idx = e.target.dataset.idx;
             const cart = getCart();
-            cart[idx].quantity = parseInt(e.target.value) || 1;
+            let newQty = parseInt(e.target.value) || 1;
+            if (newQty < 1) newQty = 1;
+            cart[idx].quantity = newQty;
             setCart(cart);
-            renderCart();
+
+            // Actualizar solo la fila y el total, no toda la tabla
+            const row = e.target.closest('tr');
+            // Obtener precio unitario desde la celda correspondiente
+            const priceCell = row.querySelector('.product-price');
+            const priceText = priceCell.textContent.replace(/[^\d.,]/g, '').replace(',', '.');
+            const price = parseFloat(priceText) || 0;
+            const itemTotal = price * newQty;
+            row.querySelector('.product-total').textContent = price ? `$${itemTotal.toFixed(2)}` : '-';
+
+            // Actualizar el total general
+            let total = 0;
+            const allRows = cartItemsContainer.querySelectorAll('tr');
+            allRows.forEach((tr, i) => {
+                const qtyInput = tr.querySelector('.quantity-input');
+                const priceCell = tr.querySelector('.product-price');
+                const priceText = priceCell.textContent.replace(/[^\d.,]/g, '').replace(',', '.');
+                const price = parseFloat(priceText) || 0;
+                const qty = parseInt(qtyInput.value) || 1;
+                total += price * qty;
+            });
+            cartTotal.textContent = total.toFixed(2);
         }
     });
 
