@@ -344,7 +344,8 @@ a {
 }
 
 .boton-whatsapp,
-.boton-volver {
+.boton-volver,
+.boton-agregar-carrito {
   display: inline-flex;
   gap: 0.5rem;
   padding: 0.7rem 1.5rem;
@@ -367,6 +368,15 @@ a {
 }
 .boton-whatsapp:hover {
   background: var(--color-whatsapp-hover);
+}
+
+.boton-agregar-carrito {
+  background: var(--color-principal);
+  color: #fff;
+}
+.boton-agregar-carrito:hover {
+  background: var(--color-principal-dark);
+  transform: translateY(-2px);
 }
 
 .boton-volver {

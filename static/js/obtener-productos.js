@@ -123,8 +123,13 @@ async function loadProducts(searchQuery = '', page = 1) {
                     <button class="catalog__details-button" data-product-id="${product.id}">
                       Ver detalles
                     </button>
+<<<<<<< HEAD
                     <button class="add-to-cart-btn${inCart ? ' in-cart' : ''}" data-product-id="${product.id}" ${inCart ? 'disabled' : ''}>
                       <i class="fas fa-cart-plus"></i> ${inCart ? 'En el carrito' : 'Agregar al carrito'}
+=======
+                    <button class="add-to-cart-btn" data-product-id="${product.id}">
+                      <i class="fas fa-cart-plus"></i> Agregar
+>>>>>>> 25107a2c84db92099d97ac1bf1c311fecc32e61c
                     </button>
                     <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
                       <i class="fab fa-whatsapp"></i> Consultar
@@ -204,4 +209,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateCartCount();
     window.addEventListener('storage', updateCartCount);
+
 });
