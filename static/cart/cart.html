@@ -1,88 +1,178 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>MP Deportes - Carrito</title>
-    <link rel="stylesheet" href="../catalogo/styles.css" />
-    <link rel="stylesheet" href="cart.css" />
-    <link href="../images/logo-encabezado.png" rel="icon" type="image/png" sizes="16x16">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP Deportes - Carrito de Compras</title>
+    <link rel="stylesheet" href="cart.css">
+    <link href="../../images/logo-encabezado.png" rel="icon" type="image/png" sizes="16x16">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__logo-search">
+            <button class="header__menu-toggle" aria-label="Mostrar menú">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="../../index.html" class="header__logo-link">
+                <img src="../../images/logo-encabezado.png" alt="Logo Emprendimiento" class="header__logo-img" />
+            </a>
+        </div>
+        <nav class="header__nav">
+            <ul class="header__nav-list">
+                <li><a href="../../index.html" class="header__nav-link">Inicio</a></li>
+                <li><a href="../catalogo/catalogo.html" class="header__nav-link">Catálogo</a></li>
+                <li><a href="#contact" class="header__nav-link">Contacto</a></li>
+                <li><a href="#" class="header__nav-link cart-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a></li>
+            </ul>
+        </nav>
+    </header>
 
-<header class="header">
-  <div class="header__logo-search">
-    <button class="header__menu-toggle" aria-label="Mostrar menú">
-      <i class="fas fa-bars"></i>
-    </button>
-    <a href="#" class="header__logo-link">
-      <img src="../../images/logo-encabezado.png" alt="Logo Emprendimiento" class="header__logo-img" />
-    </a>
-  </div>
-  <nav class="header__nav">
-    <ul class="header__nav-list">
-      <li><a href="../../index.html" class="header__nav-link">Inicio</a></li>
-      <li><a href="#contact" class="header__nav-link">Contacto</a></li>
-    </ul>
-  </nav>
-</header>
+    <!-- Overlay para menú móvil -->
+    <div class="overlay" id="overlay"></div>
 
-<div class="overlay" id="overlay"></div>
+    <!-- Sidebar móvil -->
+    <aside class="sidebar">
+        <nav class="mobile-nav">
+            <ul>
+                <li><a href="../../index.html" class="mobile-nav-link">Inicio</a></li>
+                <li><a href="../catalogo/catalogo.html" class="mobile-nav-link">Catálogo</a></li>
+                <li><a href="#contact" class="mobile-nav-link">Contacto</a></li>
+            </ul>
+        </nav>
+    </aside>
 
-<div class="container">
+    <!-- Main Content -->
+    <main class="cart-container">
+        <div style="margin-bottom: 1.5rem;">
+            <a href="../catalogo/catalogo.html" class="btn btn--outline">
+                <i class="fas fa-arrow-left"></i> Volver al catálogo
+            </a>
+        </div>
+        <div class="cart-header">
+            <h1 class="cart-title">
+                <i class="fas fa-shopping-cart"></i>
+                Mi Carrito de Compras
+            </h1>
+            <div class="cart-actions-header">
+                <button class="btn btn--secondary" id="clearCartBtn">
+                    <i class="fas fa-trash"></i>
+                    Vaciar Carrito
+                </button>
+                <a href="../catalogo/catalogo.html" class="btn btn--outline">
+                    <i class="fas fa-arrow-left"></i>
+                    Seguir Comprando
+                </a>
+            </div>
+        </div>
 
-  <main class="catalog">
-    <div class="catalog__header">
-      <h1 class="catalog__title">Carrito de Compras</h1>
+        <!-- Cart Content -->
+        <div class="cart-content">
+            <!-- Cart Items -->
+            <div class="cart-items" id="cartItems">
+                <!-- Los productos se cargarán dinámicamente aquí -->
+            </div>
+
+            <!-- Cart Summary -->
+            <div class="cart-summary">
+                <div class="summary-card">
+                    <h3 class="summary-title">Resumen del Pedido</h3>
+                    
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span>Envío:</span>
+                        <span id="shipping">Gratis</span>
+                    </div>
+                    
+                    <div class="summary-row summary-total">
+                        <span>Total:</span>
+                        <span id="total">$0.00</span>
+                    </div>
+
+                    <div class="checkout-actions">
+                        <button class="btn btn--primary checkout-btn" id="checkoutBtn">
+                            <i class="fas fa-credit-card"></i>
+                            Proceder al Pago
+                        </button>
+                        
+                        <button class="btn btn--whatsapp" id="whatsappOrderBtn">
+                            <i class="fab fa-whatsapp"></i>
+                            Pedir por WhatsApp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty Cart Message -->
+        <div class="empty-cart" id="emptyCart" style="display: none;">
+            <div class="empty-cart-content">
+                <i class="fas fa-shopping-cart empty-cart-icon"></i>
+                <h2>Tu carrito está vacío</h2>
+                <p>¡Agrega algunos productos increíbles a tu carrito!</p>
+                <a href="../catalogo/catalogo.html" class="btn btn--primary">
+                    <i class="fas fa-shopping-bag"></i>
+                    Explorar Productos
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="footer">
+        <div class="footer__content">
+            <div class="footer__social">
+                <a href="https://www.instagram.com/marcapasosdeportes/" class="footer__social-link">
+                    <img src="../../images/Instagram copy.png" alt="Instagram">
+                </a>
+                <a href="https://wa.me/3445417684" class="footer__social-link">
+                    <img src="../../images/Whatsapp copy.png" alt="WhatsApp">
+                </a>
+            </div>
+            <p class="footer__copy">©2025 Lautaro Gregoraschuk. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal__overlay" id="modalOverlay"></div>
+        <div class="modal__content">
+            <button class="modal__close" id="closeModal" aria-label="Cerrar">&times;</button>
+            <div class="login-card">
+                <h1 class="login-title">Iniciar Sesión</h1>
+                <p class="login-subtitle">Inicia sesión para gestionar tu carrito</p>
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="username">Usuario:</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn--primary login-btn">Ingresar</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="cart-container">
-      <div style="display: flex; justify-content: flex-start; margin-bottom: 1.2rem;">
-        <a href="../catalogo/catalogo.html" class="btn btn--outline" style="font-size:1rem;">
-          <i class="fas fa-arrow-left"></i> Volver al catálogo
-        </a>
-      </div>
-      <table class="cart-table">
-        <thead>
-          <tr>
-            <th>Imagen</th>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Precio unitario</th>
-            <th>Total</th>
-            <th>Eliminar</th>
-          </tr>
-        </thead>
-        <tbody id="cart-items">
-          <!-- Los productos se insertan aquí dinámicamente -->
-        </tbody>
-      </table>
-      <div class="cart-summary">
-        <span>Total: $<span id="cart-total">0.00</span></span>
-        <button id="whatsapp-btn">
-          <i class="fab fa-whatsapp"></i> Enviar pedido por WhatsApp
-        </button>
-      </div>
-    </div>
-  </main>
-</div>
 
-<footer id="contact" class="footer">
-  <div class="footer__content">
-    <div class="footer__social">
-      <a href="https://www.instagram.com/marcapasosdeportes/" class="footer__social-link footer__social-link--instagram">
-        <img src="../../images/Instagram copy.png" alt="Redireccion a Instagram">
-      </a>
-      <a href="https://wa.me/3445417684" class="footer__social-link footer__social-link--whatsapp">
-        <img src="../../images/Whatsapp copy.png" alt="Redireccion a Whatsapp">
-      </a>
+    <!-- Notification Toast -->
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <i class="toast-icon"></i>
+            <span class="toast-message"></span>
+        </div>
     </div>
-    <p class="footer__copy">©2025 Lautaro Gregoraschuk. Todos los derechos reservados.</p>
-  </div>
-</footer>
 
-<script src="../js/cart.js"></script>
-<script src="../js/barra-navegacion.js"></script>
-<script src="../js/menu_lateral_mobile.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/menu_lateral_mobile.js"></script>
 </body>
 </html>
