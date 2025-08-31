@@ -1,208 +1,154 @@
-let currentPage = 1;
-const productsPerPage = 20; // Cambiado de 12 a 20
-let isLoading = false;
-let hasMoreProducts = true;
-let loadedProductIds = new Set(); // <-- Añadido para evitar duplicados
+// catalogo.js
+document.addEventListener("DOMContentLoaded", () => {
+  const catalogContainer = document.querySelector(".catalog__grid");
+  const sidebarCategories = document.querySelector("#sidebarCategories");
+  const sidebarTypes = document.querySelector("#sidebarTypes");
 
-const debounce = (func, delay) => {
-  let debounceTimeout;
-  return (...args) => {
-    clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(() => func(...args), delay);
-  };
-};
+  // 📌 Contenedor para la paginación
+  const paginationContainer = document.createElement("div");
+  paginationContainer.classList.add("pagination");
+  catalogContainer.after(paginationContainer);
 
-function addLoadMoreButton() {
-    const catalogCards = document.getElementById('catalogCards');
-    let existingButton = document.querySelector('.load-more-button');
-    if (existingButton) existingButton.remove(); // Siempre lo agregamos al final
+  const PRODUCTS_PER_PAGE = 12;
+  let currentPage = 1;
+  let currentProducts = [];
 
-    const button = document.createElement('button');
-    button.textContent = "Ver más";
-    button.classList.add('load-more-button', 'catalog__card-button');
-    button.style.margin = "2rem auto";
-    button.style.display = "block";
-    button.addEventListener('click', async () => {
-        button.disabled = true;
-        button.textContent = "Cargando...";
-        currentPage++;
-        const searchInput = document.querySelector('.header__search-input');
-        const searchQuery = searchInput ? searchInput.value.trim() : '';
-        await loadProducts(searchQuery, currentPage);
-        button.disabled = false;
-        button.textContent = "Ver más";
-    });
-    catalogCards.parentNode.insertBefore(button, catalogCards.nextSibling);
-}
+  const SHEET_URL =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vSj1ZyiyFIKdJ1HkQCu1911NkQ6GLLV87Vz0KHbMi1Sf4ZJioVPiQvzo0jxzKGH-g/pub?output=csv";
 
-function removeLoadMoreButton() {
-    const existingButton = document.querySelector('.load-more-button');
-    if (existingButton) existingButton.remove();
-}
+  Papa.parse(SHEET_URL, {
+    download: true,
+    header: true,
+    complete: function (results) {
+      const data = results.data.filter(p => p.name && p.image_url);
 
-function getCart() {
-    return JSON.parse(localStorage.getItem('cart')) || [];
-}
+      // 👉 Categorías únicas
+      const categorias = [...new Set(data.map(item => item.category_name).filter(Boolean))];
+      // 👉 Tipos únicos
+      const tipos = [...new Set(data.map(item => item.type).filter(Boolean))];
 
-function setCart(cart) {
-    localStorage.setItem('cart', JSON.stringify(cart));
-}
+      // Render Sidebar de Categorías
+      categorias.forEach(cat => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = "#";
+        a.textContent = cat;
+        a.classList.add("sidebar__link");
+        a.addEventListener("click", e => {
+          e.preventDefault();
+          currentPage = 1;
+          currentProducts = data.filter(p => p.category_name === cat);
+          renderProducts();
+        });
+        li.appendChild(a);
+        sidebarCategories.appendChild(li);
+      });
 
-function isInCart(productId) {
-    const cart = getCart();
-    return cart.some(item => item.id == productId);
-}
+      // Render Sidebar de Tipos
+      tipos.forEach(tipo => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = "#";
+        a.textContent = tipo;
+        a.classList.add("sidebar__link");
+        a.addEventListener("click", e => {
+          e.preventDefault();
+          currentPage = 1;
+          currentProducts = data.filter(p => p.type === tipo);
+          renderProducts();
+        });
+        li.appendChild(a);
+        sidebarTypes.appendChild(li);
+      });
 
-function updateCartCount() {
-    const cart = getCart();
-    const cartCount = document.getElementById('cart-count');
-    if (cartCount) cartCount.textContent = cart.length;
-}
+      // Render inicial
+      currentProducts = data;
+      renderProducts();
 
-function addToCart(product) {
-    let cart = getCart();
-    if (!cart.some(item => item.id == product.id)) {
-        cart.push({ id: product.id, name: product.name, price: product.price || 0, image: product.image_url, quantity: 1 });
-        setCart(cart);
-        updateCartCount();
-    }
-}
+      // 👉 Función para renderizar cards con paginación
+      function renderProducts() {
+        catalogContainer.innerHTML = "";
 
-async function loadProducts(searchQuery = '', page = 1) {
-    if (isLoading || !hasMoreProducts) return;
-    isLoading = true;
+        const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
+        const end = start + PRODUCTS_PER_PAGE;
+        const paginatedProducts = currentProducts.slice(start, end);
 
-    try {
-        const url = new URL('https://webmpdeportes-production.up.railway.app/productos/listar');
-        url.searchParams.append('page', page);
-        url.searchParams.append('limit', productsPerPage); // Usa el nuevo valor 20
-        if (searchQuery) url.searchParams.append('search', searchQuery);
+        paginatedProducts.forEach(prod => {
+          const card = document.createElement("div");
+          card.classList.add("catalog__card");
 
-        const response = await fetch(url);
-        if (!response.ok) {
-            if (response.status === 400) {
-                console.error('Bad Request: Check query parameters.');
-                document.getElementById('catalogCards').innerHTML = '<p>Error: Solicitud incorrecta. Verifique los parámetros de búsqueda.</p>';
-            }
-            throw new Error('Error al cargar los productos');
-        }
+          card.innerHTML = `
+            <div class="catalog__card-image">
+              <img src="${prod.image_url}" alt="${prod.name}">
+            </div>
+            <div class="catalog__card-details">
+              <h3 class="catalog__card-title">${prod.name}</h3>
+              <p class="catalog__card-price">
+                $${Number(prod.price || 0).toLocaleString("es-AR")}
+              </p>
+            </div>
+            <div class="catalog__card-actions">
+              <button class="catalog__card-button">
+                <i class="fab fa-whatsapp"></i> Consultar
+              </button>
+              <button class="add-to-cart-btn" data-id="${prod.id}">
+                <i class="fas fa-cart-plus"></i> Agregar
+              </button>
+            </div>
+          `;
 
-        const { products, totalPages } = await response.json();
-
-        const catalogCards = document.getElementById('catalogCards');
-        if (page === 1) {
-            catalogCards.innerHTML = '';
-            hasMoreProducts = true;
-            removeLoadMoreButton();
-            loadedProductIds.clear(); // Limpiar IDs cargados en nueva búsqueda
-        }
-
-        if (!products || products.length === 0) {
-            if (page === 1) catalogCards.innerHTML = '<p>No se encontraron productos.</p>';
-            removeLoadMoreButton();
-            return;
-        }
-
-        products.slice(0, productsPerPage).forEach(product => {
-            if (loadedProductIds.has(product.id)) return; // Evita duplicados
-            loadedProductIds.add(product.id);
-            const productImage = product.image_url || 'https://res.cloudinary.com/demo/image/upload/v1/products/default-product.jpg';
-            const formattedPrice = product.price
-                ? `$${product.price.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                : "Consultar";
-            const inCart = isInCart(product.id);
-            const productCard = `
-              <div class="catalog__card">
-                <div class="catalog__card-image">
-                  <img src="${productImage}" alt="${product.name}">
-                </div>
-                <div class="catalog__card-details">
-                  <h3 class="catalog__card-title">${product.name}</h3>
-                  <p class="catalog__card-price">${formattedPrice}</p>
-                  <div class="catalog__card-actions">
-                                        <button class="catalog__details-button" data-product-id="${product.id}">
-                                            Ver detalles
-                                        </button>
-                                        <button class="add-to-cart-btn${inCart ? ' in-cart' : ''}" data-product-id="${product.id}" ${inCart ? 'disabled' : ''}>
-                                            <i class="fas fa-cart-plus"></i> ${inCart ? 'En el carrito' : 'Agregar al carrito'}
-                                        </button>
-                    <a href="https://wa.me/3445417684/?text=¡Hola! Quiero saber más info acerca de ${product.name}." class="catalog__card-button" target="_blank">
-                      <i class="fab fa-whatsapp"></i> Consultar
-                    </a>
-                  </div>
-                </div>
-              </div>`;
-            catalogCards.insertAdjacentHTML('beforeend', productCard);
+          catalogContainer.appendChild(card);
         });
 
-        document.querySelectorAll('.catalog__details-button').forEach(button => {
-            button.addEventListener('click', (event) => {
-                // Guardar scroll antes de ir a detalles
-                sessionStorage.setItem('catalogScroll', window.scrollY);
-                const productId = event.target.dataset.productId;
-                window.location.href = `../productos/producto.html?id=${productId}`;
-            });
+        renderPagination();
+      }
+
+      // 👉 Render de la barra de paginación
+      function renderPagination() {
+        paginationContainer.innerHTML = "";
+        const totalPages = Math.ceil(currentProducts.length / PRODUCTS_PER_PAGE);
+
+        if (totalPages <= 1) return; // No mostrar paginación si hay solo 1 página
+
+        // Botón "Anterior"
+        const prevBtn = document.createElement("button");
+        prevBtn.textContent = "« Anterior";
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.addEventListener("click", () => {
+          if (currentPage > 1) {
+            currentPage--;
+            renderProducts();
+          }
         });
+        paginationContainer.appendChild(prevBtn);
 
-        // Vincular lógica de agregar al carrito
-        document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-            btn.addEventListener('click', async function (e) {
-                const productId = this.getAttribute('data-product-id');
-                // Usar la función global y forzar cantidad 1
-                const success = await addProductToCart(productId, null, 1);
-                if (success) {
-                    this.classList.add('in-cart');
-                    this.disabled = true;
-                    this.innerHTML = '<i class=\"fas fa-cart-plus\"></i> En el carrito';
-                }
-            });
-        });
-
-        updateCartCount();
-
-        // El botón "Ver más" siempre debe estar después de los productos
-        if (page < totalPages && products.length === productsPerPage) {
-            addLoadMoreButton();
-            hasMoreProducts = true;
-        } else {
-            removeLoadMoreButton();
-            hasMoreProducts = false;
+        // Números de página
+        for (let i = 1; i <= totalPages; i++) {
+          const pageBtn = document.createElement("button");
+          pageBtn.textContent = i;
+          if (i === currentPage) pageBtn.classList.add("active");
+          pageBtn.addEventListener("click", () => {
+            currentPage = i;
+            renderProducts();
+          });
+          paginationContainer.appendChild(pageBtn);
         }
-    } catch (error) {
-        console.error('Error al cargar los productos:', error);
-        removeLoadMoreButton();
-    } finally {
-        isLoading = false;
+
+        // Botón "Siguiente"
+        const nextBtn = document.createElement("button");
+        nextBtn.textContent = "Siguiente »";
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.addEventListener("click", () => {
+          if (currentPage < totalPages) {
+            currentPage++;
+            renderProducts();
+          }
+        });
+        paginationContainer.appendChild(nextBtn);
+      }
+    },
+    error: function (err) {
+      console.error("❌ Error cargando CSV:", err);
     }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.querySelector('.header__search-input');
-
-    function reloadProducts() {
-        const searchQuery = searchInput.value.trim();
-        currentPage = 1;
-        hasMoreProducts = true;
-        loadedProductIds.clear(); // Limpiar IDs cargados en nueva búsqueda
-        loadProducts(searchQuery, currentPage);
-    }
-
-    searchInput.addEventListener('input', debounce(() => {
-        reloadProducts();
-    }, 300));
-
-    loadProducts();
-
-    // Restaurar scroll si existe
-    const savedScroll = sessionStorage.getItem('catalogScroll');
-    if (savedScroll !== null) {
-        setTimeout(() => {
-            window.scrollTo(0, parseInt(savedScroll, 10));
-            sessionStorage.removeItem('catalogScroll');
-        }, 50);
-    }
-
-    updateCartCount();
-    window.addEventListener('storage', updateCartCount);
-
+  });
 });
