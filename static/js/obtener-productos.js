@@ -74,15 +74,50 @@ document.addEventListener("DOMContentLoaded", () => {
         sidebarTypes.appendChild(li);
       });
 
+      // --- Búsqueda en la barra de navegación (integrada aquí para combinar con sidebar) ---
+      const searchInput = document.querySelector('.header__search-input');
+      const searchButton = document.querySelector('.header__search-btn');
+      let searchQuery = '';
+
+      function normalizeString(str) {
+        return (str || '').toString().normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
+      }
+
+      function matchesName(name, query) {
+        if (!query) return true;
+        const nameNorm = normalizeString(name || '');
+        const tokens = query.trim().split(/\s+/).map(t => t.replace(/[^\w\-]/g, '')).filter(Boolean).map(normalizeString);
+        return tokens.every(tok => nameNorm.includes(tok));
+      }
+
+      // Integrar búsqueda con los filtros laterales
       function applyFiltersAndRender() {
+        // Filtrar por category/type (activeFilter) y por búsqueda (searchQuery)
         if (activeFilter.type === 'category') {
-          currentProducts = data.filter(p => p.category_name === activeFilter.value);
+          currentProducts = data.filter(p => p.category_name === activeFilter.value && matchesName(p.name, searchQuery));
         } else if (activeFilter.type === 'type') {
-          currentProducts = data.filter(p => p.type === activeFilter.value);
+          currentProducts = data.filter(p => p.type === activeFilter.value && matchesName(p.name, searchQuery));
         } else {
-          currentProducts = data;
+          currentProducts = data.filter(p => matchesName(p.name, searchQuery));
         }
         renderProducts();
+      }
+
+      if (searchButton && searchInput) {
+        searchButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          searchQuery = searchInput.value || '';
+          currentPage = 1;
+          applyFiltersAndRender();
+        });
+        searchInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            searchQuery = searchInput.value || '';
+            currentPage = 1;
+            applyFiltersAndRender();
+          }
+        });
       }
 
       // Render inicial
@@ -127,6 +162,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // 👉 Función para renderizar cards con paginación
   function renderProducts() {
     catalogContainer.innerHTML = "";
+
+    // Si no hay productos después de aplicar filtros/búsqueda, mostrar mensaje
+    if (!currentProducts || currentProducts.length === 0) {
+      catalogContainer.innerHTML = '<p>Productos no encontrados</p>';
+      // Limpiar paginación si existe
+      if (paginationContainer) paginationContainer.innerHTML = '';
+      return;
+    }
 
     const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
     const end = start + PRODUCTS_PER_PAGE;
